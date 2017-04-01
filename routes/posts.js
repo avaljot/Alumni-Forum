@@ -11,12 +11,13 @@ router.post('/addPost', function (req, res) {
     var dateCreated=Date.now;
     var lastModified=Date.now;
     var upvotes=0;
+    var user=req.session.user._id;
     var downvotes=0;
     var status= true;
     var newPost=new Post({
         title: title, description : description ,
         tags : tags, dateCreated : dateCreated() , lastModified : lastModified() ,
-        upvotes : upvotes, downvotes : downvotes, status : status
+        upvotes : upvotes, downvotes : downvotes, status : status, user:user,comments: null
     });
     Post.createPost(newPost, function (err, post) {
         if (err) throw err;
@@ -24,6 +25,14 @@ router.post('/addPost', function (req, res) {
     });
     req.flash('success_msg', 'Discussion Created');
     res.redirect('/');
+});
+
+router.get('/viewPosts', function (req, res) {
+
+    Post.getPostByNewest(function (err, posts) {
+        if (err) throw err;
+        res.render("index",{posts: posts,reg_user:req.session.user});
+    });
 });
 
 

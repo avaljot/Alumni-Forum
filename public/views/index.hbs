@@ -12,5 +12,25 @@
         <th><span>Posts</span></th>
         <th><span>Last Post</span></th>
     </tr>
+    {{#each posts}}
+        <tr>
+            <td><span>{{title}}</span></td>
+            <td>
+            {{#each tags}}
+                <span>{{this}}</span>
+            {{/each}}
+            </td>
+            <td>
+                <span>
+                    {{#if comments}}
+                        {{comments.length}}
+                    {{else}}
+                        0
+                    {{/if}}
+                </span>
+            </td>
+            <td><span>{{lastModified}}</span></td>
+        </tr>
+    {{/each}}
     </thead>
 </table>

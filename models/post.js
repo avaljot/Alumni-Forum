@@ -1,11 +1,9 @@
 var mongoose = require('mongoose');
-var CommentSchema = require('../models/comment');
-var UserSchema = require('../models/user');
 var Schema = mongoose.Schema;
 
 
 var PostSchema = mongoose.Schema({
-    tile: String,
+    title: String,
     description: String,
     tags: [String],
     dateCreated: Date,
