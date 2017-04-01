@@ -1,0 +1,39 @@
+<div id="loginModel">
+    <div id="id03" class="modal">
+        <form method="post" class="modal-content animate" action="/posts/addPost">
+            <span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal">&times;</span>
+            <div class="container expandonClick1">
+                <table>
+                    <tr>
+                        <th><label><b>Title</b></label></th>
+                        <td><input type="text" placeholder="Enter Title" name="title" required></td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label><b>Description</b></label>
+                        </th>
+                        <td>
+                            <textarea placeholder="Enter Description" name="description" required></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label><b>Tags</b></label>
+                        </th>
+                        <td>
+                            <textarea placeholder="Enter Tags" name="tags"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+
+                        </th>
+                        <td>
+                            <button type="submit">Post Discussion</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>
