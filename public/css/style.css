@@ -161,6 +161,29 @@ body{
     float: right;
 }
 
+#dispPosts table span{
+    word-wrap: break-word;
+}
+
+#dispPosts th,#dispPosts td {
+    border-bottom: 1px solid #ddd;
+}
+
+#dispPosts td{
+    color : darkblue;
+}
+
+
+#dispPosts tr:hover
+{
+    background-color: #a1b9f4 !important;
+}
+
+
+#dispPosts tr:nth-child(even)
+{
+    color: darkgreen;
+}
 
 @media only screen and (max-width: 840px) {
 

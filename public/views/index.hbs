@@ -1,36 +1,52 @@
 <span class="expandonClick">
     <input type="text" name="search" placeholder="Search..">
     {{#if reg_user}}
-        <a onclick="document.getElementById('id03').style.display='block'" style="width:auto;"> Post this Question ?</a>
+        <a onclick="document.getElementById('id03').style.display='block'" style="width:auto;"> Post Question ?</a>
     {{/if}}
 </span>
+<div id="dispPosts">
 <table class="table forum table-striped" id="middleTable">
     <thead>
     <tr>
-        <th><span>Discussion</span></th>
-        <th><span>Topics</span></th>
-        <th><span>Posts</span></th>
-        <th><span>Last Post</span></th>
+        <th style="width: 10em;"><span>Discussion</span></th>
+        <th style="width: 7em;"><span>Topics</span></th>
+        <th style="width: 3em;"><span>Posts</span></th>
+        <th style="width: 7em;"><span>Last Post</span></th>
     </tr>
     {{#each posts}}
-        <tr>
-            <td><span>{{title}}</span></td>
-            <td>
-            {{#each tags}}
-                <span>{{this}}</span>
-            {{/each}}
-            </td>
-            <td>
-                <span>
-                    {{#if comments}}
-                        {{comments.length}}
-                    {{else}}
-                        0
-                    {{/if}}
-                </span>
-            </td>
-            <td><span>{{lastModified}}</span></td>
+        <tr class="clickable-row">
+            <form method="post" action="/posts/getPost/" id="getPost">
+                <input type="hidden" value={{_id}} id='postId' name="getPost" />
+                <td style="width: 10em;">
+                    <span style="width: 70%; float: right;" id="title">{{title}}</span>
+                    <br/>
+                    <span style="width: 10%; color:greenyellow;">Up votes : {{upvotes}}</span>
+                    <br/>
+                    <span style="width: 10%; color:lightcoral;">Down votes : {{downvotes}}</span>
+                    <br/>
+                    <span style="width: 10%; color:cornflowerblue;">Views : {{preview}}</span>
+                </td>
+                <td style="width: 7em;">
+                    <span style="float: right;">
+                        {{#each tags}}
+                            <span style="background-color:#cdf2f1;color: black;display: inline;font-weight: bold;">#{{this}}</span>
+                            <span>&nbsp;</span>
+                        {{/each}}
+                    </span>
+                </td>
+                <td style="width: 3em; float: right; color: darkslategray;">
+                    <span>
+                        {{#if comments}}
+                            {{comments.length}}
+                        {{else}}
+                            0
+                        {{/if}}
+                    </span>
+                </td>
+                    <td style="width: 7em; color: darkcyan;"><span>{{lastModified}}</span></td>
+            </form>
         </tr>
     {{/each}}
     </thead>
 </table>
+</div>

@@ -11,9 +11,10 @@ var PostSchema = mongoose.Schema({
     versions: [String],
     upvotes: Number,
     downvotes: Number,
-    comments:[Schema.Types.ObjectId],
-    user : Schema.Types.ObjectId,
-    status: Boolean
+    comments:{type:[Schema.ObjectId],ref: 'Comment'},
+    user : {type:Schema.ObjectId, ref:'User'},
+    status: Boolean,
+    preview : Number
 });
 
 var Post = module.exports = mongoose.model('Post', PostSchema);
@@ -22,6 +23,12 @@ var Post = module.exports = mongoose.model('Post', PostSchema);
 module.exports.createPost = function (newPost,callback) {
       newPost.save(callback);
 };
+
+
+module.exports.updatePost = function (newPost,callback) {
+    newPost.findOneAndUpdate(callback);
+};
+
 
 module.exports.getPostbyId = function (id,callback) {
     Post.findById(id,callback);
