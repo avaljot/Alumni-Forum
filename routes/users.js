@@ -15,6 +15,8 @@ var storage = multer.diskStorage({
 var upload = multer({storage: storage});
 
 var User = require('../models/user');
+var Company = require('../models/company');
+var University = require('../models/university');
 
 // Register
 router.get('/register', function (req, res) {
@@ -27,14 +29,20 @@ router.get('/login', function (req, res) {
 });
 
 router.post('/addUser', function (req, res) { // adding user to db
-    var name = req.body.name;
-    var email = req.body.email;
+    var firstname = req.body.firstname;
+    var lastname = req.body.lastname;
     var username = req.body.username;
+    var email = req.body.email;
+    var workStatus = req.body.optradio;
+    var company = req.body.companyPicker;
+    var university = req.body.universityPicker;
+    var company_text = req.body.company;
+    var university_text = req.body.university;
     var password = req.body.password;
     var password2 = req.body.password2;
 
     // Validation
-    req.checkBody('name', 'Name is required').notEmpty();
+    // req.checkBody('name', 'Name is required').notEmpty();
     req.checkBody('email', 'Email is required').notEmpty();
     req.checkBody('email', 'Email is not valid').isEmail();
     req.checkBody('username', 'Username is required').notEmpty();
@@ -66,13 +74,40 @@ router.post('/addUser', function (req, res) { // adding user to db
             });
         }
         else {
+            //save company
+            if (company == "Other") {
+                console.log(company);
+                var newCompany = new Company({
+                    name: company_text
+                });
+                Company.createCompany(newCompany, function (err, company) {
+                    if (err) throw err;
+                    else console.log(company);
+                });
+                company = company_text;
+            }
+            if (university == "Other") {
+                var newUniversity = new University({
+                    name: university_text
+                });
+                University.createUniversity(newUniversity, function (err, university) {
+                    if (err) throw err;
+                    else console.log(university);
+                });
+                university = university_text;
+            }
             //create a new unique user
             var newUser = new User({
-                name: name,
-                email: email,
+                firstname: firstname,
+                lastname: lastname,
                 username: username,
+                email: email,
+                workStatus: workStatus,
+                company: company,
+                university: university,
                 password: password,
-                filename: "unknown.png"
+                filename: "unknown.png",
+                status: true
             });
             User.createUser(newUser, function (err, user) {
                 if (err) throw err;
@@ -143,5 +178,27 @@ router.post('/upload', upload.single('img_file'), function (req, res, next) {
         else res.redirect('/users/profile');
 
     });
+});
+
+router.get('/AllUsers', function (req, res) {
+    User.getAllUsers(function (err, users) {
+        if (err) throw err;
+        
+    })
+
+});
+// Ajax Call Routes
+router.get('/companyname', function (req, res) {
+    Company.getCompanyName(function (err, names) {
+        if (err) throw err;
+        else res.send(names);
+    })
+});
+
+router.get('/universityname', function (req, res) {
+    University.getUniversityName(function (err, names) {
+        if (err) throw err;
+        else res.send(names);
+    })
 });
 module.exports = router;

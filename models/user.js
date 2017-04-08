@@ -1,24 +1,19 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
+var Schema = mongoose.Schema;
 
 // User Schema
 var UserSchema = mongoose.Schema({
-    username: {
-        type: String,
-        index: true
-    },
-    password: {
-        type: String
-    },
-    email: {
-        type: String
-    },
-    name: {
-        type: String
-    },
-    filename: {
-        type: String
-    }
+    firstname: String,
+    lastname: String,
+    username: String,
+    email: String,
+    workStatus: String,
+    password: String,
+    company: String,
+    university: String,
+    filename: String,
+    status: Boolean
 });
 
 var User = module.exports = mongoose.model('User', UserSchema);
@@ -48,6 +43,9 @@ module.exports.comparePassword = function (candidatePassword, hash, callback) {
     });
 };
 
+module.exports.getAllUsers = function (callback) {
+    User.find({}).exec(callback);
+};
 module.exports.updateImage = function (filename, username, callback) {
     var query = {'username': username};
     User.findOneAndUpdate(query, {$set: {filename: filename}}, callback)
