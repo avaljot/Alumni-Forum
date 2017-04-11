@@ -13,15 +13,6 @@ var storage = multer.diskStorage({
 
 var User = require('../models/user');
 
-router.get('/', function (req, res) {
-    if (req.session && req.session.user) {
-        res.render('profile-posts', {layout: 'profile-layout', reg_user: req.session.user})
-    }
-    else {
-        res.redirect('/users/login');
-    }
-});
-
 router.post('/upload', upload.single('img_file'), function (req, res, next) {
     var myfile = req.file;
     User.updateImage(myfile.originalname, req.session.user.username, function (err, user) {
@@ -31,5 +22,51 @@ router.post('/upload', upload.single('img_file'), function (req, res, next) {
     });
 });
 
+router.get('/users', function (req, res) {
+    if (req.session && req.session.user) {
+        User.getAllUsers(function (err, users) {
+            if (err) throw err;
+            res.render('profile-users', {
+                userlist: users,
+                layout: 'profile-layout',
+                user: req.session.user,
+                reg_user: req.session.user
+            });
+        });
+    }
+    else {
+        res.redirect('/users/login');
+    }
+});
+
+router.get('/:username', function (req, res) {
+    if (req.session && req.session.user) {
+        User.getUserByUsername(req.params.username, function (err, user) {
+            if (err)throw err;
+            res.render('profile-posts', {
+                layout: 'profile-layout',
+                user: user,
+                reg_user: req.session.user
+            });
+
+        });
+
+    } else {
+        res.redirect('/users/login');
+    }
+});
+
+router.get('/', function (req, res) {
+    if (req.session && req.session.user) {
+        res.render('profile-posts', {
+            layout: 'profile-layout',
+            user: req.session.user,
+            reg_user: req.session.user
+        });
+    }
+    else {
+        res.redirect('/users/login');
+    }
+});
 module.exports = router;
 
