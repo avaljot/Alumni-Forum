@@ -7,29 +7,14 @@ var Comment=require('../models/comment');
 
 router.post('/getPost',function (req, res) {
     var postID =req.body.getPost;
+    console.log("getting post "+postID);
     Post.getPostbyId(postID, function (err, post) {
         if (err) throw err;
+        console.log("got post of length "+post);
         User.getUserById(post.user, function (err, user){
             if (err) throw err;
-            var comments=new Array();
-            var commentUsers=new Array();
-            if(post.comments!=null) {
-                for(i=0; i<post.comments.length; i++) {
-                    Comment.getCommentByID(post.comments[i], function (err, comment) {
-                        User.getUserById(post.user, function (commentErr, commentUser){
-                            if(commentErr) throw commentErr;
-                            //commentUsers.push(commentUser);
-                            comment.user = commentUser;
-                            console.log(comment.user);
-                            //comment.push(commentUser);
-                        });
-                        //console.log(comment);
-                        console.log(comment);
-                        comments.push(comment);
-                    });
-                }
-            }
-            res.render('homePost', {post: post,layout: 'postLayout.hbs',user:user, comments: comments,commentUsers:commentUsers});
+            console.log(user);
+            res.render('homePost', {post: post,layout: 'postLayout.hbs',user:user});
         });
     });
 });
@@ -48,7 +33,7 @@ router.post('/postsComment',function (req, res) {
 
     var newComment=new Comment({
         text: text, dateCreated : dateCreated() , lastModified : lastModified() ,
-        upvotes : upvotes, downvotes : downvotes, user:user, status: true
+        upvotes : upvotes, downvotes : downvotes, user:user
     });
 
     Comment.createComment(newComment, function (err, post) {
@@ -68,28 +53,6 @@ router.post('/postsComment',function (req, res) {
             console.log(post);
         });
         res.render('homePost', {post: post,layout: 'postLayout.hbs',user:'sample'});
-    });
-});
-
-router.post('/getComments', function (req, res) {
-    var commentId=req.body.commentId;
-    console.log(commentId);
-    Comment.getCommentByID(commentId, function (err, comment) {
-         if (err) throw err;
-         var comments=new Array();
-         if(comment!=null && comment.comments!=null) {
-            for(i=0; i<comment.comments.length; i++) {
-                Comment.getCommentByID(comment.comments[i], function (err, comment1) {
-                    User.getUserById(post.user, function (commentErr, commentUser){
-                        if(commentErr) throw commentErr;
-                        comment1.user = commentUser;
-                    });
-                    comments.push(comment1);
-                });
-            }
-         }
-         console.log(comment);
-         res.send(comment);
     });
 });
 

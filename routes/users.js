@@ -2,17 +2,6 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var multer = require('multer');
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'public/uploads/')
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname)
-    }
-});
-
-var upload = multer({storage: storage});
 
 var User = require('../models/user');
 var Company = require('../models/company');
@@ -162,31 +151,15 @@ router.get('/logout', function (req, res) {
     res.redirect('/users/login');
 });
 
-router.get('/profile', function (req, res) {
-    if (req.session && req.session.user) {
-        res.render('profile', {reg_user: req.session.user})
-    }
-    else {
-        res.redirect('/users/login');
-    }
-});
-router.post('/upload', upload.single('img_file'), function (req, res, next) {
-    var myfile = req.file;
-    User.updateImage(myfile.originalname, req.session.user.username, function (err, user) {
-        req.session.user.filename = myfile.originalname;
-        if (err) throw  err;
-        else res.redirect('/users/profile');
-
-    });
-});
-
 router.get('/AllUsers', function (req, res) {
     User.getAllUsers(function (err, users) {
         if (err) throw err;
-        
+
     })
 
 });
+
+
 // Ajax Call Routes
 router.get('/companyname', function (req, res) {
     Company.getCompanyName(function (err, names) {

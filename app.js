@@ -20,6 +20,7 @@ var db = mongoose.connection;
 var home = require('./routes/index');
 var users = require('./routes/users');
 var posts = require('./routes/posts');
+var profile = require('./routes/profile');
 
 var app = express();
 
@@ -81,10 +82,61 @@ app.use(function (req, res, next) {
 app.use('/', home);
 app.use('/users', users);
 app.use('/posts', posts);
+app.use('/profile', profile);
 
 // Set Port
 app.set('port', (process.env.PORT || 8000));
 app.listen(app.get('port'), function () {
     console.log('Server started on port ' + app.get('port'));
+});
+
+
+//Handlebar Helper Function for comparision in view
+
+exphbs.registerHelper('compare', function (lvalue, rvalue, options) {
+
+    if (arguments.length < 3)
+        throw new Error("Handlerbars Helper 'compare' needs 2 parameters");
+
+    var operator = options.hash.operator || "==";
+
+    var operators = {
+        '==': function (l, r) {
+            return l == r;
+        },
+        '===': function (l, r) {
+            return l === r;
+        },
+        '!=': function (l, r) {
+            return l !== r;
+        },
+        '<': function (l, r) {
+            return l < r;
+        },
+        '>': function (l, r) {
+            return l > r;
+        },
+        '<=': function (l, r) {
+            return l <= r;
+        },
+        '>=': function (l, r) {
+            return l >= r;
+        },
+        'typeof': function (l, r) {
+            return typeof l == r;
+        }
+    };
+
+    if (!operators[operator])
+        throw new Error("Handlerbars Helper 'compare' doesn't know the operator " + operator);
+
+    var result = operators[operator](lvalue, rvalue);
+
+    if (result) {
+        return options.fn(this);
+    } else {
+        return options.inverse(this);
+    }
+
 });
 module.exports = app;
