@@ -108,7 +108,7 @@ body{
 }
 
 .expandonClick1 textarea:focus {
-    width: 100%;
+    width: 80%;
 }
 .navbar-fixed-top .modal {
     display: none; /* Hidden by default */
@@ -157,9 +157,31 @@ body{
     font-size: 2em;
 
 }
+
+
+#dispPosts1 table span{
+    word-wrap: break-word;
+}
+
+#dispPosts1 td{
+    color : darkblue;
+}
+
+
+#dispPosts1 tr:hover
+{
+    background-color: #a1b9f4 !important;
+}
+
+#dispPosts1 tr:nth-child(even)
+{
+    color: darkgreen;
+}
+
 #middleTable th span{
     float: right;
 }
+
 
 #dispPosts table span{
     word-wrap: break-word;
@@ -179,6 +201,10 @@ body{
     background-color: #a1b9f4 !important;
 }
 
+.profile-pic{
+    width:5em;
+    height:5em;
+}
 
 #dispPosts tr:nth-child(even)
 {
