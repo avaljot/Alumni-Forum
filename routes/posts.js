@@ -5,16 +5,57 @@ var Post = require('../models/post');
 var User = require('../models/user');
 var Comment=require('../models/comment');
 
+
+router.post('/getComments',function(req,res){
+
+    var commentID=req.body.commentId;
+    var comments=new Array();
+    Comment.getCommentByID(commentID,function (err,comment) {
+
+        if(err) throw err;
+
+        if(comment.comments!=null){
+            for(var i=0;i<comment.comments.length;i++){
+                Comment.getCommentByID(comment.comments[i],function (errNow,commentNow) {
+                    if(errNow) throw errNow;
+                    User.getUserById(commentNow.user,function (errUser,userUser) {
+                        if(errUser) throw errUser;
+                        commentNow.user=userUser;
+                    });
+                    comments.push(commentNow);
+                });
+            }
+        }
+    });
+    res.send(comments);
+});
+
+
 router.post('/getPost',function (req, res) {
     var postID =req.body.getPost;
     console.log("getting post "+postID);
     Post.getPostbyId(postID, function (err, post) {
         if (err) throw err;
-        console.log("got post of length "+post);
         User.getUserById(post.user, function (err, user){
             if (err) throw err;
-            console.log(user);
-            res.render('homePost', {post: post,layout: 'postLayout.hbs',user:user});
+            var comments=new Array();
+            if(post.comments!=null){
+                console.log(post.comments.length);
+                for(var i=0;i<post.comments.length;i++){
+                    //console.log(post.comments[i]);
+                    Comment.getCommentByID(post.comments[i],function (commentErr,commentNow) {
+                         if (commentErr) throw  commentErr;
+                        // console.log(commentNow);
+                         User.getUserById(commentNow.user,function(userErr,userNow){
+                                if(userErr) throw userErr;
+                                commentNow.user=userNow;
+                                comments.push(commentNow);
+                                console.log(comments);
+                         });
+                    });
+                }
+            }
+            res.render('homePost', {post: post,layout: 'postLayout.hbs',user:user,comments:comments});
         });
     });
 });
