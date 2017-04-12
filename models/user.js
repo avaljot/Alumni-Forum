@@ -13,7 +13,11 @@ var UserSchema = mongoose.Schema({
     company: String,
     university: String,
     filename: String,
-    status: Boolean
+    status: Boolean,
+    isAdmin: Boolean,
+    posts: {type: [Schema.ObjectId], ref: 'Post'},
+    comments: {type: [Schema.ObjectId], ref: 'Comment'},
+    favs: {type: [Schema.ObjectId], ref: 'Post'}
 });
 
 var User = module.exports = mongoose.model('User', UserSchema);
@@ -44,10 +48,16 @@ module.exports.comparePassword = function (candidatePassword, hash, callback) {
 };
 
 module.exports.getAllUsers = function (callback) {
-    User.find({}).exec(callback);
+    User.find({'status': true}).exec(callback);
 };
 module.exports.updateImage = function (filename, username, callback) {
     var query = {'username': username};
     User.findOneAndUpdate(query, {$set: {filename: filename}}, callback)
 
+};
+
+module.exports.deleteUser = function (id, callback) {
+    User.findOneAndUpdate({'_id': id}, {
+        $set: {status: false}
+    }, callback);
 };
