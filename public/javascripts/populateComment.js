@@ -1,5 +1,10 @@
 function getCommentOfComment(commentId,currObject){
     console.log("comment clicked "+commentId);
+    var divToAppend="#selected"+commentId;
+    console.log(divToAppend);
+    $('#selected_*').each(function() {
+        console.log("1");
+    });
     $.ajax({
         url: '../getComments',
         type: 'POST',
@@ -8,15 +13,35 @@ function getCommentOfComment(commentId,currObject){
         },
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
-            $(currObject).append("<div> new div </div>");
+            var one="<div class='well expandonClick commentOfComment'> <h4>Leave a Comment:</h4> <div>";
+            one+="<div class='form-group'>";
+            one+="<input type='text' class='form-control' name='comment' id='comment'/>";
+            one+="</div><button onclick=\"addCommentofComment('"+commentId+"',this)\" class='btn btn-primary'>Post Comment</button>";
+            one+="</div> </div>";
+            $(divToAppend).append(one);
+            console.log(data);
         }
     });
 }
 
-function sample () {
-    console.log('check');
-}
+function addCommentofComment(commentID,currentObject){
+      console.log(commentID);
+      console.log($(currentObject).parent().html());
+    $.ajax({
+        url: '../addCommentOfComment',
+        type: 'POST',
+        data : {
+            commentId: commentID,
+            comment : $(currentObject).parent().find('input').val(),
+        },
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            console.log(data);
 
+        }
+    });
+
+}
 function addComment(postId){
     $.ajax({
         url: '../postsComment',
