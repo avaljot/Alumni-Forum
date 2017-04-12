@@ -7,27 +7,28 @@ var Comment=require('../models/comment');
 
 
 router.post('/getComments',function(req,res){
-
     var commentID=req.body.commentId;
-    var comments=new Array();
+    var comments=[];
     Comment.getCommentByID(commentID,function (err,comment) {
-
         if(err) throw err;
-
         if(comment.comments!=null){
+
             for(var i=0;i<comment.comments.length;i++){
                 Comment.getCommentByID(comment.comments[i],function (errNow,commentNow) {
                     if(errNow) throw errNow;
                     User.getUserById(commentNow.user,function (errUser,userUser) {
                         if(errUser) throw errUser;
                         commentNow.user=userUser;
+                        comments.push(commentNow);
+                        console.log(commentNow);
+                        res.(commentNow);
                     });
-                    comments.push(commentNow);
                 });
             }
+            console.log(comments);
+
         }
     });
-    res.send(comments);
 });
 
 
@@ -60,9 +61,9 @@ router.post('/getPost',function (req, res) {
     });
 });
 
-router.post('/postsComment',function (req, res) {
-
-    var postId=req.body.getPost;
+//addCommentOfComment
+router.post('/addCommentOfComment',function (req, res) {
+    var commentId=req.body.commentId;
     var text=req.body.comment;
     var dateCreated=Date.now;
     var lastModified=Date.now;
@@ -79,7 +80,48 @@ router.post('/postsComment',function (req, res) {
 
     Comment.createComment(newComment, function (err, post) {
         if (err) throw err;
+    });
+
+    Comment.getCommentByID(commentId,function (err1,comment) {
+        if(err1) throw err1;
+        if(comment.comments==null){
+            comment.comments=new Array();
+        }
+        comment.comments.push(newComment);
+        Comment.createComment(comment,function (err,comment) {
+             if(err) throw err;
+        });
+    });
+
+    User.getUserById(user,function (err,userObj) {
+        if(err) throw err;
+        newComment.user=userObj;
         console.log(newComment);
+        res.send(newComment);
+    });
+});
+
+router.post('/postsComment',function (req, res) {
+    var postId=req.body.getPost;
+    var text=req.body.comment;
+    console.log(postId);
+    console.log(text);
+
+    var dateCreated=Date.now;
+    var lastModified=Date.now;
+    var upvotes=0;
+    var user=req.session.user;
+    var downvotes=0;
+    var version=null;
+    var comments=null;
+
+    var newComment=new Comment({
+        text: text, dateCreated : dateCreated() , lastModified : lastModified() ,
+        upvotes : upvotes, downvotes : downvotes, user:user
+    });
+
+    Comment.createComment(newComment, function (err, post) {
+        if (err) throw err;
     });
 
     Post.getPostbyId(postId,function (err1, post) {
@@ -88,16 +130,20 @@ router.post('/postsComment',function (req, res) {
             post.comments=new Array();
         }
         post.comments.push(newComment);
-
         Post.createPost(post,function (err,post) {
-            if (err) throw err;
-            console.log(post);
+            if (err) throw err;;
         });
-        res.render('homePost', {post: post,layout: 'postLayout.hbs',user:'sample'});
+    });
+
+    User.getUserById(user,function (err,userObj) {
+        if(err) throw err;
+        newComment.user=userObj;
+        console.log(newComment);
+        res.send(newComment);
     });
 });
 
-/*
+/*        console.log(newComment);
  text: String,
  dateCreated: Date,
  lastModified: Date,
@@ -139,7 +185,6 @@ router.get('/viewPosts', function (req, res) {
         res.render("index",{posts: posts,reg_user:req.session.user});
     });
 });
-
 
 module.exports = router;
 
