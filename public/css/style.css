@@ -152,6 +152,11 @@ body{
     height: 70%;
 }
 
+.commentOfComment{
+    margin-top: 2em;
+    margin-left: 8em;
+}
+
 #middleTable th{
     color:forestgreen;
     font-size: 2em;
