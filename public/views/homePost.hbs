@@ -23,13 +23,13 @@
             <p>{{post.description}}</p>
             <div class="well">
                 <h4>Leave a Comment:</h4>
-                <form method="post" action="/posts/postsComment">
-                    <input type="hidden" value={{post._id}} name='getPost'/>
+                <div>
+                    <input type="hidden" value={{post._id}} name='getPost' id="getPost"/>
                     <div class="form-group">
-                        <textarea class="form-control" rows="3" name="comment"></textarea>
+                        <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+                    <button onclick="addComment('{{_id}}')" class="btn btn-primary">Post Comment</button>
+                </div>
             </div>
             <hr>
         </div>
@@ -39,7 +39,7 @@
             <div class="well">
                 <h4>Topic Search:</h4>
                 <div class="input-group">
-                    <span class="expandonClick">
+                    <span class="expandonClick1">
                         <input type="text" name="search" placeholder="Search..">
                         {{#if reg_user}}
                             <a onclick="document.getElementById('id03').style.display='block'" style="width:auto;"> Post Question ?</a>
@@ -59,7 +59,7 @@
             </div>
         </div>
     </div>
-    <div>
+    <div id="commentsList">
     {{#each comments}}
         <div class="media" onclick="getCommentOfComment('{{_id}}',this);">
             <a class="pull-left" href="#">
@@ -72,6 +72,7 @@
                 {{text}}
                 </div>
         </div>
+        <div class="clickedDiv" id='selected{{_id}}'></div>
     {{/each}}
     </div>
 <script src="http://localhost:8000/javascript/jquery.js"></script>
