@@ -22,13 +22,13 @@ router.post('/upload', upload.single('img_file'), function (req, res, next) {
     });
 });
 
-router.get('/users', function (req, res) {
+router.get('/allusers', function (req, res) {
     if (req.session && req.session.user) {
         User.getAllUsers(function (err, users) {
             if (err) throw err;
             res.render('profile-users', {
-                userlist: users,
                 layout: 'profile-layout',
+                userlist: users,
                 user: req.session.user,
                 reg_user: req.session.user
             });
@@ -48,12 +48,21 @@ router.get('/:username', function (req, res) {
                 user: user,
                 reg_user: req.session.user
             });
-
         });
 
     } else {
         res.redirect('/users/login');
     }
+});
+
+router.get('/:id', function (req, res) {
+    console.log("here" + req.params.id);
+    User.deleteUser(req.params.id, function (err, user) {
+        if (err) throw err;
+        req.flash('success_msg', 'User Deleted!!');
+        res.redirect('/profile/allusers');
+    })
+
 });
 
 router.get('/', function (req, res) {

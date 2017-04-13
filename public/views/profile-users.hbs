@@ -1,7 +1,15 @@
 <div class="container">
-    <ul>
+    {{# if success_msg}}
+        <div class="alert-success">{{success_msg}}</div>
+    {{/if}}
+    <ul class="list-group">
         {{#each userlist}}
-            <li><a href="/profile/{{username}}">{{username}}</a></li>
+            <li class="list-group-item"><a href="/profile/{{username}}">{{username}}</a>
+                {{#if ../user.isAdmin}}
+                    <a class="btn btn-default" href="/profile/{{_id}}">Delete</a>
+                    <a class="btn btn-default" href="">Make Admin</a>
+                {{/if}}
+            </li>
         {{/each}}
     </ul>
 </div>

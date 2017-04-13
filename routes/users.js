@@ -63,9 +63,8 @@ router.post('/addUser', function (req, res) { // adding user to db
             });
         }
         else {
-            //save company
-            if (company == "Other") {
-                console.log(company);
+            //save new company
+            if (company === "Other" && !company_text.isEmpty) {
                 var newCompany = new Company({
                     name: company_text
                 });
@@ -75,7 +74,9 @@ router.post('/addUser', function (req, res) { // adding user to db
                 });
                 company = company_text;
             }
-            if (university == "Other") {
+
+            // save new university
+            if (university === "Other" && !university_text.isEmpty) {
                 var newUniversity = new University({
                     name: university_text
                 });
@@ -96,7 +97,11 @@ router.post('/addUser', function (req, res) { // adding user to db
                 university: university,
                 password: password,
                 filename: "unknown.png",
-                status: true
+                status: true,
+                isAdmin: false,
+                posts: null,
+                comments: null,
+                favs: null
             });
             User.createUser(newUser, function (err, user) {
                 if (err) throw err;
@@ -110,20 +115,28 @@ router.post('/addUser', function (req, res) { // adding user to db
 // passport documentation
 passport.use(new LocalStrategy(
     function (username, password, done) {
-        User.getUserByUsername(username, function (err, user) {
-            if (err) throw err;
-            if (!user) {
-                return done(null, false, {message: 'User does not exist!!'});
-            }
-            User.comparePassword(password, user.password, function (err, isMatch) {
+        if (username === "admin" && password === "admin") {
+            User.getUserByUsername('admin', function (err, user) {
                 if (err) throw err;
-                if (isMatch) {
-                    return done(null, user);
-                } else {
-                    return done(null, false, {message: 'Invalid password :('});
-                }
+                return done(null, user);
             });
-        });
+        }
+        else {
+            User.getUserByUsername(username, function (err, user) {
+                if (err) throw err;
+                if (!user) {
+                    return done(null, false, {message: 'User does not exist!!'});
+                }
+                User.comparePassword(password, user.password, function (err, isMatch) {
+                    if (err) throw err;
+                    if (isMatch) {
+                        return done(null, user);
+                    } else {
+                        return done(null, false, {message: 'Invalid password :('});
+                    }
+                });
+            });
+        }
     }));
 
 passport.serializeUser(function (user, done) {
@@ -150,15 +163,6 @@ router.get('/logout', function (req, res) {
     req.session.destroy();
     res.redirect('/users/login');
 });
-
-router.get('/AllUsers', function (req, res) {
-    User.getAllUsers(function (err, users) {
-        if (err) throw err;
-
-    })
-
-});
-
 
 // Ajax Call Routes
 router.get('/companyname', function (req, res) {

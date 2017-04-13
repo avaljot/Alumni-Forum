@@ -6,27 +6,19 @@ var User = require('../models/user');
 var Comment=require('../models/comment');
 
 
-router.post('/getComments',function(req,res){
-    var commentID=req.body.commentId;
-    var comments=[];
-    Comment.getCommentByID(commentID,function (err,comment) {
-        if(err) throw err;
-        if(comment.comments!=null){
-            for(var i=0;i<comment.comments.length;i++){
-                Comment.getCommentByID(comment.comments[i],function (errNow,commentNow) {
-                    if(errNow) throw errNow;
-                    User.getUserById(commentNow.user,function (errUser,userUser) {
-                        if(errUser) throw errUser;
-                        commentNow.user=userUser;
-                        comments.push(commentNow);
-                        console.log(commentNow);
-
-                    });
-                });
-            }
-            console.log(comments);
-            res.send(comments);
+router.post('/getComments', function (req, res) {
+    var commentID = req.body.commentId;
+    Comment.find({'_id': commentID}).populate({
+        path: 'comments',
+        model: 'Comment',
+        populate: {
+            path: 'user',
+            model: 'User'
         }
+    }).exec(function (err, comments) {
+        console.log("here" + comments);
+        res.send(comments);
+
     });
 });
 
