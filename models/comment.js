@@ -8,8 +8,8 @@ var CommentSchema = mongoose.Schema({
     dateCreated: Date,
     lastModified: Date,
     versions: [String],
-    upvotes: Number,
-    downvotes: Number,
+    upvotes: {type:[Schema.Types.ObjectId],ref: 'User'},
+    downvotes: {type:[Schema.Types.ObjectId],ref: 'User'},
     comments:{type:[Schema.Types.ObjectId],ref: 'Comment'},
     user : {type:Schema.Types.ObjectId,ref: 'User'},
     status : Boolean

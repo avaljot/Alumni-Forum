@@ -59,21 +59,23 @@
             </div>
         </div>
     </div>
-    <div id="commentsList">
-    {{#each comments}}
-        <div class="media" onclick="getCommentOfComment('{{_id}}',this);">
-            <a class="pull-left" href="#">
-                <img class="media-object" style="width: 7em;height: 5em;" src="http://localhost:8000/uploads/{{user.filename}}" alt="profile pic of user">
-            </a>
-            <div class="media-body">
-                <h4 class="media-heading">{{user.username}}
-                    <small>{{lastModified}}</small>
-                </h4>
-                {{text}}
+    {{#if reg_user}}
+        <div id="commentsList">
+            {{#each comments}}
+                <div class="media" onclick="getCommentOfComment('{{_id}}',this);">
+                    <a class="pull-left" href="#">
+                        <img class="media-object" style="width: 7em;height: 5em;" src="http://localhost:8000/uploads/{{user.filename}}" alt="profile pic of user">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{user.username}}
+                            <small>{{lastModified}}</small>
+                        </h4>
+                        {{text}}
+                        </div>
                 </div>
+                <div class="clickedDiv" id='selected{{_id}}'></div>
+            {{/each}}
         </div>
-        <div class="clickedDiv" id='selected{{_id}}'></div>
-    {{/each}}
-    </div>
+    {{/if}}
 <script src="http://localhost:8000/javascript/jquery.js"></script>
 <script src="http://localhost:8000/javascript/bootstrap.min.js"></script>

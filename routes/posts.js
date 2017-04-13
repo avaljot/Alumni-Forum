@@ -12,7 +12,6 @@ router.post('/getComments',function(req,res){
     Comment.getCommentByID(commentID,function (err,comment) {
         if(err) throw err;
         if(comment.comments!=null){
-
             for(var i=0;i<comment.comments.length;i++){
                 Comment.getCommentByID(comment.comments[i],function (errNow,commentNow) {
                     if(errNow) throw errNow;
@@ -21,12 +20,12 @@ router.post('/getComments',function(req,res){
                         commentNow.user=userUser;
                         comments.push(commentNow);
                         console.log(commentNow);
-                        res.(commentNow);
+
                     });
                 });
             }
             console.log(comments);
-
+            res.send(comments);
         }
     });
 });
@@ -34,6 +33,7 @@ router.post('/getComments',function(req,res){
 
 router.post('/getPost',function (req, res) {
     var postID =req.body.getPost;
+
     console.log("getting post "+postID);
     Post.getPostbyId(postID, function (err, post) {
         if (err) throw err;
@@ -56,7 +56,8 @@ router.post('/getPost',function (req, res) {
                     });
                 }
             }
-            res.render('homePost', {post: post,layout: 'postLayout.hbs',user:user,comments:comments});
+            console.log(req.session.user);
+            res.render('homePost', {post: post,layout: 'postLayout.hbs',user:user,comments:comments,reg_user:req.session.user});
         });
     });
 });
@@ -67,9 +68,9 @@ router.post('/addCommentOfComment',function (req, res) {
     var text=req.body.comment;
     var dateCreated=Date.now;
     var lastModified=Date.now;
-    var upvotes=0;
+    var upvotes=null;
     var user=req.session.user;
-    var downvotes=0;
+    var downvotes=null;
     var version=null;
     var comments=null;
 
@@ -109,9 +110,9 @@ router.post('/postsComment',function (req, res) {
 
     var dateCreated=Date.now;
     var lastModified=Date.now;
-    var upvotes=0;
+    var upvotes=null;
     var user=req.session.user;
-    var downvotes=0;
+    var downvotes=null;
     var version=null;
     var comments=null;
 
@@ -161,9 +162,9 @@ router.post('/addPost', function (req, res) {
     var tags = req.body.tags.split(" ");
     var dateCreated=Date.now;
     var lastModified=Date.now;
-    var upvotes=0;
+    var upvotes=null;
     var user=req.session.user;
-    var downvotes=0;
+    var downvotes=null;
     var status= true;
     var newPost=new Post({
         title: title, description : description ,

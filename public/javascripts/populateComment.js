@@ -2,7 +2,7 @@ function getCommentOfComment(commentId,currObject){
     console.log("comment clicked "+commentId);
     var divToAppend="#selected"+commentId;
     console.log(divToAppend);
-    $('#selected_*').each(function() {
+    $('#selected*').each(function() {
         console.log("1");
     });
     $.ajax({
