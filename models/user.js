@@ -15,7 +15,7 @@ var UserSchema = mongoose.Schema({
     filename: String,
     status: Boolean,
     isAdmin: Boolean,
-    posts: {type: [Schema.ObjectId], ref: 'Post'},
+    posts: [{type: Schema.ObjectId, ref: 'Post'}],
     comments: {type: [Schema.ObjectId], ref: 'Comment'},
     favs: {type: [Schema.ObjectId], ref: 'Post'}
 });
@@ -24,7 +24,7 @@ var User = module.exports = mongoose.model('User', UserSchema);
 
 
 module.exports.updateFav = function (newUser, callback) {
-    User.findOneAndUpdate({'_id': newUser._id}, {$set: {'favs': newUser.favs}}, callback);
+    User.findOneAndUpdate({'_id': newUser._id, 'status': true}, {$set: {'favs': newUser.favs}}, callback);
 };
 
 module.exports.createUser = function (newUser, callback) {
@@ -56,7 +56,7 @@ module.exports.getAllUsers = function (callback) {
     User.find({'status': true}).exec(callback);
 };
 module.exports.updateImage = function (filename, username, callback) {
-    var query = {'username': username};
+    var query = {'username': username, 'status': true};
     User.findOneAndUpdate(query, {$set: {filename: filename}}, callback)
 
 };
@@ -80,7 +80,7 @@ module.exports.undoAdmin = function (id, callback) {
 };
 
 module.exports.updatePosts = function (newUser, callback) {
-    User.findOneAndUpdate({'_id': newUser._id}, {
+    User.findOneAndUpdate({'_id': newUser._id, 'status': true}, {
         $set: {'posts': newUser.posts}
     }, callback)
 };
