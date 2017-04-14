@@ -18,14 +18,11 @@ router.post('/getComments', function (req, res) {
     }).exec(function (err, comments) {
         console.log("here" + comments);
         res.send(comments);
-
     });
 });
 
-
 router.post('/getPost',function (req, res) {
     var postID =req.body.getPost;
-
     console.log("getting post "+postID);
     Post.getPostbyId(postID, function (err, post) {
         if (err) throw err;
@@ -49,6 +46,7 @@ router.post('/getPost',function (req, res) {
                 }
             }
             console.log(req.session.user);
+            post.preview=post.preview+1;
             res.render('homePost', {post: post,layout: 'postLayout.hbs',user:user,comments:comments,reg_user:req.session.user});
         });
     });
@@ -70,6 +68,11 @@ router.post('/addCommentOfComment',function (req, res) {
         text: text, dateCreated : dateCreated() , lastModified : lastModified() ,
         upvotes : upvotes, downvotes : downvotes, user:user
     });
+
+    if(user.comments!=null)
+        user.comments=new Array();
+
+    user.comments.push(newComment);
 
     Comment.createComment(newComment, function (err, post) {
         if (err) throw err;
@@ -113,6 +116,10 @@ router.post('/postsComment',function (req, res) {
         upvotes : upvotes, downvotes : downvotes, user:user
     });
 
+    if(user.comments!=null)
+        user.comments=new Array();
+
+    user.comments.push(newComment);
     Comment.createComment(newComment, function (err, post) {
         if (err) throw err;
     });
@@ -163,6 +170,9 @@ router.post('/addPost', function (req, res) {
         tags : tags, dateCreated : dateCreated() , lastModified : lastModified() ,
         upvotes : upvotes, downvotes : downvotes, status : status, user:user,comments: null,preview:0
     });
+    if(user.post==null)
+        user.post=new Array();
+    user.post.push(newPost);
     Post.createPost(newPost, function (err, post) {
         if (err) throw err;
         console.log(post);
@@ -176,6 +186,58 @@ router.get('/viewPosts', function (req, res) {
     Post.getPostByNewest(function (err, posts) {
         if (err) throw err;
         res.render("index",{posts: posts,reg_user:req.session.user});
+    });
+});
+
+
+router.post('/increaseUpvotes',function (req,res) {
+
+     var postId=req.body.getPost;
+     Post.getPostbyId(postId,function (err,post) {
+         if(err) throw err;
+         if(post.upvotes==null)
+             post.upvotes=new Array();
+         post.upvotes.push(req.session.user);
+         Post.updatePost(post,function (newErr,newPost) {
+                 if(newErr) throw err;
+                 console.log('upvotes '+newPost.upvotes.length);
+                 res.send(newPost.upvotes.length.toString());
+         });
+         //res.send(post.upvotes.length);
+     });
+});
+
+router.post('/increaseDownvotes',function (req,res) {
+    var postId=req.body.getPost;
+    Post.getPostbyId(postId,function (err,post) {
+        if(err) throw err;
+        if(post.downvotes==null)
+            post.downvotes=new Array();
+        post.downvotes.push(req.session.user);
+        Post.updatePost(post,function (newErr,newPost) {
+            if(newErr) throw err;
+            console.log('downvotes '+newPost.upvotes.length);
+            res.send(newPost.downvotes.length.toString());
+        });
+        //res.send(post.upvotes.length.toString());
+    });
+});
+
+//favPost
+
+router.post('/favPost',function (req,res) {
+    var postId=req.body.getPost;
+    var user=req.session.user;
+    Post.getPostbyId(postId,function (err,post) {
+        if(err) throw err;
+        if(user.favs==null)
+            user.favs=new Array();
+        user.favs.push(post);
+        User.updateFav(user,function (newErr,newUser) {
+              if(newErr) throw newErr;
+              res.send("ok",200);
+              console.log("fav added");
+        });
     });
 });
 

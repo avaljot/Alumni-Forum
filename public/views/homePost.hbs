@@ -7,7 +7,11 @@
 
     <div class="row">
         <div class="col-lg-8">
-            <h1>{{post.title}}</h1>
+            <h1>{{post.title}}
+                {{#if reg_user}}
+                    <img src="http://localhost:8000/images/fav.jpg" style="width: 2em;" onclick="favThisPost('{{post._id}}'); "/>
+                {{/if}}
+            </h1>
             <p class="lead">
                 by <a href="#">{{user.username}}</a>
             </p>
@@ -21,16 +25,18 @@
             {{/each}}
             <hr>
             <p>{{post.description}}</p>
-            <div class="well">
-                <h4>Leave a Comment:</h4>
-                <div>
-                    <input type="hidden" value={{post._id}} name='getPost' id="getPost"/>
-                    <div class="form-group">
-                        <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
+            {{#if reg_user}}
+                <div class="well">
+                    <h4>Leave a Comment:</h4>
+                    <div>
+                        <input type="hidden" value={{post._id}} name='getPost' id="getPost"/>
+                        <div class="form-group">
+                            <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
+                        </div>
+                        <button onclick="addComment('{{_id}}')" class="btn btn-primary">Post Comment</button>
                     </div>
-                    <button onclick="addComment('{{_id}}')" class="btn btn-primary">Post Comment</button>
                 </div>
-            </div>
+            {{/if}}
             <hr>
         </div>
 
@@ -51,31 +57,42 @@
             <!-- Side Widget Well -->
             <div class="well">
                 <h4>Stats:</h4>
-                <span style="color:greenyellow;">Up votes : {{post.upvotes}}</span>
+                {{#if reg_user}}
+                      <img src="http://localhost:8000/images/like.png" style="width: 2em;" onclick="increaseUpvotes('{{post._id}}'); "/>
+                {{/if}}
+                <span style="color:greenyellow;" id="upvotes">
+                    Up votes : {{post.upvotes.length}}</span>
                 <br/>
-                <span style="color:lightcoral;">Down votes : {{post.downvotes}}</span>
+                {{#if reg_user}}
+                      <img src="http://localhost:8000/images/unlike.png" style="width: 2em;" onclick="increaseDownvotes('{{post._id}}');"/>
+                {{/if}}
+
+                <span style="color:lightcoral;" id="downvotes">
+                    Down votes : {{post.downvotes.length}}</span>
                 <br/>
-                <span style="color:cornflowerblue;">Views : {{post.preview}}</span>
+                <img src="http://localhost:8000/images/preview.jpg" style="width: 2em;"/>
+                <span style="color:cornflowerblue;" id="preview" >
+                    Views : {{post.preview}}</span>
             </div>
         </div>
     </div>
-    {{#if reg_user}}
-        <div id="commentsList">
-            {{#each comments}}
-                <div class="media" onclick="getCommentOfComment('{{_id}}',this);">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" style="width: 7em;height: 5em;" src="http://localhost:8000/uploads/{{user.filename}}" alt="profile pic of user">
-                    </a>
-                    <div class="media-body">
-                        <h4 class="media-heading">{{user.username}}
-                            <small>{{lastModified}}</small>
-                        </h4>
-                        {{text}}
-                        </div>
-                </div>
-                <div class="clickedDiv" id='selected{{_id}}'></div>
-            {{/each}}
-        </div>
-    {{/if}}
+    <div id="commentsList">
+        {{#each comments}}
+            <div class="media" onclick="getCommentOfComment('{{_id}}',this);">
+                <a class="pull-left" href="#">
+                    <img class="media-object" style="width: 7em;height: 5em;" src="http://localhost:8000/uploads/{{user.filename}}" alt="profile pic of user">
+                </a>
+                <div class="media-body">
+                    <h4 class="media-heading">{{user.username}}
+                        <small>{{lastModified}}</small>
+                    </h4>
+                    {{text}}
+                    </div>
+            </div>
+            <div class="clickedDiv" id='selected{{_id}}'></div>
+        {{/each}}
+    </div>
+</div>
+
 <script src="http://localhost:8000/javascript/jquery.js"></script>
 <script src="http://localhost:8000/javascript/bootstrap.min.js"></script>
