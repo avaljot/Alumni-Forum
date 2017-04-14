@@ -32,7 +32,7 @@ module.exports.createUser = function (newUser, callback) {
 };
 
 module.exports.getUserByUsername = function (username, callback) {
-    var query = {username: username};
+    var query = {username: username, status: true};
     User.findOne(query, callback);
 };
 
@@ -61,3 +61,16 @@ module.exports.deleteUser = function (id, callback) {
         $set: {status: false}
     }, callback);
 };
+
+module.exports.makeAdmin = function (id, callback) {
+    User.findOneAndUpdate({'_id': id}, {
+        $set: {isAdmin: true}
+    }, callback);
+};
+
+module.exports.undoAdmin = function (id, callback) {
+    User.findOneAndUpdate({'_id': id}, {
+        $set: {isAdmin: false}
+    }, callback);
+};
+

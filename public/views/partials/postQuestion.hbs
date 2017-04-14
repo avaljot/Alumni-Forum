@@ -1,8 +1,9 @@
-<div id="loginModel">
-    <div id="id03" class="modal">
-        <form method="post" class="modal-content animate" action="/posts/addPost">
-            <span onclick="document.getElementById('id03').style.display='none'" class="close" title="Close Modal">&times;</span>
-            <div class="container expandonClick1">
+<div class="modal fade" id="thread-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     style="display: none;">
+    <div class="modal-dialog ">
+        <div class="loginmodal-container width-container">
+            <h1>Make a Thread</h1><br>
+            <form method="post" action="/posts/addPost">
                 <table>
                     <tr>
                         <th><label><b>Title</b></label></th>
@@ -13,7 +14,8 @@
                             <label><b>Description</b></label>
                         </th>
                         <td>
-                            <textarea placeholder="Enter Description" name="description" required></textarea>
+                            <textarea class="textarea" placeholder="Enter Description" name="description"
+                                      required></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -21,7 +23,7 @@
                             <label><b>Tags</b></label>
                         </th>
                         <td>
-                            <textarea placeholder="Enter Tags" name="tags"></textarea>
+                            <textarea class="textarea" placeholder="Enter Tags" name="tags"></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -29,11 +31,12 @@
 
                         </th>
                         <td>
-                            <button type="submit">Post Discussion</button>
+                            <input type="submit" name="login" class="login loginmodal-submit" value="Ceate">
                         </td>
                     </tr>
                 </table>
-            </div>
-        </form>
+            </form>
+
+        </div>
     </div>
 </div>
