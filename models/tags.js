@@ -5,8 +5,9 @@ var Schema = mongoose.Schema;
 
 var TagsSchema = mongoose.Schema({
     text: String,
-    posts: {type: [Schema.ObjectId], ref: 'Post'},
-    comments: {type: [Schema.ObjectId], ref: 'Comment'}
+    posts: [{type: Schema.ObjectId, ref: 'Post'}],
+    comments: {type: [Schema.ObjectId], ref: 'Comment'},
+    preview : Number
 });
 
 var Tags = module.exports = mongoose.model('Tags', TagsSchema);
@@ -20,4 +21,6 @@ module.exports.getTagByText = function (text,callback) {
     Tags.find(query).exec(callback);
 };
 
-
+module.exports.updateTags = function (newTags,callback) {
+    Tags.findOneAndUpdate({'_id':newTags._id},{$set:{'posts':newTags.posts}},callback);
+};

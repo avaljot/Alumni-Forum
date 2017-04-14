@@ -198,31 +198,34 @@ router.post('/addPost', function (req, res) {
     var count=0;
     console.log(tags);
     console.log(tags.length);
-    for(var i=0;i<tags.length;i++){
-        //console.log("now "+tags[count]+" current i "+i);
-        Tags.getTagByText(tags[count],function (errNow,tagNow) {
+    tags.forEach(function(element,index,array){
+        Tags.getTagByText(element,function (errNow,tagNow) {
+            console.log("tag now "+element);
+            console.log(array.length+" "+index);
             if(errNow) throw errNow;
-            //console.log(tagNow+" "+tags[count]+" "+i);
             if(tagNow==null || tagNow==''){
-                //console.log('check');
+                console.log('inside');
                 var newTag=new Tags({
-                    text : tags[count], posts : new Array() , comments : new Array()
+                    text : element, posts : [] , comments : [] , preview : 0
                 });
                 Tags.createTags(newTag,function (newErr,newTag) {
                     if(newErr) throw newErr;
                     tagsArray.push(newTag);
+                    //console.log(newTag);
                     count++;
+                    console.log("count "+count+" tagsArrayLength "+tagsArray.length);
                     if(count==tags.length)
                         createPost(title,description,tagsArray,req, res);
                 });
             }else{
-                tagsArray.push(newTag);
+                tagsArray.push(tagNow[0]);
                 count++;
+                console.log("count old "+count+" tagsArrayLength "+tagsArray.length);
+                if(count==tags.length)
+                    createPost(title,description,tagsArray,req, res);
             }
-            if(count==tags.length)
-                createPost(title,description,tagsArray,req, res);
         });
-    }
+    });
 });
 
 function createPost(title,description,tagsArray,req,res){
@@ -232,14 +235,34 @@ function createPost(title,description,tagsArray,req,res){
     var user = req.session.user;
     var downvotes = null;
     var status = true;
-    for(var i=0;i<tagsArray.length;i++){
-        console.log(tagsArray[i]);
-    }
+
     var newPost = new Post({
         title: title, description: description,
-        tags: tagsArray, dateCreated: dateCreated(), lastModified: lastModified(),
+        tags: new Array(), dateCreated: dateCreated(), lastModified: lastModified(),
         upvotes: upvotes, downvotes: downvotes, status: status, user: user, comments: null, preview: 0
     });
+
+    if(tagsArray.length==0){
+        createPostOther(title,description,tagsArray,req,res,newPost,user);
+    }
+
+    var count=0;
+    tagsArray.forEach(function(element,index,array){
+        console.log(array[index]);
+        console.log(array[index].posts);
+        console.log(array[index].preview);
+        array[index].posts.push(newPost);
+        Tags.updateTags(tagsArray[index],function (err,tagNow) {
+               if(err) throw err;
+               newPost.tags.push(tagNow);
+               count++;
+               if(count==tagsArray.length)
+                   createPostOther(title,description,tagsArray,req,res,newPost,user);
+            });
+    });
+}
+
+function createPostOther(title,description,tagsArray,req,res,newPost,user){
     if (user.posts == null)
         user.posts = [];
     user.posts.push(newPost);
@@ -257,8 +280,10 @@ function createPost(title,description,tagsArray,req,res){
 }
 
 router.get('/viewPosts', function (req, res) {
-    Post.getPostByNewest(function (err, posts) {
+    var query = {status: true};
+    Post.getPostWithTags(query,function (err, posts) {
         if (err) throw err;
+        console.log(posts);
         res.render("index", {posts: posts, reg_user: req.session.user});
     });
 });
@@ -313,6 +338,36 @@ router.post('/favPost', function (req, res) {
             if (newErr) throw newErr;
             res.send("ok", 200);
             console.log("fav added");
+        });
+    });
+});
+
+
+router.post('/getPostByTag',function (req,res) {
+    var tags=req.body.tags.split(" ");
+    var posts=new Array();
+    var count=0;
+    if(tags.length==0) res.send(posts);
+    console.log(tags);
+    tags.forEach(function(element,index,array){
+        Tags.getTagByText(element,function (err,tag) {
+                if(!(tag==null || tag=='')){
+                    if(tag[0].posts!=null && tag[0].posts.length>0){
+                        tag[0].posts.forEach(function (postNow,index1,array1) {
+                             Post.getPostbyId(postNow,function (errNow,postToPush) {
+                                  console.log("7");
+                                  if(errNow) throw errNow;
+                                  posts.push(postToPush);
+                             });
+                        });
+                    }
+                }
+                count++;
+                console.log(count+" "+element);
+                if(count==tags.length) {
+                    res.send(posts);
+                    console.log("10-1");
+                }
         });
     });
 });

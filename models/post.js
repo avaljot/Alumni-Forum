@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var PostSchema = mongoose.Schema({
     title: String,
     description: String,
-    tags: {type:[Schema.ObjectId],ref: 'Tags'},
+    tags: [{type:Schema.ObjectId,ref: 'Tags'}],
     dateCreated: Date,
     lastModified: Date,
     versions: [String],
@@ -37,6 +37,10 @@ module.exports.getPostbyId = function (id,callback) {
 module.exports.getPostByNewest = function (callback) {
     var query = {status: true};
     Post.find(query).sort({lastModified : 'descending'}).exec(callback);
+};
+
+module.exports.getPostWithTags = function(queryString,callback) {
+    Post.find(queryString).sort({lastModified : 'descending'}).populate('tags').exec(callback);
 };
 
 module.exports.getPostByNoComment = function (callback) {
