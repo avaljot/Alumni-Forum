@@ -1,32 +1,19 @@
-<div class="container">
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header navbar-fixed-top">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">1</span>
-                    <span class="icon-bar">2</span>
-                    <span class="icon-bar">2</span>
-                    <span class="icon-bar">3</span>
-                </button>
-                <a class="pull-left" href="#"><img src="http://localhost:8000/images/d5.png"
-                                                   class="logosize img-rounded"></a>
-                <div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav navbar-right">
-                        {{#if user}}
+<div class="container" style="margin-top: 25px">
+    <div class="page-header page-heading">
+        <ol class="breadcrumb pull-right where-am-i">
+            <li><a href="/">Forum</a></li>
+            <li><a href="/">Home</a></li>
+            {{#if user}}
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/users/logout">Logout</a></li>
+            {{else}}
+                <li></li>
+                <a href="#" data-toggle="modal" data-target="#login-modal">Login</a>
+                <li></li>
+                <li><a href="/users/register">Register</a></li>
+            {{/if}}
+        </ol>
 
-                            <li><a href="/profile">Profile</a></li>
-                            <li></li>
-                            <li><a href="/users/logout"><span class="glyphicon glyphicon-log-in"></span>Logout</a></li>
-                        {{else}}
-                            <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">
-                                <span class="glyphicon glyphicon-log-in"></span>
-                                Login
-                            </button>
-                        {{/if}}
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
+        <div class="clearfix"></div>
+    </div>
 </div>

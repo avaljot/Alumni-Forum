@@ -45,8 +45,8 @@ router.get('/:username', function (req, res) {
             if (err)throw err;
             res.render('profile-posts', {
                 layout: 'profile-layout',
-                user: user,
-                reg_user: req.session.user
+                user: user,  //profiles user
+                reg_user: req.session.user //loged in user
             });
         });
 
@@ -55,18 +55,34 @@ router.get('/:username', function (req, res) {
     }
 });
 
-router.get('/:id', function (req, res) {
-    console.log("here" + req.params.id);
-    User.deleteUser(req.params.id, function (err, user) {
-        if (err) throw err;
-        req.flash('success_msg', 'User Deleted!!');
-        res.redirect('/profile/allusers');
-    })
+router.post('/delete', function (req, res) {
 
+    User.deleteUser(req.body.user_id, function (err, user) {
+        if (err) throw err;
+        res.send(user);
+    })
 });
+
+router.post('/make-admin', function (req, res) {
+
+    User.makeAdmin(req.body.user_id, function (err, user) {
+        if (err) throw err;
+        res.send(user);
+    })
+});
+
+router.post('/undo-admin', function (req, res) {
+
+    User.undoAdmin(req.body.user_id, function (err, user) {
+        if (err) throw err;
+        res.send(user);
+    })
+});
+
 
 router.get('/', function (req, res) {
     if (req.session && req.session.user) {
+        console.log(req.session.user);
         res.render('profile-posts', {
             layout: 'profile-layout',
             user: req.session.user,

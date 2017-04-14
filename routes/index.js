@@ -7,7 +7,10 @@ var Post = require('../models/post');
 router.get('/', function (req, res) {
     Post.getPostByNewest(function (err, posts) {
         if (err) throw err;
-        res.render("index", {posts: posts, reg_user: req.session.user});
+        res.render("index", {
+            posts: posts,
+            reg_user: req.session.user
+        });
     });
 });
 
