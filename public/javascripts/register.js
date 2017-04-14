@@ -1,5 +1,4 @@
 function companyName() {
-    console.log("here");
     $.ajax({
         url: "./companyname",
         method: 'get',

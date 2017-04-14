@@ -45,8 +45,8 @@ router.get('/:username', function (req, res) {
             if (err)throw err;
             res.render('profile-posts', {
                 layout: 'profile-layout',
-                user: user,
-                reg_user: req.session.user
+                user: user,  //profiles user
+                reg_user: req.session.user //loged in user
             });
         });
 
@@ -82,6 +82,7 @@ router.post('/undo-admin', function (req, res) {
 
 router.get('/', function (req, res) {
     if (req.session && req.session.user) {
+        console.log(req.session.user);
         res.render('profile-posts', {
             layout: 'profile-layout',
             user: req.session.user,
