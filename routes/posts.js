@@ -148,7 +148,7 @@ router.post('/postsComment', function (req, res) {
         upvotes: upvotes, downvotes: downvotes, user: user
     });
 
-    if (user.comments != null)
+    if (user.comments == null)
         user.comments = new Array();
 
     user.comments.push(newComment);
@@ -199,12 +199,12 @@ router.post('/addPost', function (req, res) {
     console.log(tags);
     console.log(tags.length);
     for(var i=0;i<tags.length;i++){
-        console.log("now "+tags[count]+" current i "+i);
+        //console.log("now "+tags[count]+" current i "+i);
         Tags.getTagByText(tags[count],function (errNow,tagNow) {
             if(errNow) throw errNow;
-            console.log(tagNow+" "+tags[count]+" "+i);
+            //console.log(tagNow+" "+tags[count]+" "+i);
             if(tagNow==null || tagNow==''){
-                console.log('check');
+                //console.log('check');
                 var newTag=new Tags({
                     text : tags[count], posts : new Array() , comments : new Array()
                 });
@@ -223,9 +223,6 @@ router.post('/addPost', function (req, res) {
                 createPost(title,description,tagsArray,req, res);
         });
     }
-    for(var i=0;i<tags.length;i++) {
-        console.log("nowTest "+tags[i]);
-    }
 });
 
 function createPost(title,description,tagsArray,req,res){
@@ -235,9 +232,12 @@ function createPost(title,description,tagsArray,req,res){
     var user = req.session.user;
     var downvotes = null;
     var status = true;
+    for(var i=0;i<tagsArray.length;i++){
+        console.log(tagsArray[i]);
+    }
     var newPost = new Post({
         title: title, description: description,
-        tags: null, dateCreated: dateCreated(), lastModified: lastModified(),
+        tags: tagsArray, dateCreated: dateCreated(), lastModified: lastModified(),
         upvotes: upvotes, downvotes: downvotes, status: status, user: user, comments: null, preview: 0
     });
     if (user.posts == null)
@@ -257,7 +257,6 @@ function createPost(title,description,tagsArray,req,res){
 }
 
 router.get('/viewPosts', function (req, res) {
-
     Post.getPostByNewest(function (err, posts) {
         if (err) throw err;
         res.render("index", {posts: posts, reg_user: req.session.user});
