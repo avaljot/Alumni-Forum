@@ -2,8 +2,9 @@
 {{# each user.posts}}
     <li>
         <form method="post" action="/posts/getPost">
-            <input type="hidden" value={{_id}} id='postId' name="getPost"/>
-            <input type="submit" value="{{title}}" class="btn btn-default">
+            <input type="hidden" value="{{_id}}" name="getPost"/>
+            {{title}},Views={{preview}}
+            <button>View</button>
         </form>
     </li>
 {{/each}}
