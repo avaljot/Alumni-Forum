@@ -26,7 +26,7 @@ module.exports.createPost = function (newPost,callback) {
 
 
 module.exports.updatePost = function (newPost,callback) {
-    newPost.findOneAndUpdate(callback);
+    Post.findOneAndUpdate({'_id':newPost._id},{$set:{'upvotes':newPost.upvotes,'downvotes':newPost.downvotes}},callback);
 };
 
 

@@ -10,9 +10,8 @@
                 <a class="pull-left" href="#"><img src="http://localhost:8000/images/d5.png" class="logosize img-rounded"></a>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav navbar-right">
-                        {{#if user}}
-
-                            <li><a href="/profile">Profile</a></li> <li></li>
+                        {{#if reg_user}}
+                            <li><a href="/users/profile">Profile</a></li> <li></li>
                             <li><a href="/users/logout"><span class="glyphicon glyphicon-log-in"></span>Logout</a></li>
                         {{else}}
                             <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">
