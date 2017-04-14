@@ -1,3 +1,6 @@
+<link href="http://localhost:8000/css/bootstrap.min.css" rel="stylesheet">
+<link href="http://localhost:8000/css/blog-post.css" rel="stylesheet">
+
 <!-- Page Content -->
 <div class="container">
 
@@ -16,23 +19,22 @@
             <hr>
             <hr>
             {{#each post.tags}}
-                <span class="lead" style="background-color:#cdf2f1;color: black;display: inline;font-weight: bold;">#{{this}}</span>
+                <span class="lead"
+                      style="background-color:#cdf2f1;color: black;display: inline;font-weight: bold;">#{{this}}</span>
                 <span>&nbsp;</span>
             {{/each}}
             <hr>
             <p>{{post.description}}</p>
-            {{#if reg_user}}
-                <div class="well">
-                    <h4>Leave a Comment:</h4>
-                    <div>
-                        <input type="hidden" value={{post._id}} name='getPost' id="getPost"/>
-                        <div class="form-group">
-                            <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
-                        </div>
-                        <button onclick="addComment('{{_id}}')" class="btn btn-primary">Post Comment</button>
+            <div class="well">
+                <h4>Leave a Comment:</h4>
+                <div>
+                    <input type="hidden" value={{post._id}} name='getPost' id="getPost"/>
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
                     </div>
+                    <button onclick="addComment('{{_id}}')" class="btn btn-primary">Post Comment</button>
                 </div>
-            {{/if}}
+            </div>
             <hr>
         </div>
 
@@ -89,3 +91,5 @@
         {{/each}}
     </div>
 </div>
+<script src="http://localhost:8000/javascript/jquery.js"></script>
+<script src="http://localhost:8000/javascript/bootstrap.min.js"></script>

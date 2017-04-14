@@ -15,7 +15,7 @@ var UserSchema = mongoose.Schema({
     filename: String,
     status: Boolean,
     isAdmin: Boolean,
-    posts: {type: Schema.ObjectId, ref: 'Post'},
+    posts: [{type: Schema.ObjectId, ref: 'Post'}],
     comments: {type: [Schema.ObjectId], ref: 'Comment'},
     favs: {type: [Schema.ObjectId], ref: 'Post'}
 });

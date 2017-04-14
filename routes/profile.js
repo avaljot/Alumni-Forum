@@ -41,16 +41,16 @@ router.get('/allusers', function (req, res) {
 
 router.get('/:username', function (req, res) {
     if (req.session && req.session.user) {
-        User.getUserByUsername(req.params.username, function (err, user) {
-            if (err)throw err;
+        User.findOne({username: req.params.username, 'status': true}).populate('posts').exec(function (err, user) {
+            console.log("found: " + user);
             res.render('profile-posts', {
                 layout: 'profile-layout',
-                user: user,  //profiles user
-                reg_user: req.session.user //loged in user
+                user: user,
+                reg_user: req.session.user
             });
         });
-
-    } else {
+    }
+    else {
         res.redirect('/users/login');
     }
 });
@@ -82,11 +82,12 @@ router.post('/undo-admin', function (req, res) {
 
 router.get('/', function (req, res) {
     if (req.session && req.session.user) {
-        console.log(req.session.user);
-        res.render('profile-posts', {
-            layout: 'profile-layout',
-            user: req.session.user,
-            reg_user: req.session.user
+        User.findOne({_id: req.session.user._id, 'status': true}).populate('posts').exec(function (err, user) {
+            res.render('profile-posts', {
+                layout: 'profile-layout',
+                user: user,
+                reg_user: user
+            });
         });
     }
     else {
