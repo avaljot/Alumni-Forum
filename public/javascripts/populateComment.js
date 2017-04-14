@@ -14,15 +14,17 @@ function getCommentOfComment(commentId,currObject){
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             //$(divToAppend).append(one);
-            var one="<div class='commentOfComment well'>";
-            for(i=0;i<data.comments.length;i++){
-                one+=getCommentDiv(data.comments[i]);
+            var one = "<div class='commentOfComment well'>";
+            if(data.comments!="done") {
+                for (i = 0; i < data.comments.length; i++) {
+                    one += getCommentDiv(data.comments[i]);
+                }
             }
             if(data.user!=false)
                 one+=getCommentButtonOfComment(data,commentId);
             one+="</div>";
+            $(divToAppend).empty();
             $(divToAppend).append(one);
-            console.log(data);
         }
     });
 }

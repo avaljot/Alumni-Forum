@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var PostSchema = mongoose.Schema({
     title: String,
     description: String,
-    tags: [String],
+    tags: {type:[Schema.ObjectId],ref: 'Tags'},
     dateCreated: Date,
     lastModified: Date,
     versions: [String],
