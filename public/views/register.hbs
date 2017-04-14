@@ -1,79 +1,76 @@
-<script src="/javascripts/company-call.js"></script>
-<script src="/javascripts/university-call.js"></script>
-<h2 class="page-header">Register</h2>
+
 {{#if err}}
     {{#each err}}
-        <div class="alert alert-danger">{{err_msg}}</div>
+        <div class="alert alert-danger register-container" style="text-align: center;margin: 0 auto">{{err_msg}}</div>
     {{/each}}
 {{/if}}
 
 {{#if message}}
-    <div class="alert alert-danger">{{message}}</div>
+    <div class="alert alert-danger register-container" style="text-align: center;margin: 0 auto"">{{message}}</div>
 {{/if}}
-<form method="post" action="/users/addUser" class="modal-content animate">
-    <span onclick="document.getElementById('id02').style.display='none'" class="close"
-          title="Close Modal">&times;</span>
-    <div class="container">
-        <div class="form-group">
-            <label>First Name</label>
-            <input type="text" class="form-control" placeholder="First Name" name="firstname">
-        </div>
-        <div class="form-group">
-            <label>Last Name</label>
-            <input type="text" class="form-control" placeholder="Last Name" name="lastname">
-        </div>
-        <div class="form-group">
-            <label>Username</label>
-            <input type="text" class="form-control" placeholder="Username" name="username">
-        </div>
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" class="form-control" placeholder="Email" name="email">
-        </div>
-        <div class="form-group">
-            <label>Your current work status</label>
-            <label class="radio-inline">
-                <input type="radio" name="optradio">Working full-time
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="optradio">Working part-time
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="optradio">Between jobs / In transition
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="optradio">Full-time student
-            </label>
-            <label class="radio-inline">
-                <input type="radio" name="optradio">Retired
-            </label>
-        </div>
-        <div class="form-group">
-            <label>Select Company Name(Type if not listed)</label>
-            <select class="form-control" id="company-list">
-                <option></option>
-                <!--company list-->
-            </select>
-            Company:<input type="text" class="form-control" placeholder="Company Name" name="company">
-        </div>
-        <div class="form-group">
-            <label>Select School Name(Type if not listed)</label>
-            <select class="form-control" id="university-list">
-                <option></option>
-                <!--school-list-->
-            </select>
-            School:<input type="text" class="form-control" placeholder="University Name" name="university">
-        </div>
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" class="form-control" placeholder="Password" name="password">
-        </div>
-        <div class="form-group">
-            <label>Confirm Password</label>
-            <input type="password" class="form-control" placeholder="Password" name="password2">
-        </div>
-    </div>
-    <div class="container" style="background-color:#f1f1f1">
-        <button type="submit" class="btn btn-default">Submit</button>
-    </div>
+
+
+<div class="loginmodal-container width-container">
+    <form method="post" action="/users/addUser">
+        <label>First Name</label>
+        <input type="text" placeholder="First Name" name="firstname">
+
+
+        <label>Last Name</label>
+        <input type="text" class="form-control" placeholder="Last Name" name="lastname">
+
+
+        <label>Username</label>
+        <input type="text" class="form-control" placeholder="Username" name="username">
+
+
+        <label>Email</label>
+        <input type="email" class="form-control" placeholder="Email" name="email">
+        <br>
+
+        <label>Your current work status</label><br>
+        <label class="radio-inline">
+            <input type="radio" name="optradio">Working full-time
+        </label><br>
+        <label class="radio-inline">
+            <input type="radio" name="optradio">Working part-time
+        </label><br>
+        <label class="radio-inline">
+            <input type="radio" name="optradio">Between jobs / In transition
+        </label><br>
+        <label class="radio-inline">
+            <input type="radio" name="optradio">Full-time student
+        </label><br>
+        <label class="radio-inline">
+            <input type="radio" name="optradio">Retired
+        </label><br>
+        <br>
+
+        <label>Select Company Name(Type if not listed)</label>
+        <select class="form-control" id="company-list" onclick="companyName()">
+            <option></option>
+            <!--company list-->
+        </select>
+        Company:<input type="text" placeholder="Company Name" name="company">
+
+
+        <label>Select School Name(Type if not listed)</label>
+        <select class="form-control" id="university-list" onclick="univName()">
+            <option></option>
+            <!--school-list-->
+        </select>
+        School:<input type="text" placeholder="University Name" name="university">
+
+
+        <label>Password</label>
+        <input type="password" class="form-control" placeholder="Password" name="password">
+
+
+        <label>Confirm Password</label>
+        <input type="password" class="form-control" placeholder="Password" name="password2">
+
+        <input type="submit" name="register" class="login loginmodal-submit" value="Register">
+
+</div>
+
 </form>

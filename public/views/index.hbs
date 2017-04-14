@@ -1,7 +1,7 @@
 <span class="expandonClick">
-    <input type="text" name="search" placeholder="Search..">
+    <input type="text" name="search" placeholder="Search.." id="searchBox">
     {{#if reg_user}}
-        <a onclick="document.getElementById('id03').style.display='block'" style="width:auto;"> Post Question ?</a>
+        <a href="#" data-toggle="modal" data-target="#thread-modal">Create new Thread</a>
     {{/if}}
 </span>
 <div id="dispPosts">
@@ -29,7 +29,7 @@
                     <td style="width: 7em;">
                     <span style="float: right;">
                         {{#each tags}}
-                            <span style="background-color:#cdf2f1;color: black;display: inline;font-weight: bold;">#{{this}}</span>
+                            <span style="background-color:#cdf2f1;color: black;display: inline;font-weight: bold;">#{{this.text}}</span>
                             <span>&nbsp;</span>
                         {{/each}}
                     </span>

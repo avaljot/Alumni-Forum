@@ -1,2 +1,10 @@
-here logged in users post will come
-<h1>hello</h1>
+<h1>Threads created by You:</h1>
+{{# each user.posts}}
+    <li>
+        <form method="post" action="/posts/getPost">
+            <input type="hidden" value="{{_id}}" name="getPost"/>
+            {{title}},Views={{preview}}
+            <button>View</button>
+        </form>
+    </li>
+{{/each}}

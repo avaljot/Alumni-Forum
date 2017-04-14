@@ -41,36 +41,53 @@ router.get('/allusers', function (req, res) {
 
 router.get('/:username', function (req, res) {
     if (req.session && req.session.user) {
-        User.getUserByUsername(req.params.username, function (err, user) {
-            if (err)throw err;
+        User.findOne({username: req.params.username, 'status': true}).populate('posts').exec(function (err, user) {
+            console.log("found: " + user);
             res.render('profile-posts', {
                 layout: 'profile-layout',
                 user: user,
                 reg_user: req.session.user
             });
         });
-
-    } else {
+    }
+    else {
         res.redirect('/users/login');
     }
 });
 
-router.get('/:id', function (req, res) {
-    console.log("here" + req.params.id);
-    User.deleteUser(req.params.id, function (err, user) {
-        if (err) throw err;
-        req.flash('success_msg', 'User Deleted!!');
-        res.redirect('/profile/allusers');
-    })
+router.post('/delete', function (req, res) {
 
+    User.deleteUser(req.body.user_id, function (err, user) {
+        if (err) throw err;
+        res.send(user);
+    })
 });
+
+router.post('/make-admin', function (req, res) {
+
+    User.makeAdmin(req.body.user_id, function (err, user) {
+        if (err) throw err;
+        res.send(user);
+    })
+});
+
+router.post('/undo-admin', function (req, res) {
+
+    User.undoAdmin(req.body.user_id, function (err, user) {
+        if (err) throw err;
+        res.send(user);
+    })
+});
+
 
 router.get('/', function (req, res) {
     if (req.session && req.session.user) {
-        res.render('profile-posts', {
-            layout: 'profile-layout',
-            user: req.session.user,
-            reg_user: req.session.user
+        User.findOne({_id: req.session.user._id, 'status': true}).populate('posts').exec(function (err, user) {
+            res.render('profile-posts', {
+                layout: 'profile-layout',
+                user: user,
+                reg_user: user
+            });
         });
     }
     else {

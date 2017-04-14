@@ -5,12 +5,12 @@ var Schema = mongoose.Schema;
 var PostSchema = mongoose.Schema({
     title: String,
     description: String,
-    tags: [String],
+    tags: [{type:Schema.ObjectId,ref: 'Tags'}],
     dateCreated: Date,
     lastModified: Date,
     versions: [String],
-    upvotes: Number,
-    downvotes: Number,
+    upvotes: {type:[Schema.ObjectId],ref: 'User'},
+    downvotes: {type:[Schema.ObjectId],ref: 'User'},
     comments:{type:[Schema.ObjectId],ref: 'Comment'},
     user : {type:Schema.ObjectId, ref:'User'},
     status: Boolean,
@@ -26,7 +26,7 @@ module.exports.createPost = function (newPost,callback) {
 
 
 module.exports.updatePost = function (newPost,callback) {
-    newPost.findOneAndUpdate(callback);
+    Post.findOneAndUpdate({'_id':newPost._id},{$set:{'upvotes':newPost.upvotes,'downvotes':newPost.downvotes}},callback);
 };
 
 
@@ -37,6 +37,10 @@ module.exports.getPostbyId = function (id,callback) {
 module.exports.getPostByNewest = function (callback) {
     var query = {status: true};
     Post.find(query).sort({lastModified : 'descending'}).exec(callback);
+};
+
+module.exports.getPostWithTags = function(queryString,callback) {
+    Post.find(queryString).sort({lastModified : 'descending'}).populate('tags').exec(callback);
 };
 
 module.exports.getPostByNoComment = function (callback) {
