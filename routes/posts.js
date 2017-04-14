@@ -8,16 +8,36 @@ var Comment=require('../models/comment');
 
 router.post('/getComments', function (req, res) {
     var commentID = req.body.commentId;
-    Comment.find({'_id': commentID}).populate({
-        path: 'comments',
-        model: 'Comment',
-        populate: {
-            path: 'user',
-            model: 'User'
-        }
-    }).exec(function (err, comments) {
-        console.log("here" + comments);
-        res.send(comments);
+    var comments=new Object();
+    var currUser=req.session.user;
+    comments.user=false;
+    comments.comments=new Array();
+    comments.user=currUser;
+    var count=0;
+    Comment.getCommentByID(commentID,function (err,comment) {
+           if(err) throw err;
+        console.log("comment is "+commentID+" "+comment.comments.length);
+           if(comment.comments!=null) {
+               for (var i = 0; i < comment.comments.length; i++) {
+                   Comment.getCommentByID(comment.comments[i], function (newErr, commentNow) {
+                       if (newErr) throw newErr;
+                       if (commentNow != null) {
+                           User.getUserById(commentNow.user,function(userErr,userNow){
+                               if(userErr) throw userErr;
+                               count++;
+                               commentNow.user=userNow;
+                               comments.comments.push(commentNow);
+                               if(count==comment.comments.length){
+                                   console.log("sending ");
+                                   res.send(comments);
+                               }
+                           });
+                       }
+                   });
+               }
+           }else{
+               res.send(comments);
+           }
     });
 });
 

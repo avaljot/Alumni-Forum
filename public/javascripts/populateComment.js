@@ -13,15 +13,22 @@ function getCommentOfComment(commentId,currObject){
         },
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
-            //var one=getCommentButtonOfComment(data,commentId);
             //$(divToAppend).append(one);
+            var one="<div class='commentOfComment well'>";
+            for(i=0;i<data.comments.length;i++){
+                one+=getCommentDiv(data.comments[i]);
+            }
+            if(data.user!=false)
+                one+=getCommentButtonOfComment(data,commentId);
+            one+="</div>";
+            $(divToAppend).append(one);
             console.log(data);
         }
     });
 }
 
 function getCommentButtonOfComment(data,commentId){
-    var one="<div class='well expandonClick commentOfComment'> <h4>Leave a Comment:</h4> <div>";
+    var one="<div class='expandonClick'> <h4>Leave a Comment:</h4> <div>";
     one+="<div class='form-group'>";
     one+="<input type='text' class='form-control' name='comment' id='comment'/>";
     one+="</div><button onclick=\"addCommentofComment('"+commentId+"',this)\" class='btn btn-primary'>Post Comment</button>";
