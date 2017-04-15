@@ -1,7 +1,10 @@
+<<<<<<< HEAD
 <link href="http://localhost:8000/css/bootstrap.min.css" rel="stylesheet">
 <link href="http://localhost:8000/css/blog-post.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+=======
+>>>>>>> refs/remotes/origin/master
 <!-- Page Content -->
 <div class="container">
 
@@ -9,7 +12,14 @@
         <div class="col-lg-8">
             <h1>{{post.title}}
                 {{#if reg_user}}
-                    <img src="http://localhost:8000/images/fav.jpg" style="width: 2em;" onclick="favThisPost('{{post._id}}'); "/>
+                    {{# if isfav}}
+                        <img src="http://localhost:8000/images/fav.jpg" style="width: 2em;"
+                             onclick="unfavThisPost('{{post._id}}'); " id="fav"/>
+                    {{else}}
+                        <img src="http://localhost:8000/images/unfav.png" style="width: 2em;"
+                             onclick="favThisPost('{{post._id}}'); " id="fav"/>
+                    {{/if}}
+
                 {{/if}}
             </h1>
             <p class="lead">
@@ -20,6 +30,7 @@
             <hr>
 			<p><span class="glyphicon glyphicon-time "></span> Posted on {{dateFormat post.dateCreated "dddd, MMMM Do YYYY, h:mm:ss a"}}</p>
             {{#each post.tags}}
+<<<<<<< HEAD
                 <span class="icon-tags"
                       style="background-color:#cdf2f1;color: black;display: inline;">#{{this}}</span>
                 <span>&nbsp;</span>
@@ -32,10 +43,26 @@
                     <input type="hidden" value={{post._id}} name='getPost' id="getPost"/>
                     <div class="form-group">
                         <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
+=======
+                <span class="lead"
+                      style="background-color:#cdf2f1;color: black;display: inline;font-weight: bold;">#{{this.text}}</span>
+                <span>&nbsp;</span>
+            {{/each}}
+            <hr>
+            <p>{{post.description}}</p>
+            {{#if reg_user}}
+                <div class="well">
+                    <h4>Leave a Comment:</h4>
+                    <div>
+                        <input type="hidden" value={{post._id}} name='getPost' id="getPost"/>
+                        <div class="form-group">
+                            <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
+                        </div>
+                        <button onclick="addComment('{{_id}}')" class="btn btn-primary">Post Comment</button>
+>>>>>>> refs/remotes/origin/master
                     </div>
-                    <button onclick="addComment('{{_id}}')" class="btn btn-primary">Post Comment</button>
                 </div>
-            </div>
+            {{/if}}
             <hr>
         </div>
 
@@ -57,20 +84,22 @@
             <div class="well">
                 <h4>Stats:</h4>
                 {{#if reg_user}}
-                    <img src="http://localhost:8000/images/like.png" style="width: 2em;" onclick="increaseUpvotes('{{post._id}}'); "/>
+                    <img src="http://localhost:8000/images/like.png" style="width: 2em;"
+                         onclick="increaseUpvotes('{{post._id}}'); "/>
                 {{/if}}
                 <span style="color:greenyellow;" id="upvotes">
                     Up votes : {{post.upvotes.length}}</span>
                 <br/>
                 {{#if reg_user}}
-                    <img src="http://localhost:8000/images/unlike.png" style="width: 2em;" onclick="increaseDownvotes('{{post._id}}');"/>
+                    <img src="http://localhost:8000/images/unlike.png" style="width: 2em;"
+                         onclick="increaseDownvotes('{{post._id}}');"/>
                 {{/if}}
 
                 <span style="color:lightcoral;" id="downvotes">
                     Down votes : {{post.downvotes.length}}</span>
                 <br/>
                 <img src="http://localhost:8000/images/preview.jpg" style="width: 2em;"/>
-                <span style="color:cornflowerblue;" id="preview" >
+                <span style="color:cornflowerblue;" id="preview">
                     Views : {{post.preview}}</span>
             </div>
         </div>
@@ -79,7 +108,8 @@
         {{#each comments}}
             <div class="media" onclick="getCommentOfComment('{{_id}}',this);">
                 <a class="pull-left" href="#">
-                    <img class="media-object" style="width: 7em;height: 5em;" src="http://localhost:8000/uploads/{{user.filename}}" alt="profile pic of user">
+                    <img class="media-object" style="width: 7em;height: 5em;"
+                         src="http://localhost:8000/uploads/{{user.filename}}" alt="profile pic of user">
                 </a>
                 <div class="media-body">
                     <h4 class="media-heading">{{user.username}}
@@ -92,5 +122,3 @@
         {{/each}}
     </div>
 </div>
-<script src="http://localhost:8000/javascript/jquery.js"></script>
-<script src="http://localhost:8000/javascript/bootstrap.min.js"></script>

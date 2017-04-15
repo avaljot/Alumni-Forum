@@ -5,6 +5,8 @@ var Post = require('../models/post');
 var User = require('../models/user');
 var Comment = require('../models/comment');
 var Tags = require('../models/tags');
+var async = require("async");
+var waterfall = require('async-waterfall');
 
 
 router.post('/getComments', function (req, res) {
@@ -18,42 +20,48 @@ router.post('/getComments', function (req, res) {
     var count=0;
     console.log("1");
     Comment.getCommentByID(commentID,function (err,comment) {
-           if(err) throw err;
-           if(comment.comments!=null) {
-               if(comment.comments.length==0){
-                   comments.comments="done";
-                   res.send(comments,200);
-               }
-               for (var i = 0; i < comment.comments.length; i++) {
-                   Comment.getCommentByID(comment.comments[i], function (newErr, commentNow) {
-                       if (newErr) throw newErr;
-                       if (commentNow != null) {
-                           User.getUserById(commentNow.user,function(userErr,userNow){
-                               if(userErr) throw userErr;
-                               count++;
-                               commentNow.user=userNow;
-                               comments.comments.push(commentNow);
-                               if(count==comment.comments.length){
-                                   console.log("sending ");
-                                   res.send(comments);
-                               }
-                           });
-                       }
-                   });
-               }
-           }else{
-               res.send("done",200);
-           }
+        if(err) throw err;
+        if(comment.comments!=null) {
+            if(comment.comments.length==0){
+                comments.comments="done";
+                res.send(comments,200);
+            }
+            for (var i = 0; i < comment.comments.length; i++) {
+                Comment.getCommentByID(comment.comments[i], function (newErr, commentNow) {
+                    if (newErr) throw newErr;
+                    if (commentNow != null) {
+                        User.getUserById(commentNow.user,function(userErr,userNow){
+                            if(userErr) throw userErr;
+                            count++;
+                            commentNow.user=userNow;
+                            comments.comments.push(commentNow);
+                            if(count==comment.comments.length){
+                                console.log("sending ");
+                                res.send(comments);
+                            }
+                        });
+                    }
+                });
+            }
+        }else{
+            res.send("done",200);
+        }
     });
 });
 
 router.post('/getPost', function (req, res) {
     var postID = req.body.getPost;
+    var isfav = null;
     console.log("getting post " + postID);
     Post.getPostbyId(postID, function (err, post) {
         if (err) throw err;
         User.getUserById(post.user, function (err, user) {
             if (err) throw err;
+            if (user.favs.indexOf(postID.toString()) > 0) {
+                isfav = true;
+            }
+            else
+                isfav = false;
             var comments = new Array();
             if (post.comments != null) {
                 console.log(post.comments.length);
@@ -73,12 +81,25 @@ router.post('/getPost', function (req, res) {
             }
             console.log(req.session.user);
             post.preview = post.preview + 1;
+            Post.updatePost(post,function (newErr,newPost) {
+                if(newErr) throw newErr;
+                newPost.tags.forEach(function(ele1,ind1,arr1) {
+                    Tags.getTagbyId(ele1,function (err2,tag2) {
+                        tag2.preview+=1;
+                        Tags.updateTags(tag2,function (err3,tag3) {
+                            if(err3) throw err3;
+                            //console.log(tag3);
+                        });
+                    });
+                });
+            });
             res.render('homePost', {
                 post: post,
                 layout: 'postLayout.hbs',
                 user: user,
                 comments: comments,
-                reg_user: req.session.user
+                reg_user: req.session.user,
+                isfav: isfav
             });
         });
     });
@@ -253,12 +274,12 @@ function createPost(title,description,tagsArray,req,res){
         console.log(array[index].preview);
         array[index].posts.push(newPost);
         Tags.updateTags(tagsArray[index],function (err,tagNow) {
-               if(err) throw err;
-               newPost.tags.push(tagNow);
-               count++;
-               if(count==tagsArray.length)
-                   createPostOther(title,description,tagsArray,req,res,newPost,user);
-            });
+            if(err) throw err;
+            newPost.tags.push(tagNow);
+            count++;
+            if(count==tagsArray.length)
+                createPostOther(title,description,tagsArray,req,res,newPost,user);
+        });
     });
 }
 
@@ -342,38 +363,110 @@ router.post('/favPost', function (req, res) {
     });
 });
 
-
-router.post('/getPostByTag',function (req,res) {
-    var tags=req.body.tags.split(" ");
-    var posts=new Array();
-    var count=0;
-    if(tags.length==0) res.send(posts);
-    console.log(tags);
-    tags.forEach(function(element,index,array){
-        Tags.getTagByText(element,function (err,tag) {
-                if(!(tag==null || tag=='')){
-                    if(tag[0].posts!=null && tag[0].posts.length>0){
-                        tag[0].posts.forEach(function (postNow,index1,array1) {
-                             Post.getPostbyId(postNow,function (errNow,postToPush) {
-                                  console.log("7");
-                                  if(errNow) throw errNow;
-                                  posts.push(postToPush);
-                             });
-                        });
-                    }
-                }
-                count++;
-                console.log(count+" "+element);
-                if(count==tags.length) {
-                    res.send(posts);
-                    console.log("10-1");
-                }
+router.post('/unfavPost', function (req, res) {
+    var postId = req.body.getPost;
+    var user = req.session.user;
+    Post.getPostbyId(postId, function (err, post) {
+        if (err) throw err;
+        User.removeFav(user, postId, function (newErr, newUser) {
+            if (newErr) throw newErr;
+            User.getUserById(user._id, function (err, updatedUser) {
+                if (err) throw err;
+                req.session.user = updatedUser;
+                res.send("ok", 200);
+                console.log("fav removed");
+            });
         });
     });
 });
 
+//getPostByNoComment
+//getPostByMostComment
+
+router.post('/getPostByNoComment',function (req,res) {
+    var query = {status: true,comments : null};
+    Post.getPostWithTags(query,function (err, posts) {
+        if (err) throw err;
+        res.send(posts);
+    });
+});
+
+router.post('/getPostByMostComment',function (req,res) {
+    var query = {status: true,comments : { $ne: null }};
+    Post.getPostWithTagsWithMostComments(query,function (err, posts) {
+        if (err) throw err;
+        res.send(posts);
+    });
+});
+
+router.post('/getPostByTag',function (req,res) {
+    var tags=req.body.tags;
+    var flag=false;
+    if(tags==null){
+        flag=true;
+    }
+    else{
+        tags=tags.split(" ");
+    }
+    var tasArr=req.body.tags;
+    var posts=new Array();
+    var addedTags="-----";
+    if(flag || tasArr==''||tags.length==0){
+        var query = {status: true};
+        Post.getPostWithTags(query,function (err, posts) {
+            if (err) throw err;
+            res.send(posts);
+        });
+    }
+    else {
+        var count = 0;
+        waterfall([
+            function (callback) {
+                async.each(tags, function (tag, callback) {
+                    if(tag=='' || tag.length<1){
+                        count++;
+                        if(count == tags.length)
+                            res.send(posts);
+                    }
+                    else {
+                        Tags.getPostWithTags(tag, function (errNow, tagsNow) {
+                            if (tagsNow == null || tagsNow == '') {
+                                count++;
+                            }
+                            else {
+                                async.each(tagsNow, function (ele1, callback1) {
+                                    async.each(ele1.posts, function (ele2, callback2) {
+                                        if (addedTags.indexOf(ele2._id.toString()) == -1) {
+                                            addedTags += ele2._id + "-----";
+                                            posts.push(ele2);
+                                        }
+                                    });
+                                });
+                                count++;
+                            }
+                            if (count == tags.length) {
+                                res.send(posts);
+                            }
+                        });
+                    }
+                });
+            }
+        ], function (err) {
+            console.log("done");
+        });
+    }
+});
+
 module.exports = router;
 
+/*
+ async.each(tagsNow,function (ele1,callback1) {
+
+ });
+
+
+ }, function(err){console.log("done");});
+ */
 
 /*
  tile: String,
