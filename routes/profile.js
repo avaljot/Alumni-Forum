@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var multer = require('multer');
-var upload = multer({storage: storage});
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'public/uploads/')
@@ -10,8 +9,10 @@ var storage = multer.diskStorage({
         cb(null, file.originalname)
     }
 });
+var upload = multer({storage: storage});
 
 var User = require('../models/user');
+var Post = require('../models/post');
 
 router.post('/upload', upload.single('img_file'), function (req, res, next) {
     var myfile = req.file;
@@ -42,7 +43,6 @@ router.get('/allusers', function (req, res) {
 router.get('/:username', function (req, res) {
     if (req.session && req.session.user) {
         User.findOne({username: req.params.username, 'status': true}).populate('posts').exec(function (err, user) {
-            console.log("found: " + user);
             res.render('profile-posts', {
                 layout: 'profile-layout',
                 user: user,
@@ -60,6 +60,13 @@ router.post('/delete', function (req, res) {
     User.deleteUser(req.body.user_id, function (err, user) {
         if (err) throw err;
         res.send(user);
+    })
+});
+
+router.post('/delete-post', function (req, res) {
+    Post.deletePost(req.body.post_id, function (err, post) {
+        if (err) throw err;
+        res.send(post);
     })
 });
 
@@ -82,7 +89,15 @@ router.post('/undo-admin', function (req, res) {
 
 router.get('/', function (req, res) {
     if (req.session && req.session.user) {
-        User.findOne({_id: req.session.user._id, 'status': true}).populate('posts').exec(function (err, user) {
+
+        User.findOne({
+            _id: req.session.user._id,
+            'status': true
+        }).populate({
+            path: 'posts favs',
+            match: {status: true}
+        }).exec(function (err, user) {
+            console.log("found: " + user);
             res.render('profile-posts', {
                 layout: 'profile-layout',
                 user: user,

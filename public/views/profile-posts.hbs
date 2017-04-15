@@ -1,5 +1,43 @@
+<script type="text/javascript">
+
+    function deletePost(postid) {
+        $.ajax({
+            url: "./profile/delete-post",
+            type: 'POST',
+            data: {
+                post_id: postid
+            },
+            contentType: 'application/x-www-form-urlencoded',
+            success: function (data) {
+                if (data) {
+                    $('#' + postid).css("display", "none");
+                } else
+                    $('#message').addClass("alert-danger").html("Try again");
+
+            },
+            error: function (xhr, text, err) {
+                console.log('error: ', err);
+                console.log('text: ', text);
+                console.log('xhr: ', xhr);
+                console.log("there is a problem with your request, please check ajax request");
+            }
+        });
+    }
+</script>
+
 <h1>Threads created by You:</h1>
 {{# each user.posts}}
+    <li id="{{_id}}">
+        <form method="post" action="/posts/getPost">
+            <input type="hidden" value="{{_id}}" name="getPost"/>
+            {{title}},Views={{preview}}
+            <button>View</button>
+        </form>
+        <a class="btn btn-default" onclick="deletePost('{{_id}}')">Delete</a>
+    </li>
+{{/each}}
+<h1>Favourites created by You:</h1>
+{{# each user.favs}}
     <li>
         <form method="post" action="/posts/getPost">
             <input type="hidden" value="{{_id}}" name="getPost"/>
@@ -8,3 +46,4 @@
         </form>
     </li>
 {{/each}}
+

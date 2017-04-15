@@ -1,4 +1,4 @@
-function getCommentOfComment(commentId,currObject){
+function getCommentOfComment(commentId){
     console.log("comment clicked "+commentId);
     var divToAppend="#selected"+commentId;
     //console.log(divToAppend);
@@ -112,7 +112,30 @@ function favThisPost(postId){
             getPost: postId,
         },
         success: function (data) {
-            console.log(data);
+            $("#fav").attr("onclick", "unfavThisPost('" + postId + "');");
+            $("#fav").attr("src", "/images/fav.jpg");
+
+        },
+        error: function (xhr, text, err) {
+            console.log('error: ', err);
+            console.log('text: ', text);
+            console.log('xhr: ', xhr);
+        }
+    });
+}
+
+function unfavThisPost(postId) {
+
+    $.ajax({
+        url: '../unfavPost',
+        type: 'POST',
+        data: {
+            getPost: postId
+        },
+        success: function (data) {
+            $("#fav").attr("onclick", "favThisPost('" + postId + "');");
+            $("#fav").attr("src", "/images/unfav.png");
+
         },
         error: function (xhr, text, err) {
             console.log('error: ', err);
