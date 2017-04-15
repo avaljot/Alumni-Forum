@@ -362,6 +362,29 @@ router.post('/favPost', function (req, res) {
     });
 });
 
+router.post('/unfavPost', function (req, res) {
+    var postId = req.body.getPost;
+    var user = req.session.user;
+    Post.getPostbyId(postId, function (err, post) {
+        if (err) throw err;
+        User.removeFav(user, postId, function (newErr, newUser) {
+            if (newErr) throw newErr;
+            User.getUserById(user._id, function (err, updatedUser) {
+                if (err) throw err;
+                req.session.user = updatedUser;
+                res.send("ok", 200);
+                console.log("fav removed");
+            });
+        });
+    });
+});
+
+router.post('/getPostByTag', function (req, res) {
+    var tags = req.body.tags.split(" ");
+    var tasArr = req.body.tags;
+    var posts = new Array();
+    var addedTags = "-----";
+    if (tasArr == '' || tags.length == 0) {
 
 //getPostByNoComment
 //getPostByMostComment
