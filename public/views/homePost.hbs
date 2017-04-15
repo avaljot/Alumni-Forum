@@ -20,11 +20,12 @@
             <hr>
             {{#each post.tags}}
                 <span class="lead"
-                      style="background-color:#cdf2f1;color: black;display: inline;font-weight: bold;">#{{this}}</span>
+                      style="background-color:#cdf2f1;color: black;display: inline;font-weight: bold;">#{{this.text}}</span>
                 <span>&nbsp;</span>
             {{/each}}
             <hr>
             <p>{{post.description}}</p>
+            {{#if reg_user}}
             <div class="well">
                 <h4>Leave a Comment:</h4>
                 <div>
@@ -35,6 +36,7 @@
                     <button onclick="addComment('{{_id}}')" class="btn btn-primary">Post Comment</button>
                 </div>
             </div>
+            {{/if}}
             <hr>
         </div>
 

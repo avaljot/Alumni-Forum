@@ -26,12 +26,17 @@ module.exports.createPost = function (newPost,callback) {
 
 
 module.exports.updatePost = function (newPost,callback) {
-    Post.findOneAndUpdate({'_id':newPost._id},{$set:{'upvotes':newPost.upvotes,'downvotes':newPost.downvotes}},callback);
+    Post.findOneAndUpdate({'_id':newPost._id},{
+        $set:{
+            'upvotes':newPost.upvotes,
+            'downvotes':newPost.downvotes,
+            'preview':newPost.preview
+        }
+        },callback);
 };
 
-
 module.exports.getPostbyId = function (id,callback) {
-    Post.findById(id,callback);
+    Post.findById(id).populate('tags').exec(callback);
 };
 
 module.exports.getPostByNewest = function (callback) {
