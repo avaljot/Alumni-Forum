@@ -1,23 +1,56 @@
 $(function() {
     $( "#searchBox" ).keyup(function() {
         console.log("data now "+$("#searchBox").val());
-        $.ajax({
-            url: '../posts/getPostByTag',
-            type: 'POST',
-            data : {
-                tags: $("#searchBox").val(),
-            },
-            contentType: 'application/x-www-form-urlencoded',
-            success: function (data) {
-                $("#middleTable").empty();
-                $("#middleTable").append(getHeaderRow());
-                for(var i=0;i<data.length;i++){
-                    $("#middleTable").append(getpostsForCurrentRow(data[i]));
-                }
-            }
-        });
+        getPostsByTags($("#searchBox").val());
     });
 });
+
+function getPostsByTags(tags){
+    $.ajax({
+        url: '../posts/getPostByTag',
+        type: 'POST',
+        data : {
+            tags: tags,
+        },
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            $("#middleTable").empty();
+            $("#middleTable").append(getHeaderRow());
+            for(var i=0;i<data.length;i++){
+                $("#middleTable").append(getpostsForCurrentRow(data[i]));
+            }
+        }
+    });
+}
+
+function getPostsWithoutComments(){
+    $.ajax({
+        url: '../posts/getPostByNoComment',
+        type: 'POST',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            $("#middleTable").empty();
+            $("#middleTable").append(getHeaderRow());
+            for(var i=0;i<data.length;i++){
+                $("#middleTable").append(getpostsForCurrentRow(data[i]));
+            }
+        }
+    });
+}
+function getPostsWithMostComments(){
+    $.ajax({
+        url: '../posts/getPostByMostComment',
+        type: 'POST',
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            $("#middleTable").empty();
+            $("#middleTable").append(getHeaderRow());
+            for(var i=0;i<data.length;i++){
+                $("#middleTable").append(getpostsForCurrentRow(data[i]));
+            }
+        }
+    });
+}
 
 function getHeaderRow(){
     var one="<tr>";

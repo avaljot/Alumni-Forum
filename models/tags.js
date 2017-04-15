@@ -37,3 +37,9 @@ module.exports.getPostWithTags = function(text,callback) {
 module.exports.getTagbyId = function (id,callback) {
     Tags.findById(id,callback);
 };
+
+module.exports.getTop7Tags = function (callback) {
+    Tags.find().sort({preview : 'descending'}).limit(7).exec(callback);
+};
+
+module.exports.get

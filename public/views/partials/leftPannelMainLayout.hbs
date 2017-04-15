@@ -3,56 +3,52 @@
         <div>
             <span class="makeBold">Top Feed</span>
             <ul class="nav">
+                {{#each top_tags}}
                 <li>
-                    <a class="page-scroll" href="#">Jobs</a>
+                    <a class="page-scroll" onclick="getPostsByTags('{{text}}')">{{text}}</a>
                 </li>
-                <li>
-                    <a class="page-scroll" href="#">Internships</a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#">Masters </a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#">Admissions</a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#">Ranking</a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#">Companies</a>
-                </li>
+                {{/each}}
             </ul>
         </div>
         <div style="margin-top:2em;">
             <span class="makeBold">Suggestions</span>
             <ul class="nav">
                 <li>
-                    <a class="page-scroll" href="#"><span class="selectedFeed">Top Stories</span></a>
+                    <a class="page-scroll" onclick="getPostsByTags()"><span class="selectedFeed">Latest</span></a>
                 </li>
-                <li>
-                    <a class="page-scroll" href="#">University of Texas at Dallas</a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#">Google</a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#">Facebook</a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#">Microsoft</a>
-                </li>
+                {{#if reg_user}}
+                    {{#if reg_user.company}}
+                    <li>
+                        <a class="page-scroll" onclick="getPostsByTags('{{reg_user.company}}')">{{reg_user.company}}</a>
+                    </li>
+                    {{/if}}
+                    {{#if reg_user.university}}
+                        <li>
+                            <a class="page-scroll" onclick="getPostsByTags('{{reg_user.university}}')">{{reg_user.university}}</a>
+                        </li>
+                    {{/if}}
+                    {{#if reg_user.workStatus}}
+                        <li>
+                            <a class="page-scroll" onclick="getPostsByTags('{{reg_user.workStatus}}')">{{reg_user.workStatus}}</a>
+                        </li>
+                    {{/if}}
+                {{/if}}
             </ul>
         </div>
 
         <div style="margin-top:2em;">
-            <a class="page-scroll" href="#"><span class="makeBold">New Questions</span></a>
+            <a class="page-scroll" onclick="getPostsByTags()"><span class="makeBold">New Questions</span></a>
         </div>
 
         <div style="margin-top:2em;">
-            <a class="page-scroll" href="#"><span class="makeBold">Unanswered Questions</span></a>
+            <a class="page-scroll" onclick="getPostsWithoutComments()"><span class="makeBold">Unanswered Questions</span></a>
         </div>
 
-        {{#if user}}
+        <div style="margin-top:2em;">
+            <a class="page-scroll" onclick="getPostsWithMostComments()"><span class="makeBold">Most answered Questions</span></a>
+        </div>
+
+        {{#if reg_user}}
             <div style="margin-top:2em;">
                 <a class="page-scroll" href="#"><span class="makeBold">Favourites</span></a>
             </div>
