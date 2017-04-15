@@ -98,7 +98,8 @@ router.post('/getPost', function (req, res) {
                 layout: 'postLayout.hbs',
                 user: user,
                 comments: comments,
-                reg_user: req.session.user
+                reg_user: req.session.user,
+                isfav: isfav
             });
         });
     });

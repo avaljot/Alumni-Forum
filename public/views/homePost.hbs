@@ -30,16 +30,16 @@
             <hr>
             <p>{{post.description}}</p>
             {{#if reg_user}}
-            <div class="well">
-                <h4>Leave a Comment:</h4>
-                <div>
-                    <input type="hidden" value={{post._id}} name='getPost' id="getPost"/>
-                    <div class="form-group">
-                        <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
+                <div class="well">
+                    <h4>Leave a Comment:</h4>
+                    <div>
+                        <input type="hidden" value={{post._id}} name='getPost' id="getPost"/>
+                        <div class="form-group">
+                            <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
+                        </div>
+                        <button onclick="addComment('{{_id}}')" class="btn btn-primary">Post Comment</button>
                     </div>
-                    <button onclick="addComment('{{_id}}')" class="btn btn-primary">Post Comment</button>
                 </div>
-            </div>
             {{/if}}
             <hr>
         </div>
