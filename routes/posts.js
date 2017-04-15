@@ -51,14 +51,20 @@ router.post('/getComments', function (req, res) {
 
 router.post('/getPost', function (req, res) {
     var postID = req.body.getPost;
+    var isfav = null;
     console.log("getting post " + postID);
     Post.getPostbyId(postID, function (err, post) {
         if (err) throw err;
         User.getUserById(post.user, function (err, user) {
             if (err) throw err;
+            if (user.favs.indexOf(postID.toString()) > 0) {
+                isfav = true;
+            }
+            else
+                isfav = false;
             var comments = new Array();
             if (post.comments != null) {
-               // console.log(post.comments.length);
+                console.log(post.comments.length);
                 for (var i = 0; i < post.comments.length; i++) {
                     //console.log(post.comments[i]);
                     Comment.getCommentByID(post.comments[i], function (commentErr, commentNow) {
@@ -73,7 +79,7 @@ router.post('/getPost', function (req, res) {
                     });
                 }
             }
-            //console.log(req.session.user);
+            console.log(req.session.user);
             post.preview = post.preview + 1;
             Post.updatePost(post,function (newErr,newPost) {
                if(newErr) throw newErr;

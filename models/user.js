@@ -17,7 +17,7 @@ var UserSchema = mongoose.Schema({
     isAdmin: Boolean,
     posts: [{type: Schema.ObjectId, ref: 'Post'}],
     comments: {type: [Schema.ObjectId], ref: 'Comment'},
-    favs: {type: [Schema.ObjectId], ref: 'Post'}
+    favs: [{type: Schema.ObjectId, ref: 'Post'}]
 });
 
 var User = module.exports = mongoose.model('User', UserSchema);
@@ -25,6 +25,12 @@ var User = module.exports = mongoose.model('User', UserSchema);
 
 module.exports.updateFav = function (newUser, callback) {
     User.findOneAndUpdate({'_id': newUser._id}, {$set: {'favs': newUser.favs}}, callback);
+};
+
+module.exports.removeFav = function (newUser, postid, callback) {
+    User.update({'_id': newUser._id}, {
+        $pull: {'favs': {$in: [postid]}}
+    }, {multi: true}, callback);
 };
 
 module.exports.createUser = function (newUser, callback) {
