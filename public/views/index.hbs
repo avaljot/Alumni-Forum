@@ -1,5 +1,6 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <span class="expandonClick">
-    <input type="text" name="search" placeholder="Search.." id="searchBox">
+    <input type="text" name="search" placeholder="Search.." id="searchBox" ><i class="material-icons">search</i>
     {{#if reg_user}}
         <a href="#" data-toggle="modal" data-target="#thread-modal">Create new Thread</a>
     {{/if}}
@@ -14,17 +15,18 @@
             <th style="width: 7em;"><span>Last modified</span></th>
         </tr>
         {{#each posts}}
-            <tr class="clickable-row">
+            <tr class="clickable-row" style="cursor:pointer;">
                 <form method="post" action="/posts/getPost/" id="getPost">
                     <input type="hidden" value={{_id}} id='postId' name="getPost"/>
                     <td style="width: 10em;">
                         <span style="width: 70%; float: right;" id="title">{{title}}</span>
                         <br/>
-                        <span style="width: 10%; color:greenyellow;">Up votes : {{upvotes}}</span>
-                        <br/>
-                        <span style="width: 10%; color:lightcoral;">Down votes : {{downvotes}}</span>
-                        <br/>
-                        <span style="width: 10%; color:cornflowerblue;">Views : {{preview}}</span>
+                        <span style="width: 10%; color:green;"><i class="material-icons">check</i>{{upvotes}}</span>
+                        
+                        
+                        <span style="width: 10%; color:lightcoral;"><i class="material-icons">close</i>{{downvotes}}</span>
+                       
+                        <span style="width: 10%; color:cornflowerblue;"><i class="material-icons">visibility</i>Views : {{preview}}</span>
                     </td>
                     <td style="width: 7em;">
                     <span style="float: right;">
