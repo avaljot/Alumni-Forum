@@ -352,14 +352,16 @@ router.post('/favPost', function (req, res) {
 router.post('/unfavPost', function (req, res) {
     var postId = req.body.getPost;
     var user = req.session.user;
-    console.log(user.favs);
     Post.getPostbyId(postId, function (err, post) {
         if (err) throw err;
         User.removeFav(user, postId, function (newErr, newUser) {
             if (newErr) throw newErr;
-            res.send("ok", 200);
-            console.log("fav removed");
-            console.log(newUser);
+            User.getUserById(user._id, function (err, updatedUser) {
+                if (err) throw err;
+                req.session.user = updatedUser;
+                res.send("ok", 200);
+                console.log("fav removed");
+            });
         });
     });
 });
