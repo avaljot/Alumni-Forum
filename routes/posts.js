@@ -20,32 +20,32 @@ router.post('/getComments', function (req, res) {
     var count=0;
     console.log("1");
     Comment.getCommentByID(commentID,function (err,comment) {
-           if(err) throw err;
-           if(comment.comments!=null) {
-               if(comment.comments.length==0){
-                   comments.comments="done";
-                   res.send(comments,200);
-               }
-               for (var i = 0; i < comment.comments.length; i++) {
-                   Comment.getCommentByID(comment.comments[i], function (newErr, commentNow) {
-                       if (newErr) throw newErr;
-                       if (commentNow != null) {
-                           User.getUserById(commentNow.user,function(userErr,userNow){
-                               if(userErr) throw userErr;
-                               count++;
-                               commentNow.user=userNow;
-                               comments.comments.push(commentNow);
-                               if(count==comment.comments.length){
-                                   console.log("sending ");
-                                   res.send(comments);
-                               }
-                           });
-                       }
-                   });
-               }
-           }else{
-               res.send("done",200);
-           }
+        if(err) throw err;
+        if(comment.comments!=null) {
+            if(comment.comments.length==0){
+                comments.comments="done";
+                res.send(comments,200);
+            }
+            for (var i = 0; i < comment.comments.length; i++) {
+                Comment.getCommentByID(comment.comments[i], function (newErr, commentNow) {
+                    if (newErr) throw newErr;
+                    if (commentNow != null) {
+                        User.getUserById(commentNow.user,function(userErr,userNow){
+                            if(userErr) throw userErr;
+                            count++;
+                            commentNow.user=userNow;
+                            comments.comments.push(commentNow);
+                            if(count==comment.comments.length){
+                                console.log("sending ");
+                                res.send(comments);
+                            }
+                        });
+                    }
+                });
+            }
+        }else{
+            res.send("done",200);
+        }
     });
 });
 
@@ -82,13 +82,13 @@ router.post('/getPost', function (req, res) {
             console.log(req.session.user);
             post.preview = post.preview + 1;
             Post.updatePost(post,function (newErr,newPost) {
-               if(newErr) throw newErr;
+                if(newErr) throw newErr;
                 newPost.tags.forEach(function(ele1,ind1,arr1) {
                     Tags.getTagbyId(ele1,function (err2,tag2) {
                         tag2.preview+=1;
                         Tags.updateTags(tag2,function (err3,tag3) {
-                               if(err3) throw err3;
-                               //console.log(tag3);
+                            if(err3) throw err3;
+                            //console.log(tag3);
                         });
                     });
                 });
@@ -273,12 +273,12 @@ function createPost(title,description,tagsArray,req,res){
         console.log(array[index].preview);
         array[index].posts.push(newPost);
         Tags.updateTags(tagsArray[index],function (err,tagNow) {
-               if(err) throw err;
-               newPost.tags.push(tagNow);
-               count++;
-               if(count==tagsArray.length)
-                   createPostOther(title,description,tagsArray,req,res,newPost,user);
-            });
+            if(err) throw err;
+            newPost.tags.push(tagNow);
+            count++;
+            if(count==tagsArray.length)
+                createPostOther(title,description,tagsArray,req,res,newPost,user);
+        });
     });
 }
 
@@ -379,13 +379,6 @@ router.post('/unfavPost', function (req, res) {
     });
 });
 
-router.post('/getPostByTag', function (req, res) {
-    var tags = req.body.tags.split(" ");
-    var tasArr = req.body.tags;
-    var posts = new Array();
-    var addedTags = "-----";
-    if (tasArr == '' || tags.length == 0) {
-
 //getPostByNoComment
 //getPostByMostComment
 
@@ -419,10 +412,10 @@ router.post('/getPostByTag',function (req,res) {
     var addedTags="-----";
     if(flag || tasArr==''||tags.length==0){
         var query = {status: true};
-          Post.getPostWithTags(query,function (err, posts) {
-              if (err) throw err;
-              res.send(posts);
-          });
+        Post.getPostWithTags(query,function (err, posts) {
+            if (err) throw err;
+            res.send(posts);
+        });
     }
     else {
         var count = 0;
@@ -464,11 +457,6 @@ router.post('/getPostByTag',function (req,res) {
 });
 
 module.exports = router;
-
-
-function getAllpostOfAllTags(tags,req,res,posts){
-
-}
 
 /*
  async.each(tagsNow,function (ele1,callback1) {
