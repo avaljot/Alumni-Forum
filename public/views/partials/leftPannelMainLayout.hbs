@@ -3,31 +3,18 @@
         <div>
             <span class="makeBold">Top Feed</span>
             <ul class="nav">
+                {{#each top_tags}}
                 <li>
-                    <a class="page-scroll" href="#">Jobs</a>
+                    <a class="page-scroll" onclick="getPostsByTags('{{text}}')">{{text}}</a>
                 </li>
-                <li>
-                    <a class="page-scroll" href="#">Internships</a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#">Masters </a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#">Admissions</a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#">Ranking</a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#">Companies</a>
-                </li>
+                {{/each}}
             </ul>
         </div>
         <div style="margin-top:2em;">
             <span class="makeBold">Suggestions</span>
             <ul class="nav">
                 <li>
-                    <a class="page-scroll" href="#"><span class="selectedFeed">Top Stories</span></a>
+                    <a class="page-scroll" onclick="getPostsByTags()"><span class="selectedFeed">Latest</span></a>
                 </li>
                 <li>
                     <a class="page-scroll" href="#">University of Texas at Dallas</a>
@@ -45,11 +32,15 @@
         </div>
 
         <div style="margin-top:2em;">
-            <a class="page-scroll" href="#"><span class="makeBold">New Questions</span></a>
+            <a class="page-scroll" onclick="getPostsByTags()"><span class="makeBold">New Questions</span></a>
         </div>
 
         <div style="margin-top:2em;">
-            <a class="page-scroll" href="#"><span class="makeBold">Unanswered Questions</span></a>
+            <a class="page-scroll" onclick="getPostsWithoutComments()"><span class="makeBold">Unanswered Questions</span></a>
+        </div>
+
+        <div style="margin-top:2em;">
+            <a class="page-scroll" onclick="getPostsWithMostComments()"><span class="makeBold">Most answered Questions</span></a>
         </div>
 
         {{#if user}}

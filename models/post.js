@@ -58,6 +58,10 @@ module.exports.getPostByTags = function (tag,callback) {
     Post.find(query).sort({lastModified : 'descending'}).exec(callback);
 };
 
+module.exports.getPostWithTagsWithMostComments = function(queryString,callback) {
+    Post.find(queryString).sort({comments : 'descending'}).populate('tags').limit(10).exec(callback);
+};
+
 module.exports.deletePost = function (id, callback) {
     var query = {status: false};
     Post.findOneAndUpdate(id,query,callback);

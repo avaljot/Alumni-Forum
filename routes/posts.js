@@ -362,12 +362,39 @@ router.post('/favPost', function (req, res) {
     });
 });
 
+
+//getPostByNoComment
+//getPostByMostComment
+
+router.post('/getPostByNoComment',function (req,res) {
+    var query = {status: true,comments : null};
+    Post.getPostWithTags(query,function (err, posts) {
+        if (err) throw err;
+        res.send(posts);
+    });
+});
+
+router.post('/getPostByMostComment',function (req,res) {
+    var query = {status: true,comments : { $ne: null }};
+    Post.getPostWithTagsWithMostComments(query,function (err, posts) {
+        if (err) throw err;
+        res.send(posts);
+    });
+});
+
 router.post('/getPostByTag',function (req,res) {
-    var tags=req.body.tags.split(" ");
+    var tags=req.body.tags;
+    var flag=false;
+    if(tags==null){
+        flag=true;
+    }
+    else{
+        tags=tags.split(" ");
+    }
     var tasArr=req.body.tags;
     var posts=new Array();
     var addedTags="-----";
-    if(tasArr==''||tags.length==0){
+    if(flag || tasArr==''||tags.length==0){
         var query = {status: true};
           Post.getPostWithTags(query,function (err, posts) {
               if (err) throw err;
