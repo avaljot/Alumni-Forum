@@ -6,60 +6,54 @@ var User = require('../models/user');
 var Comment = require('../models/comment');
 var Tags = require('../models/tags');
 
+
 router.post('/getComments', function (req, res) {
     var commentID = req.body.commentId;
-    var comments = new Object();
-    var currUser = req.session.user;
-    comments.user = false;
-    comments.comments = new Array();
-    if (currUser != null)
-        comments.user = currUser;
-    var count = 0;
+    var comments=new Object();
+    var currUser=req.session.user;
+    comments.user=false;
+    comments.comments=new Array();
+    if(currUser!=null)
+        comments.user=currUser;
+    var count=0;
     console.log("1");
-    Comment.getCommentByID(commentID, function (err, comment) {
-        if (err) throw err;
-        if (comment.comments != null) {
-            if (comment.comments.length == 0) {
-                comments.comments = "done";
-                res.send(comments, 200);
-            }
-            for (var i = 0; i < comment.comments.length; i++) {
-                Comment.getCommentByID(comment.comments[i], function (newErr, commentNow) {
-                    if (newErr) throw newErr;
-                    if (commentNow != null) {
-                        User.getUserById(commentNow.user, function (userErr, userNow) {
-                            if (userErr) throw userErr;
-                            count++;
-                            commentNow.user = userNow;
-                            comments.comments.push(commentNow);
-                            if (count == comment.comments.length) {
-                                console.log("sending ");
-                                res.send(comments);
-                            }
-                        });
-                    }
-                });
-            }
-        } else {
-            res.send("done", 200);
-        }
+    Comment.getCommentByID(commentID,function (err,comment) {
+           if(err) throw err;
+           if(comment.comments!=null) {
+               if(comment.comments.length==0){
+                   comments.comments="done";
+                   res.send(comments,200);
+               }
+               for (var i = 0; i < comment.comments.length; i++) {
+                   Comment.getCommentByID(comment.comments[i], function (newErr, commentNow) {
+                       if (newErr) throw newErr;
+                       if (commentNow != null) {
+                           User.getUserById(commentNow.user,function(userErr,userNow){
+                               if(userErr) throw userErr;
+                               count++;
+                               commentNow.user=userNow;
+                               comments.comments.push(commentNow);
+                               if(count==comment.comments.length){
+                                   console.log("sending ");
+                                   res.send(comments);
+                               }
+                           });
+                       }
+                   });
+               }
+           }else{
+               res.send("done",200);
+           }
     });
 });
 
 router.post('/getPost', function (req, res) {
     var postID = req.body.getPost;
-    var isfav = null;
     console.log("getting post " + postID);
     Post.getPostbyId(postID, function (err, post) {
         if (err) throw err;
         User.getUserById(post.user, function (err, user) {
             if (err) throw err;
-            console.log("user= " + user);
-            if (user.favs.indexOf(postID.toString()) > 0) {
-                isfav = true;
-            }
-            else
-                isfav = false;
             var comments = new Array();
             if (post.comments != null) {
                 console.log(post.comments.length);
@@ -84,8 +78,7 @@ router.post('/getPost', function (req, res) {
                 layout: 'postLayout.hbs',
                 user: user,
                 comments: comments,
-                reg_user: req.session.user,
-                isfav: isfav
+                reg_user: req.session.user
             });
         });
     });
@@ -199,43 +192,43 @@ router.post('/addPost', function (req, res) {
     var description = req.body.description;
     var tags = req.body.tags.split(" ");
     var tagsArray = new Array();
-    if (tags.length == 0) {
-        createPost(title, description, tagsArray, req, res);
+    if(tags.length==0){
+        createPost(title,description,tagsArray,req, res);
     }
-    var count = 0;
+    var count=0;
     console.log(tags);
     console.log(tags.length);
-    tags.forEach(function (element, index, array) {
-        Tags.getTagByText(element, function (errNow, tagNow) {
-            console.log("tag now " + element);
-            console.log(array.length + " " + index);
-            if (errNow) throw errNow;
-            if (tagNow == null || tagNow == '') {
+    tags.forEach(function(element,index,array){
+        Tags.getTagByText(element,function (errNow,tagNow) {
+            console.log("tag now "+element);
+            console.log(array.length+" "+index);
+            if(errNow) throw errNow;
+            if(tagNow==null || tagNow==''){
                 console.log('inside');
-                var newTag = new Tags({
-                    text: element, posts: [], comments: [], preview: 0
+                var newTag=new Tags({
+                    text : element, posts : [] , comments : [] , preview : 0
                 });
-                Tags.createTags(newTag, function (newErr, newTag) {
-                    if (newErr) throw newErr;
+                Tags.createTags(newTag,function (newErr,newTag) {
+                    if(newErr) throw newErr;
                     tagsArray.push(newTag);
                     //console.log(newTag);
                     count++;
-                    console.log("count " + count + " tagsArrayLength " + tagsArray.length);
-                    if (count == tags.length)
-                        createPost(title, description, tagsArray, req, res);
+                    console.log("count "+count+" tagsArrayLength "+tagsArray.length);
+                    if(count==tags.length)
+                        createPost(title,description,tagsArray,req, res);
                 });
-            } else {
+            }else{
                 tagsArray.push(tagNow[0]);
                 count++;
-                console.log("count old " + count + " tagsArrayLength " + tagsArray.length);
-                if (count == tags.length)
-                    createPost(title, description, tagsArray, req, res);
+                console.log("count old "+count+" tagsArrayLength "+tagsArray.length);
+                if(count==tags.length)
+                    createPost(title,description,tagsArray,req, res);
             }
         });
     });
 });
 
-function createPost(title, description, tagsArray, req, res) {
+function createPost(title,description,tagsArray,req,res){
     var dateCreated = Date.now;
     var lastModified = Date.now;
     var upvotes = null;
@@ -249,27 +242,27 @@ function createPost(title, description, tagsArray, req, res) {
         upvotes: upvotes, downvotes: downvotes, status: status, user: user, comments: null, preview: 0
     });
 
-    if (tagsArray.length == 0) {
-        createPostOther(title, description, tagsArray, req, res, newPost, user);
+    if(tagsArray.length==0){
+        createPostOther(title,description,tagsArray,req,res,newPost,user);
     }
 
-    var count = 0;
-    tagsArray.forEach(function (element, index, array) {
+    var count=0;
+    tagsArray.forEach(function(element,index,array){
         console.log(array[index]);
         console.log(array[index].posts);
         console.log(array[index].preview);
         array[index].posts.push(newPost);
-        Tags.updateTags(tagsArray[index], function (err, tagNow) {
-            if (err) throw err;
-            newPost.tags.push(tagNow);
-            count++;
-            if (count == tagsArray.length)
-                createPostOther(title, description, tagsArray, req, res, newPost, user);
-        });
+        Tags.updateTags(tagsArray[index],function (err,tagNow) {
+               if(err) throw err;
+               newPost.tags.push(tagNow);
+               count++;
+               if(count==tagsArray.length)
+                   createPostOther(title,description,tagsArray,req,res,newPost,user);
+            });
     });
 }
 
-function createPostOther(title, description, tagsArray, req, res, newPost, user) {
+function createPostOther(title,description,tagsArray,req,res,newPost,user){
     if (user.posts == null)
         user.posts = [];
     user.posts.push(newPost);
@@ -288,7 +281,7 @@ function createPostOther(title, description, tagsArray, req, res, newPost, user)
 
 router.get('/viewPosts', function (req, res) {
     var query = {status: true};
-    Post.getPostWithTags(query, function (err, posts) {
+    Post.getPostWithTags(query,function (err, posts) {
         if (err) throw err;
         console.log(posts);
         res.render("index", {posts: posts, reg_user: req.session.user});
@@ -306,6 +299,7 @@ router.post('/increaseUpvotes', function (req, res) {
         post.upvotes.push(req.session.user);
         Post.updatePost(post, function (newErr, newPost) {
             if (newErr) throw err;
+            console.log(newPost);
             console.log('upvotes ' + newPost.upvotes.length);
             res.send(newPost.upvotes.length.toString());
         });
@@ -322,6 +316,7 @@ router.post('/increaseDownvotes', function (req, res) {
         post.downvotes.push(req.session.user);
         Post.updatePost(post, function (newErr, newPost) {
             if (newErr) throw err;
+            console.log(newPost);
             console.log('downvotes ' + newPost.upvotes.length);
             res.send(newPost.downvotes.length.toString());
         });
@@ -337,10 +332,8 @@ router.post('/favPost', function (req, res) {
     Post.getPostbyId(postId, function (err, post) {
         if (err) throw err;
         if (user.favs == null)
-            user.favs = [];
+            user.favs = new Array();
         user.favs.push(post);
-
-
         User.updateFav(user, function (newErr, newUser) {
             if (newErr) throw newErr;
             res.send("ok", 200);
@@ -349,59 +342,38 @@ router.post('/favPost', function (req, res) {
     });
 });
 
-router.post('/unfavPost', function (req, res) {
-    var postId = req.body.getPost;
-    var user = req.session.user;
-    console.log(user.favs);
-    Post.getPostbyId(postId, function (err, post) {
-        if (err) throw err;
 
-        // var index = user.favs.indexOf(post._id.toString());
-        // if (index > -1) {
-        //     user.favs.splice(index, 1);
-        //     console.log("removed " + user.favs);
-        // }
-
-        User.removeFav(user, postId, function (newErr, newUser) {
-            if (newErr) throw newErr;
-            res.send("ok", 200);
-            console.log("fav removed");
-            console.log(newUser);
-        });
-    });
-});
-
-router.post('/getPostByTag', function (req, res) {
-    var tags = req.body.tags.split(" ");
-    var posts = new Array();
-    var count = 0;
-    if (tags.length == 0) res.send(posts);
+router.post('/getPostByTag',function (req,res) {
+    var tags=req.body.tags.split(" ");
+    var posts=new Array();
+    var count=0;
+    if(tags.length==0) res.send(posts);
     console.log(tags);
-    tags.forEach(function (element, index, array) {
-        Tags.getTagByText(element, function (err, tag) {
-            if (!(tag == null || tag == '')) {
-                if (tag[0].posts != null && tag[0].posts.length > 0) {
-                    tag[0].posts.forEach(function (postNow, index1, array1) {
-                        Post.getPostbyId(postNow, function (errNow, postToPush) {
-                            console.log("7");
-                            if (errNow) throw errNow;
-                            posts.push(postToPush);
+    tags.forEach(function(element,index,array){
+        Tags.getTagByText(element,function (err,tag) {
+                if(!(tag==null || tag=='')){
+                    if(tag[0].posts!=null && tag[0].posts.length>0){
+                        tag[0].posts.forEach(function (postNow,index1,array1) {
+                             Post.getPostbyId(postNow,function (errNow,postToPush) {
+                                  console.log("7");
+                                  if(errNow) throw errNow;
+                                  posts.push(postToPush);
+                             });
                         });
-                    });
+                    }
                 }
-            }
-            count++;
-            console.log(count + " " + element);
-            if (count == tags.length) {
-                res.send(posts);
-                console.log("10-1");
-            }
+                count++;
+                console.log(count+" "+element);
+                if(count==tags.length) {
+                    res.send(posts);
+                    console.log("10-1");
+                }
         });
     });
 });
-
 
 module.exports = router;
+
 
 /*
  tile: String,

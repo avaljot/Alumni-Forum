@@ -12,11 +12,11 @@ var TagsSchema = mongoose.Schema({
 
 var Tags = module.exports = mongoose.model('Tags', TagsSchema);
 
-module.exports.createTags = function (tag, callback) {
+module.exports.createTags = function (tag,callback) {
     tag.save(callback);
 };
 
-module.exports.getTagByText = function (text, callback) {
+module.exports.getTagByText = function (text,callback) {
     var query = {text: text};
     Tags.find(query).exec(callback);
 };
