@@ -7,7 +7,7 @@ var TagsSchema = mongoose.Schema({
     text: String,
     posts: [{type: Schema.ObjectId, ref: 'Post'}],
     comments: {type: [Schema.ObjectId], ref: 'Comment'},
-    preview: Number
+    preview : Number
 });
 
 var Tags = module.exports = mongoose.model('Tags', TagsSchema);
@@ -21,6 +21,19 @@ module.exports.getTagByText = function (text,callback) {
     Tags.find(query).exec(callback);
 };
 
-module.exports.updateTags = function (newTags, callback) {
-    Tags.findOneAndUpdate({'_id': newTags._id}, {$set: {'posts': newTags.posts}}, callback);
+module.exports.updateTags = function (newTags,callback) {
+    Tags.findOneAndUpdate({'_id':newTags._id}, {$set:{'posts':newTags.posts, 'preview':newTags.preview}},callback);
+};
+
+module.exports.getPostWithTags = function(text,callback) {
+    var query = {text: new RegExp(text)};
+    //Tags.find(query).populate('posts').exec(callback);
+    Tags.find(query).populate({
+        path: 'posts',
+        populate: { path: 'tags' }
+    }).exec(callback);
+};
+
+module.exports.getTagbyId = function (id,callback) {
+    Tags.findById(id,callback);
 };
