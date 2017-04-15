@@ -1,10 +1,8 @@
-<<<<<<< HEAD
+
 <link href="http://localhost:8000/css/bootstrap.min.css" rel="stylesheet">
 <link href="http://localhost:8000/css/blog-post.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-=======
->>>>>>> refs/remotes/origin/master
 <!-- Page Content -->
 <div class="container">
 
@@ -25,31 +23,18 @@
             <p class="lead">
                 <a href="#">{{user.username}}</a>
             </p>
-            <hr>
-			<p>{{post.description}}</p>
-            <hr>
-			<p><span class="glyphicon glyphicon-time "></span> Posted on {{dateFormat post.dateCreated "dddd, MMMM Do YYYY, h:mm:ss a"}}</p>
-            {{#each post.tags}}
-<<<<<<< HEAD
-                <span class="icon-tags"
-                      style="background-color:#cdf2f1;color: black;display: inline;">#{{this}}</span>
-                <span>&nbsp;</span>
-            {{/each}}
-            <hr>
             
-            <div class="well">
-                <h4>Leave a Comment:</h4>
-                <div>
-                    <input type="hidden" value={{post._id}} name='getPost' id="getPost"/>
-                    <div class="form-group">
-                        <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
-=======
-                <span class="lead"
-                      style="background-color:#cdf2f1;color: black;display: inline;font-weight: bold;">#{{this.text}}</span>
+            <hr>
+			   <p>{{post.description}}</p>
+            <hr>
+			<p><span class="glyphicon glyphicon-time"></span> Posted on {{dateFormat post.dateCreated "dddd, MMMM Do YYYY, h:mm:ss a"}}</p>
+            {{#each post.tags}}
+                <span class=""
+                      style="background-color:#cdf2f1;color: black;display: inline;">#{{this.text}}</span>
                 <span>&nbsp;</span>
             {{/each}}
             <hr>
-            <p>{{post.description}}</p>
+         
             {{#if reg_user}}
                 <div class="well">
                     <h4>Leave a Comment:</h4>
@@ -59,7 +44,6 @@
                             <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
                         </div>
                         <button onclick="addComment('{{_id}}')" class="btn btn-primary">Post Comment</button>
->>>>>>> refs/remotes/origin/master
                     </div>
                 </div>
             {{/if}}
