@@ -11,7 +11,7 @@
             <th style="width: 10em;"><span>Discussion</span></th>
             <th style="width: 7em;"><span>Topics</span></th>
             <th style="width: 3em;"><span>Posts</span></th>
-            <th style="width: 7em;"><span>Last Post</span></th>
+            <th style="width: 7em;"><span>Last modified</span></th>
         </tr>
         {{#each posts}}
             <tr class="clickable-row">
@@ -43,7 +43,7 @@
                         {{/if}}
                     </span>
                     </td>
-                    <td style="width: 7em; color: darkcyan;"><span>{{lastModified}}</span></td>
+                    <td style="width: 7em; color: darkcyan;"><span>{{dateFormat lastModified "dddd, MMMM Do YYYY, h:mm:ss a"}}</span></td>
                 </form>
             </tr>
         {{/each}}
