@@ -16,18 +16,23 @@
                 <li>
                     <a class="page-scroll" onclick="getPostsByTags()"><span class="selectedFeed">Latest</span></a>
                 </li>
-                <li>
-                    <a class="page-scroll" href="#">University of Texas at Dallas</a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#">Google</a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#">Facebook</a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#">Microsoft</a>
-                </li>
+                {{#if reg_user}}
+                    {{#if reg_user.company}}
+                    <li>
+                        <a class="page-scroll" onclick="getPostsByTags('{{reg_user.company}}')">{{reg_user.company}}</a>
+                    </li>
+                    {{/if}}
+                    {{#if reg_user.university}}
+                        <li>
+                            <a class="page-scroll" onclick="getPostsByTags('{{reg_user.university}}')">{{reg_user.university}}</a>
+                        </li>
+                    {{/if}}
+                    {{#if reg_user.workStatus}}
+                        <li>
+                            <a class="page-scroll" onclick="getPostsByTags('{{reg_user.workStatus}}')">{{reg_user.workStatus}}</a>
+                        </li>
+                    {{/if}}
+                {{/if}}
             </ul>
         </div>
 
@@ -43,7 +48,7 @@
             <a class="page-scroll" onclick="getPostsWithMostComments()"><span class="makeBold">Most answered Questions</span></a>
         </div>
 
-        {{#if user}}
+        {{#if reg_user}}
             <div style="margin-top:2em;">
                 <a class="page-scroll" href="#"><span class="makeBold">Favourites</span></a>
             </div>
