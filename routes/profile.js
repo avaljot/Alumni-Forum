@@ -100,7 +100,6 @@ router.get('/', function (req, res) {
             path: 'posts favs',
             match: {status: true}
         }).exec(function (err, user) {
-            console.log("found: " + user);
             res.render('profile-posts', {
                 layout: 'profile-layout',
                 user: user,

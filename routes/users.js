@@ -86,6 +86,7 @@ router.post('/addUser', function (req, res) { // adding user to db
                 });
                 university = university_text;
             }
+            console.log(company);
             //create a new unique user
             var newUser = new User({
                 firstname: firstname,

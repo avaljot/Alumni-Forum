@@ -1,20 +1,19 @@
-
 /* Profile container */
 .profile {
-    margin: 20px 0;
+    margin: 0;
 }
 
 /* Profile sidebar */
-.profile-sidebar {
-    padding: 20px 0 10px 0;
-    background: #fff;
-}
+/*.profile-sidebar {*/
+    /*padding: 20px 0 10px 0;*/
+    /*background: #fff;*/
+/*}*/
 
 .profile-userpic img {
     float: none;
     margin: 0 auto;
-    width: 50%;
-    height: 50%;
+    height: 25%;
+    width: 100%;
     -webkit-border-radius: 50% !important;
     -moz-border-radius: 50% !important;
     border-radius: 50% !important;
@@ -33,7 +32,6 @@
 }
 
 .profile-usertitle-job {
-    text-transform: uppercase;
     color: #5b9bd1;
     font-size: 12px;
     font-weight: 600;
@@ -103,6 +101,6 @@
     min-height: 460px;
 }
 
-.img-circle{
+.img-circle {
     border-radius: 50%;
 }

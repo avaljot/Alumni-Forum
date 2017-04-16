@@ -14,8 +14,7 @@
                 <!-- SIDEBAR USERPIC -->
                 <div class="profile-userpic">
                     {{#if user}}
-                        <img src="/uploads/{{user.filename}}"
-                             class="img-circle img-responsive" alt="profile photo">
+                        <img src="/uploads/{{user.filename}}" class="" alt="profile photo">
                     {{/if}}
                 </div>
                 <!-- END SIDEBAR USERPIC -->
@@ -28,7 +27,13 @@
                         {{/if}}
                     </div>
                     <div class="profile-usertitle-job">
-
+                        {{# if user.company}}
+                            Working at: {{user.company}}
+                        {{/if}}
+                        <br>
+                        {{# if user.university}}
+                            Alumni of: {{user.university}}
+                        {{/if}}
                     </div>
                 </div>
                 <!-- END SIDEBAR USER TITLE -->

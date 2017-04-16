@@ -5,12 +5,23 @@
             <div class="msg-wrap">
                 <div class="msg odd">
                     <div class="col-md-3 author">
-                        <h5 class="media-heading"><a href="/profile/{{user.username}}">{{user.username}}</a>
-                            <small class="text-muted"></small>
-                        </h5>
-                        <a href="/profile/{{user.username}}" style="text-align: center;font-size: 3em">
-                            <img src="/uploads/{{user.filename}}" class="media-object"/>
-                        </a>
+                        {{#if user.username}}
+                            <h5 class="media-heading"><a href="/profile/{{user.username}}">{{user.username}}</a>
+                                <small class="text-muted"></small>
+                            </h5>
+                            <a href="/profile/{{user.username}}"
+                               style="text-align: center;font-size: 3em">
+                                <img src="/uploads/{{user.filename}}" class="media-object"/>
+                            </a>
+                        {{else}}
+                            <h5 class="media-heading">Unknown User
+                                <small class="text-muted"></small>
+                            </h5>
+                            <a style="text-align: center;font-size: 3em">
+                                <img src="/uploads/unknown.png" class="media-object"/>
+                            </a>
+                        {{/if}}
+
                     </div>
                     <div class="col-md-9">
                         <p class="thread-title"> {{post.title}}</p>
@@ -43,7 +54,8 @@
                     <div class="media" onclick="getCommentOfComment('{{_id}}',this);">
                         <a class="pull-left" href="#">
                             <img class="media-object" style="width: 7em;height: 5em;"
-                                 src="http://localhost:8000/uploads/{{user.filename}}" alt="profile pic of user">
+                                 src="/uploads/{{#if user.filename}}{{user.filename}}{{else}}unknown.png{{/if}}"
+                                 alt="profile pic of user">
                         </a>
                         <div class="media-body">
                             <h4 class="media-heading">{{user.username}}
@@ -54,6 +66,7 @@
                     </div>
                     <div class="clickedDiv" id='selected{{_id}}'></div>
                 {{/each}}
+
             </div>
             {{#if reg_user}}
                 <div class="well">
@@ -67,7 +80,6 @@
                     </div>
                 </div>
             {{/if}}
-
         </div>
         <div class="col-md-4">
             <div class="well">

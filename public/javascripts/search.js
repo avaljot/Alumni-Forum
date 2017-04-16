@@ -26,7 +26,7 @@ function getPostsByTags(tags) {
             else {
                 $("#middleTable").empty();
                 $("#middleTable").append(getHeaderRow());
-                $("#middleTable").append("<div class='alert-info' style='margin:0 auto;'><h4>No Threads</h4></div>");
+                $("#middleTable").append("<td><div class='alert-info' style='margin:0 auto;'><h4>No Threads</h4></div></td>");
             }
         },
         error: function (xhr, text, err) {

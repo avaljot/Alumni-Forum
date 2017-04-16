@@ -57,11 +57,6 @@ router.get('/getPost/:post_id', function (req, res) {
         if (err) throw err;
         User.getUserById(post.user, function (err, user) {
             if (err) throw err;
-            if (user.favs != null && user.favs.indexOf(postID.toString()) > 0) {
-                isfav = true;
-            }
-            else
-                isfav = false;
             var comments = new Array();
             if (post.comments != null) {
                 console.log(post.comments.length);
@@ -93,6 +88,16 @@ router.get('/getPost/:post_id', function (req, res) {
                     });
                 });
             });
+            if (req.session && req.session.user) {
+                console.log(req.session.user);
+                if (req.session.user.favs == null) req.session.user.favs = [];
+                console.log(req.session.user.favs.indexOf(postID));
+                if (req.session.user.favs.indexOf(postID) >= 0) {
+                    isfav = true;
+                }
+                else
+                    isfav = false;
+            }
             res.render('homePost', {
                 post: post,
                 layout: 'postLayout.hbs',
@@ -354,7 +359,7 @@ router.post('/favPost', function (req, res) {
         if (err) throw err;
         if (user.favs == null)
             user.favs = new Array();
-        user.favs.push(post);
+        user.favs.push(postId);
         User.updateFav(user, function (newErr, newUser) {
             if (newErr) throw newErr;
             res.send("ok", 200);
