@@ -1,34 +1,60 @@
 <!-- Page Content -->
 <div class="container">
-
     <div class="row">
         <div class="col-lg-8">
-            <h1>{{post.title}}
-                {{#if reg_user}}
-                    {{# if isfav}}
-                        <img src="http://localhost:8000/images/fav.jpg" style="width: 2em;"
-                             onclick="unfavThisPost('{{post._id}}'); " id="fav"/>
-                    {{else}}
-                        <img src="http://localhost:8000/images/unfav.png" style="width: 2em;"
-                             onclick="favThisPost('{{post._id}}'); " id="fav"/>
-                    {{/if}}
-
-                {{/if}}
-            </h1>
-            <p class="lead">
-                by <a href="#">{{user.username}}</a>
-            </p>
+            <div class="msg-wrap">
+                <div class="msg odd">
+                    <div class="col-md-3 author">
+                        <h5 class="media-heading"><a href="/profile/{{user.username}}">{{user.username}}</a>
+                            <small class="text-muted"></small>
+                        </h5>
+                        <a href="/profile/{{user.username}}" style="text-align: center;font-size: 3em">
+                            <img src="/uploads/{{user.filename}}" class="media-object"/>
+                        </a>
+                    </div>
+                    <div class="col-md-9">
+                        <p class="thread-title"> {{post.title}}</p>
+                        {{#if reg_user}}
+                            {{# if isfav}}
+                                <img src="http://localhost:8000/images/fav.jpg" style="width: 2em;"
+                                     onclick="unfavThisPost('{{post._id}}'); " id="fav"/>
+                            {{else}}
+                                <img src="http://localhost:8000/images/unfav.png" style="width: 2em;"
+                                     onclick="favThisPost('{{post._id}}'); " id="fav"/>
+                            {{/if}}
+                        {{/if}}
+                        <small class="text-muted">
+                            <i class="fa fa-clock-o"></i> Created on: {{dateFormat post.dateCreated
+                                                                                   "MMMM Do YYYY, h:mm a"}}</small>
+                        <div style="margin-top:15px; ">{{post.description}}</div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                tags:
+                {{#each post.tags}}
+                    <span><small>#{{this.text}}</small></span>
+                    <span>&nbsp;</span>
+                {{/each}}
+            </div>
             <hr>
-            <p><span class="glyphicon glyphicon-time"></span> Posted on {{post.dateCreated}}</p>
             <hr>
-            <hr>
-            {{#each post.tags}}
-                <span class="lead"
-                      style="background-color:#cdf2f1;color: black;display: inline;font-weight: bold;">#{{this.text}}</span>
-                <span>&nbsp;</span>
-            {{/each}}
-            <hr>
-            <p>{{post.description}}</p>
+            <div id="commentsList">
+                {{#each comments}}
+                    <div class="media" onclick="getCommentOfComment('{{_id}}',this);">
+                        <a class="pull-left" href="#">
+                            <img class="media-object" style="width: 7em;height: 5em;"
+                                 src="http://localhost:8000/uploads/{{user.filename}}" alt="profile pic of user">
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">{{user.username}}
+                                <small>{{dateFormat lastModified "MMMM Do YYYY, h:mm a"}}</small>
+                            </h4>
+                            {{text}}
+                        </div>
+                    </div>
+                    <div class="clickedDiv" id='selected{{_id}}'></div>
+                {{/each}}
+            </div>
             {{#if reg_user}}
                 <div class="well">
                     <h4>Leave a Comment:</h4>
@@ -41,62 +67,39 @@
                     </div>
                 </div>
             {{/if}}
-            <hr>
+
         </div>
-
         <div class="col-md-4">
-
             <div class="well">
                 <h4>Topic Search:</h4>
                 <div class="input-group">
                     <span class="expandonClick1">
-                        <input type="text" name="search" placeholder="Search..">
+                        <input type="text" name="search" placeholder="Search.." id="searchBox">
                         {{#if reg_user}}
-                            <a onclick="document.getElementById('id03').style.display='block'" style="width:auto;"> Post Question ?</a>
+                            <a href="#" data-toggle="modal" data-target="#thread-modal" style="color:blue">Create new Thread</a>
                         {{/if}}
                     </span>
                 </div>
             </div>
-
             <!-- Side Widget Well -->
+            <h4>Stats:</h4>
             <div class="well">
-                <h4>Stats:</h4>
                 {{#if reg_user}}
-                    <img src="http://localhost:8000/images/like.png" style="width: 2em;"
+                    <img src="/images/like.png" style="width: 2em;"
                          onclick="increaseUpvotes('{{post._id}}'); "/>
-                {{/if}}
-                <span style="color:greenyellow;" id="upvotes">
-                    Up votes : {{post.upvotes.length}}</span>
-                <br/>
-                {{#if reg_user}}
-                    <img src="http://localhost:8000/images/unlike.png" style="width: 2em;"
-                         onclick="increaseDownvotes('{{post._id}}');"/>
-                {{/if}}
+                    <span style="color:blue;" id="upvotes">
+                       Upvotes: {{post.upvotes.length}}</span>
 
-                <span style="color:lightcoral;" id="downvotes">
-                    Down votes : {{post.downvotes.length}}</span>
-                <br/>
-                <img src="http://localhost:8000/images/preview.jpg" style="width: 2em;"/>
-                <span style="color:cornflowerblue;" id="preview">
-                    Views : {{post.preview}}</span>
+                    <img src="/images/unlike.png" style="width: 2em;"
+                         onclick="increaseDownvotes('{{post._id}}');"/>
+                    <span style="color:blue;" id="downvotes">Downvotes: {{post.downvotes.length}}</span>
+                {{/if}}
+                <img src="/images/preview.jpg" style="width: 2em;"/>
+                <span style="color:blue;" id="preview">
+                    {{post.preview}}</span>
+
             </div>
         </div>
     </div>
-    <div id="commentsList">
-        {{#each comments}}
-            <div class="media" onclick="getCommentOfComment('{{_id}}',this);">
-                <a class="pull-left" href="#">
-                    <img class="media-object" style="width: 7em;height: 5em;"
-                         src="http://localhost:8000/uploads/{{user.filename}}" alt="profile pic of user">
-                </a>
-                <div class="media-body">
-                    <h4 class="media-heading">{{user.username}}
-                        <small>{{lastModified}}</small>
-                    </h4>
-                    {{text}}
-                </div>
-            </div>
-            <div class="clickedDiv" id='selected{{_id}}'></div>
-        {{/each}}
-    </div>
+
 </div>

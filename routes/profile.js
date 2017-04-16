@@ -42,7 +42,10 @@ router.get('/allusers', function (req, res) {
 
 router.get('/:username', function (req, res) {
     if (req.session && req.session.user) {
-        User.findOne({username: req.params.username, 'status': true}).populate('posts').exec(function (err, user) {
+        User.findOne({username: req.params.username, 'status': true}).populate({
+            path: 'posts favs',
+            match: {status: true}
+        }).exec(function (err, user) {
             res.render('profile-posts', {
                 layout: 'profile-layout',
                 user: user,
