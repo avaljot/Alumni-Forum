@@ -1,7 +1,9 @@
 <span class="expandonClick">
     <input type="text" name="search" placeholder="Search.." id="searchBox">
     {{#if reg_user}}
-        <a href="#" data-toggle="modal" data-target="#thread-modal">Create new Thread</a>
+        <button type="button" data-toggle="modal" data-target="#thread-modal" class="login loginmodal-submit" style="width: 20%">
+            Create new Thread
+        </button>
     {{/if}}
 </span>
 <p class="lead" style="margin-top: 2%">Alumni Discussion Forum</p>

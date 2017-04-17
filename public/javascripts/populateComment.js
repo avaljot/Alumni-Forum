@@ -33,7 +33,7 @@ function getCommentButtonOfComment(data, commentId) {
     var one = "<div class='expandonClick'> <h4>Leave a Comment:</h4> <div>";
     one += "<div class='form-group'>";
     one += "<input type='text' class='form-control' name='comment' id='comment'/>";
-    one += "</div><button onclick=\"addCommentofComment('" + commentId + "',this)\" class='btn btn-primary'>Post Comment</button>";
+    one += "</div><button onclick=\"addCommentofComment('" + commentId + "',this)\" class='login loginmodal-submit' style='width: 20%'>Post Comment</button>";
     one += "</div> </div>";
     return one;
 }

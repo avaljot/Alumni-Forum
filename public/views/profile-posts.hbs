@@ -11,6 +11,7 @@
             success: function (data) {
                 if (data) {
                     $('#' + postid).css("display", "none");
+                    window.location.reload();
                 } else
                     $('#message').addClass("alert-danger").html("Try again");
 
@@ -23,27 +24,74 @@
             }
         });
     }
+
+    function openTab(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
 </script>
 
-<h1>Threads created by You:</h1>
-{{# each user.posts}}
-    <li id="{{_id}}">
-        <form method="post" action="/posts/getPost">
-            <input type="hidden" value="{{_id}}" name="getPost"/>
-            {{title}},Views={{preview}}
-            <button>View</button>
-        </form>
-        <a class="btn btn-default" onclick="deletePost('{{_id}}')">Delete</a>
-    </li>
-{{/each}}
-<h1>Favourites created by You:</h1>
-{{# each user.favs}}
-    <li>
-        <form method="post" action="/posts/getPost">
-            <input type="hidden" value="{{_id}}" name="getPost"/>
-            {{title}},Views={{preview}}
-            <button>View</button>
-        </form>
-    </li>
-{{/each}}
+
+<div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'threads')">Threads</button>
+    <button class="tablinks" onclick="openTab(event, 'favs')">Favourites</button>
+    <!--<button class="tablinks" onclick="openTab(event, 'Tokyo')">Tokyo</button>-->
+</div>
+
+<div id="threads" class="tabcontent">
+    <div class="thread">
+
+        <ul>
+            {{# if user.posts}}
+                {{# each user.posts}}
+                    <li id="{{_id}}">
+                        <a href="/posts/getPost/{{_id}}" target="_blank"><h3>{{title}}</h3></a>
+                        <p>Views={{preview}}</p>
+                        <p>{{description}}</p>
+                        {{#compare reg_user.username user.username operator="=="}}
+                            <a class="btn btn-default" onclick="deletePost('{{_id}}')">Delete</a>
+                        {{/compare}}
+                    </li>
+                {{/each}}
+            {{else}}
+                <li>No threads.</li>
+                <li>
+                    <button type="button" data-toggle="modal" data-target="#thread-modal"
+                            class="login loginmodal-submit" style="width: 30%">
+                        Create new Thread
+                    </button>
+                </li>
+            {{/if}}
+        </ul>
+    </div>
+</div>
+
+<div id="favs" class="tabcontent">
+    <div class="thread">
+        <ul>
+            {{# if user.favs}}
+                {{# each user.favs}}
+                    <li id="{{_id}}">
+                        <a href="/posts/getPost/{{_id}}" target="_blank"><h3>{{title}}</h3></a>
+                        <p>Views={{preview}}</p>
+                        <p>{{description}}</p>
+                    </li>
+                {{/each}}
+            {{else}}
+                <li>No favourites.</li>
+            {{/if}}
+        </ul>
+    </div>
+</div>
+
+
 

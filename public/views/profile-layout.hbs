@@ -40,7 +40,8 @@
                 <!-- SIDEBAR BUTTONS -->
                 {{#compare reg_user.username user.username operator="=="}}
                     <div class="profile-userbuttons">
-                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
+                        <button type="button" class="login loginmodal-submit" data-toggle="modal" data-target="#myModal"
+                                style="width: 100%">
                             Upload Profile Photo
                         </button>
                         <!-- Modal -->
@@ -72,32 +73,15 @@
                         <li class="active">
                             <a href="/profile">
                                 <i class="glyphicon glyphicon-home"></i>
-                                Posts </a>
+                                Overview </a>
                         </li>
-                        {{#compare reg_user.username user.username operator="=="}}
+                        {{# if reg_user.isAdmin}}
                             <li>
                                 <a href="/profile/allusers">
                                     <i class="glyphicon glyphicon-user"></i>
                                     List All Users </a>
                             </li>
-                        {{^}}
-                            <li>
-                                <a href="/profile/users">
-                                    <i class="glyphicon glyphicon-user"></i>
-                                    Back</a>
-                            </li>
-                        {{/compare}}
-
-                        <li>
-                            <a href="#" target="_blank">
-                                <i class="glyphicon glyphicon-ok"></i>
-                                Tasks </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="glyphicon glyphicon-flag"></i>
-                                Help </a>
-                        </li>
+                        {{/if}}
                     </ul>
                 </div>
                 <!-- END MENU -->
@@ -109,8 +93,8 @@
             </div>
         </div>
     </div>
+    {{>postQuestion}}
 </div>
-
 </body>
 </html>
 

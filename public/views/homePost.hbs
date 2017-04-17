@@ -74,9 +74,9 @@
                     <h4>Leave a Comment:</h4>
                     <input type="hidden" value={{post._id}} name='getPost' id="getPost"/>
                     <div class="form-group">
-                        <textarea class="textarea" rows="20" name="comment" id="comment"></textarea>
+                        <textarea class="textarea" name="comment" id="comment" style="margin: 0px 0px 10px; height: 95px; width: 763px;"></textarea>
                     </div>
-                    <input type="button" class="btn btn-primary" value="Comment"
+                    <input type="button" class="login loginmodal-submit" value="Comment" style="width: 20%;"
                            onclick="addComment('{{_id}}')"/>
                 </div>
 
