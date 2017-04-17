@@ -40,6 +40,19 @@ router.get('/allusers', function (req, res) {
     }
 });
 
+router.get('/posts', function (req, res) {
+    console.log("here");
+    Post.getPostByNewest(function (err, posts) {
+        if (err) throw err;
+        res.render('profile-allposts', {
+            layout: 'profile-layout',
+            reg_user: req.session.user,
+            allposts: posts
+        });
+    });
+});
+
+
 router.get('/:username', function (req, res) {
     if (req.session && req.session.user) {
         User.findOne({username: req.params.username, 'status': true}).populate({
@@ -111,5 +124,7 @@ router.get('/', function (req, res) {
         res.redirect('/users/login');
     }
 });
+
+
 module.exports = router;
 
