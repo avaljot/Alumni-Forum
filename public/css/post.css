@@ -124,17 +124,30 @@ hr {
 }
 
 .media-object {
-    border-radius: 50%;
-    height:100px;
+    height: 100px;
     width: 100px;
+    float: none;
+    margin: 0 auto;
+    -webkit-border-radius: 50% !important;
+    -moz-border-radius: 50% !important;
+    border-radius: 50% !important;
 }
 
-.stats{
+.stats {
     margin: 30px;
     padding: 10px;
     list-style-type: none;
     text-align: center;
 }
-.stats li{
+
+.stats li {
     display: inline;
+}
+
+.thread-title {
+    font-size: 20px;
+}
+
+#commentsList{
+    margin-top: 5%;
 }

@@ -22,7 +22,7 @@ function getCommentOfComment(commentId) {
             }
             if (data.user != false)
                 one += getCommentButtonOfComment(data, commentId);
-            one += "Login to Comment!</div>";
+            one += "</div>";
             $(divToAppend).empty();
             $(divToAppend).append(one);
         }

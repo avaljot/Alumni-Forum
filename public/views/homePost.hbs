@@ -5,10 +5,12 @@
             <div class="msg-wrap">
                 <div class="msg odd">
                     <div class="col-md-3 author">
+                    <div class="profile-usertitle">
+                    <div class="profile-usertitle-name">
                         {{#if user.username}}
-                            <h5 class="media-heading"><a href="/profile/{{user.username}}">{{user.username}}</a>
-                                <small class="text-muted"></small>
-                            </h5>
+                            <a href="/profile/{{user.username}}">{{user.username}}</a>
+                        </div>
+                        </div>
                             <a href="/profile/{{user.username}}"
                                style="text-align: center;font-size: 3em">
                                 <img src="/uploads/{{user.filename}}" class="media-object"/>
@@ -21,10 +23,9 @@
                                 <img src="/uploads/unknown.png" class="media-object"/>
                             </a>
                         {{/if}}
-
                     </div>
                     <div class="col-md-9">
-                        <p class="thread-title"> {{post.title}}</p>
+                        <p style="font-size: 35px"> {{post.title}}</p>
                         {{#if reg_user}}
                             {{# if isfav}}
                                 <img src="http://localhost:8000/images/fav.jpg" style="width: 2em;"
@@ -37,18 +38,18 @@
                         <small class="text-muted">
                             <i class="fa fa-clock-o"></i> Created on: {{dateFormat post.dateCreated
                                                                                    "MMMM Do YYYY, h:mm a"}}</small>
-                        <div style="margin-top:15px; ">{{post.description}}</div>
+                        <div style="margin-top:15px;font-size: 20px">{{post.description}}</div>
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                tags:
-                {{#each post.tags}}
-                    <span><small>#{{this.text}}</small></span>
-                    <span>&nbsp;</span>
-                {{/each}}
             </div>
             <hr>
             <hr>
+            Tags:
+            {{#each post.tags}}
+                <span><small>#{{this.text}}</small></span>
+                <span>&nbsp;</span>
+            {{/each}}
             <div id="commentsList">
                 {{#each comments}}
                     <div class="media" onclick="getCommentOfComment('{{_id}}',this);">
@@ -69,16 +70,16 @@
 
             </div>
             {{#if reg_user}}
-                <div class="well">
+                <div style="margin-top: 10%;">
                     <h4>Leave a Comment:</h4>
-                    <div>
-                        <input type="hidden" value={{post._id}} name='getPost' id="getPost"/>
-                        <div class="form-group">
-                            <textarea class="form-control" rows="3" name="comment" id="comment"></textarea>
-                        </div>
-                        <button onclick="addComment('{{_id}}')" class="btn btn-primary">Post Comment</button>
+                    <input type="hidden" value={{post._id}} name='getPost' id="getPost"/>
+                    <div class="form-group">
+                        <textarea class="textarea" rows="20" name="comment" id="comment"></textarea>
                     </div>
+                    <input type="button" class="btn btn-primary" value="Comment"
+                           onclick="addComment('{{_id}}')"/>
                 </div>
+
             {{/if}}
         </div>
         <div class="col-md-4">
