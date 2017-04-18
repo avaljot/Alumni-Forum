@@ -68,3 +68,13 @@ module.exports.deletePost = function (id, callback) {
         $set: query
     }, callback);
 };
+
+module.exports.editPosts = function (editPost, callback) {
+    Post.findOneAndUpdate({'_id': editPost._id}, {
+        $set: {
+            'title': editPost.title,
+            'description': editPost.description,
+            'tags': editPost.tags
+        }
+    })
+}

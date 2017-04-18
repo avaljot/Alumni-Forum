@@ -212,7 +212,7 @@ router.post('/postsComment', function (req, res) {
  user : {type:Schema.Types.ObjectId,ref: 'User'}
  */
 
-// Register
+// Add Post
 router.post('/addPost', function (req, res) {
     var title = req.body.title;
     var description = req.body.description;
@@ -254,7 +254,9 @@ router.post('/addPost', function (req, res) {
     });
 });
 
+// create post functions.
 function createPost(title, description, tagsArray, req, res) {
+    console.log('inside create post');
     var dateCreated = Date.now;
     var lastModified = Date.now;
     var upvotes = null;
@@ -264,31 +266,28 @@ function createPost(title, description, tagsArray, req, res) {
 
     var newPost = new Post({
         title: title, description: description,
-        tags: new Array(), dateCreated: dateCreated(), lastModified: lastModified(),
+        tags: [], dateCreated: dateCreated(), lastModified: lastModified(),
         upvotes: upvotes, downvotes: downvotes, status: status, user: user, comments: null, preview: 0
     });
 
     if (tagsArray.length == 0) {
-        createPostOther(title, description, tagsArray, req, res, newPost, user);
+        createPostOther(req, res, newPost, user);
     }
 
     var count = 0;
     tagsArray.forEach(function (element, index, array) {
-        console.log(array[index]);
-        console.log(array[index].posts);
-        console.log(array[index].preview);
         array[index].posts.push(newPost);
         Tags.updateTags(tagsArray[index], function (err, tagNow) {
             if (err) throw err;
             newPost.tags.push(tagNow);
             count++;
             if (count == tagsArray.length)
-                createPostOther(title, description, tagsArray, req, res, newPost, user);
+                createPostOther(req, res, newPost, user);
         });
     });
 }
-
-function createPostOther(title, description, tagsArray, req, res, newPost, user) {
+function createPostOther(req, res, newPost, user) {
+    console.log("inside create post other");
     if (user.posts == null)
         user.posts = [];
     user.posts.push(newPost);
@@ -301,7 +300,7 @@ function createPostOther(title, description, tagsArray, req, res, newPost, user)
     Post.createPost(newPost, function (err, post) {
         if (err) throw err;
     });
-    req.flash('success_msg', 'Discussion Created');
+    req.flash('success_msg', 'Thread Created');
     res.redirect('/');
 }
 

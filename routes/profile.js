@@ -41,7 +41,6 @@ router.get('/allusers', function (req, res) {
 });
 
 router.get('/posts', function (req, res) {
-    console.log("here");
     Post.getPostByNewest(function (err, posts) {
         if (err) throw err;
         res.render('profile-allposts', {
@@ -52,6 +51,17 @@ router.get('/posts', function (req, res) {
     });
 });
 
+// Ajax call
+router.get('/post/:postid', function (req, res) {
+    Post.find({
+        '_id': req.params.postid,
+        'status': true
+    }).populate({path: 'tags', select: 'text'}).exec(function (err, post) {
+        if (err) throw err;
+        console.log(post);
+        res.send(post);
+    });
+});
 
 router.get('/:username', function (req, res) {
     if (req.session && req.session.user) {
@@ -112,7 +122,7 @@ router.get('/', function (req, res) {
         }).populate({
             path: 'posts favs',
             match: {status: true}
-        }).exec(function (err, user) {
+        }).sort({lastModified: 'descending'}).exec(function (err, user) {
             res.render('profile-posts', {
                 layout: 'profile-layout',
                 user: user,

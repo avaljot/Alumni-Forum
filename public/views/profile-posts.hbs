@@ -1,4 +1,3 @@
-
 <div class="tab">
     <button class="tablinks" onclick="openTab(event, 'threads')">Threads</button>
     <button class="tablinks" onclick="openTab(event, 'favs')">Favourites</button>
@@ -17,6 +16,10 @@
                         <p>{{description}}</p>
                         {{#compare reg_user.username user.username operator="=="}}
                             <a class="btn btn-default" onclick="deletePost('{{_id}}')">Delete</a>
+                            <a data-toggle="modal" data-target="#thread-modal" class="btn btn-default"
+                               onclick="editThread('{{_id}}')">
+                                Edit
+                            </a>
                         {{/compare}}
                     </li>
                 {{/each}}
