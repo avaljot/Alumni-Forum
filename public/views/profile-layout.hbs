@@ -6,7 +6,7 @@
     {{>head}}
     {{>header}}
 </head>
-<body>
+<body onload="openTab(event, 'threads')">
 <div class="container">
     <div class="row profile">
         <div class="col-md-3">
@@ -14,8 +14,7 @@
                 <!-- SIDEBAR USERPIC -->
                 <div class="profile-userpic">
                     {{#if user}}
-                        <img src="/uploads/{{user.filename}}"
-                             class="img-circle img-responsive" alt="profile photo">
+                        <img src="/uploads/{{user.filename}}" class="" alt="profile photo">
                     {{/if}}
                 </div>
                 <!-- END SIDEBAR USERPIC -->
@@ -28,16 +27,22 @@
                         {{/if}}
                     </div>
                     <div class="profile-usertitle-job">
-
+                        {{# if user.company}}
+                            Working at: {{user.company}}
+                        {{/if}}
+                        <br>
+                        {{# if user.university}}
+                            Alumni of: {{user.university}}
+                        {{/if}}
                     </div>
                 </div>
                 <!-- END SIDEBAR USER TITLE -->
                 <!-- SIDEBAR BUTTONS -->
                 {{#compare reg_user.username user.username operator="=="}}
                     <div class="profile-userbuttons">
-                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
-                            Upload
-                            Profile Photo
+                        <button type="button" class="login loginmodal-submit" data-toggle="modal" data-target="#myModal"
+                                style="width: 100%">
+                            Upload Profile Photo
                         </button>
                         <!-- Modal -->
                         <div class="modal fade" id="myModal" role="dialog">
@@ -68,32 +73,20 @@
                         <li class="active">
                             <a href="/profile">
                                 <i class="glyphicon glyphicon-home"></i>
-                                Posts </a>
+                                Overview </a>
                         </li>
-                        {{#compare reg_user.username user.username operator="=="}}
+                        {{# if reg_user.isAdmin}}
                             <li>
                                 <a href="/profile/allusers">
                                     <i class="glyphicon glyphicon-user"></i>
                                     List All Users </a>
                             </li>
-                        {{^}}
                             <li>
-                                <a href="/profile/users">
+                                <a href="/profile/posts">
                                     <i class="glyphicon glyphicon-user"></i>
-                                    Back</a>
+                                    List All Threads </a>
                             </li>
-                        {{/compare}}
-
-                        <li>
-                            <a href="#" target="_blank">
-                                <i class="glyphicon glyphicon-ok"></i>
-                                Tasks </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="glyphicon glyphicon-flag"></i>
-                                Help </a>
-                        </li>
+                        {{/if}}
                     </ul>
                 </div>
                 <!-- END MENU -->
@@ -105,8 +98,8 @@
             </div>
         </div>
     </div>
+    {{>postQuestion}}
 </div>
-
 </body>
 </html>
 

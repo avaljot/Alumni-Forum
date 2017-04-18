@@ -6,6 +6,8 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "async": "^2.3.0",
+    "async-waterfall": "^0.1.5",
     "bcryptjs": "^2.4.3",
     "body-parser": "~1.16.0",
     "connect-flash": "*",
@@ -14,6 +16,7 @@
     "express": "~4.14.1",
     "express-session": "~1.15.1",
     "express-validator": "^3.1.2",
+    "handlebars-dateformat": "^1.0.1",
     "hbs": "~4.0.1",
     "mongodb": "*",
     "mongoose": "^4.9.0",

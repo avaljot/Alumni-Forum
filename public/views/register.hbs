@@ -1,4 +1,3 @@
-
 {{#if err}}
     {{#each err}}
         <div class="alert alert-danger register-container" style="text-align: center;margin: 0 auto">{{err_msg}}</div>
@@ -6,7 +5,7 @@
 {{/if}}
 
 {{#if message}}
-    <div class="alert alert-danger register-container" style="text-align: center;margin: 0 auto"">{{message}}</div>
+    <div class="alert alert-danger register-container" style="text-align: center;margin: 0 auto">{{message}}</div>
 {{/if}}
 
 
@@ -30,24 +29,24 @@
 
         <label>Your current work status</label><br>
         <label class="radio-inline">
-            <input type="radio" name="optradio">Working full-time
+            <input type="radio" name="optradio" value="Working full-time">Working full-time
         </label><br>
         <label class="radio-inline">
-            <input type="radio" name="optradio">Working part-time
+            <input type="radio" name="optradio" value="Working part-time">Working part-time
         </label><br>
         <label class="radio-inline">
-            <input type="radio" name="optradio">Between jobs / In transition
+            <input type="radio" name="optradio" value="Between jobs / In transition">Between jobs / In transition
         </label><br>
         <label class="radio-inline">
-            <input type="radio" name="optradio">Full-time student
+            <input type="radio" name="optradio" value="Full-time student">Full-time student
         </label><br>
         <label class="radio-inline">
-            <input type="radio" name="optradio">Retired
+            <input type="radio" name="optradio" value="Retired">Retired
         </label><br>
         <br>
 
         <label>Select Company Name(Type if not listed)</label>
-        <select class="form-control" id="company-list" onclick="companyName()">
+        <select class="form-control" id="company-list" onclick="companyName()" name="companyPicker">
             <option></option>
             <!--company list-->
         </select>
@@ -55,7 +54,7 @@
 
 
         <label>Select School Name(Type if not listed)</label>
-        <select class="form-control" id="university-list" onclick="univName()">
+        <select class="form-control" id="university-list" onclick="univName()" name="universityPicker">
             <option></option>
             <!--school-list-->
         </select>

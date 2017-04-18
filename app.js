@@ -23,6 +23,7 @@ var posts = require('./routes/posts');
 var profile = require('./routes/profile');
 
 var app = express();
+exphbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'public', 'views'));
