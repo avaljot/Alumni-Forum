@@ -25,6 +25,7 @@ var profile = require('./routes/profile');
 
 exphbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 var app = express();
+exphbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'public', 'views'));

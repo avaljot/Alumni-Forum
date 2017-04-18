@@ -8,14 +8,15 @@
                     <tr>
                         <th><label><b>Title</b></label></th>
                         <td><input type="text" placeholder="Enter Title" name="title" required></td>
+                        <input type="hidden" name="isEdit" value=""/>
                     </tr>
                     <tr>
                         <th>
                             <label><b>Description</b></label>
                         </th>
                         <td>
-                            <textarea class="textarea" placeholder="Enter Description" name="description"
-                                      required></textarea>
+                            <textarea class="textarea" placeholder="Enter Description" name="description" required
+                                      style="margin: 0px 0px 10px; width: 450px; height: 184px;"></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -23,7 +24,8 @@
                             <label><b>Tags</b></label>
                         </th>
                         <td>
-                            <textarea class="textarea" placeholder="Enter Tags" name="tags"></textarea>
+                            <textarea class="textarea" placeholder="Enter Tags" name="tags"
+                                      style="margin: 0px 0px 10px; width: 450px; height: 83px;"></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -31,7 +33,7 @@
 
                         </th>
                         <td>
-                            <input type="submit" name="login" class="login loginmodal-submit" value="Ceate">
+                            <input type="submit" name="edit" class="login loginmodal-submit" value="Create">
                         </td>
                     </tr>
                 </table>
