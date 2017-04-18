@@ -1,10 +1,6 @@
 function getCommentOfComment(commentId) {
     console.log("comment clicked " + commentId);
     var divToAppend = "#selected" + commentId;
-    //console.log(divToAppend);
-    $('#selected*').each(function () {
-        console.log("1");
-    });
     $.ajax({
         url: '../getComments',
         type: 'POST',
@@ -14,32 +10,57 @@ function getCommentOfComment(commentId) {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             //$(divToAppend).append(one);
-            var one = "<div class='commentOfComment well'>";
+            var one = "<div class='commentOfComment'>";
             if (data.comments != "done") {
                 for (i = 0; i < data.comments.length; i++) {
                     one += getCommentDiv(data.comments[i]);
                 }
             }
-            if (data.user != false)
+            if (data.user != false) {
                 one += getCommentButtonOfComment(data, commentId);
+                one +=getShowOrHideLink("selected" + commentId);
+            }
             one += "</div>";
             $(divToAppend).empty();
             $(divToAppend).append(one);
+            $(divToAppend).find(".commentOfComment .postComments").hide();
         }
     });
 }
 
+function getShowOrHideLink(selectedDiv){
+     var one="<br/><a onclick=\"showOrHideComment('"+selectedDiv+"');\"><span class='showOrHide'>Show Comment Box</span></a>";
+     return one;
+}
+
+function showOrHideComment(selectedDiv) {
+    var text=$("#"+selectedDiv).find(".commentOfComment .showOrHide").text();
+    if(text=="Show Comment Box") {
+        $("#" + selectedDiv).find(".commentOfComment .postComments").show();
+        $("#"+selectedDiv).find(".commentOfComment .showOrHide").text("Hide Comment Box");
+    }else{
+        $("#" + selectedDiv).find(".commentOfComment .postComments").hide();
+        $("#"+selectedDiv).find(".commentOfComment .showOrHide").text("Show Comment Box");
+    }
+}
+
 function getCommentButtonOfComment(data, commentId) {
+    var one="<div style='margin-top: 10%;' class='postComments'><h4>Leave a Comment:</h4>";
+    one+="<div class='form-group'>";
+    one+="<input type='text' class='form-control' name='comment' id='comment'/>";
+    one+="</div><button onclick=\"addCommentofComment('" + commentId + "',this)\" class='login loginmodal-submit' style='width: 20%'>Post Comment</button>";
+    one +="</div>";
+/*  </div>
     var one = "<div class='expandonClick'> <h4>Leave a Comment:</h4> <div>";
     one += "<div class='form-group'>";
     one += "<input type='text' class='form-control' name='comment' id='comment'/>";
     one += "</div><button onclick=\"addCommentofComment('" + commentId + "',this)\" class='login loginmodal-submit' style='width: 20%'>Post Comment</button>";
     one += "</div> </div>";
+    */
     return one;
 }
 
 function addCommentofComment(commentID, currentObject) {
-    console.log($(currentObject).parent().parent().parent().html());
     var divToAppend = "#selected" + commentID;
     $.ajax({
         url: '../addCommentOfComment',
@@ -53,7 +74,8 @@ function addCommentofComment(commentID, currentObject) {
             console.log(data);
             //$(currentObject).parent().parent().parent().empty();
             var one = getCommentDiv(data);
-            $(currentObject).after(one);
+            $(currentObject).parent().before(one);
+            $(currentObject).parent().find("input").val("");
         }
     });
 }
@@ -93,7 +115,7 @@ function increaseUpvotes(postId) {
         },
         success: function (data) {
             $("#upvotes").empty();
-            $("#upvotes").append("Up votes : " + data);
+            $("#upvotes").append("Upvotes : " + data);
         },
         error: function (xhr, text, err) {
             console.log('error: ', err);
@@ -156,7 +178,7 @@ function increaseDownvotes(postId) {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             $("#downvotes").empty();
-            $("#downvotes").append("Down votes : " + data);
+            $("#downvotes").append("Downvotes : " + data);
         },
         error: function (xhr, text, err) {
             console.log('error: ', err);

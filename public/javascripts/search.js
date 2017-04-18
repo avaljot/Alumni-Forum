@@ -28,6 +28,8 @@ function getPostsByTags(tags) {
                 $("#middleTable").append(getHeaderRow());
                 $("#middleTable").append("<td><div class='alert-info' style='margin:0 auto;'><h4>No Threads</h4></div></td>");
             }
+            $(".pager").remove();
+            paginate();
         },
         error: function (xhr, text, err) {
             console.log('error: ', err);
