@@ -72,7 +72,7 @@ function getPostsWithMostComments() {
 function getHeaderRow() {
     var one = "<tr>";
     one += "<th class=\"cell-stat\"></th> <th> <h3>Threads</h3> </th>";
-    one += "<th class=\"cell-stat text-center hidden-xs hidden-sm\">Tags</th>";
+    one += "<th class=\"cell-stat text-center hidden-xs hidden-sm\" style=\"word-wrap: break-word; width: 20em\">Tags</th>";
     one += "<th class=\"cell-stat text-center hidden-xs hidden-sm\">Posts</th>";
     one += "<th class=\"cell-stat-2x hidden-xs hidden-sm\">Last Post</th>";
     one += "</tr>";
@@ -84,7 +84,7 @@ function getpostsForCurrentRow(data) {
     one += "<td><h4><a href=\"/posts/getPost/" + data._id + "\">" + data.title + "</a><br>";
     one += "<small>Upvotes :" + getLength(data.upvotes) + ",Downvotes : " + getLength(data.downvotes)
         + ",Views :" + data.preview + "</small></h4></td>";
-    one += "<td class=\"text-center hidden-xs hidden-sm\">";
+    one += "<td class=\"text-center hidden-xs hidden-sm\" >";
     one += getTagsofPost(data.tags);
     one += "</td>";
     one += "<td class=\"text-center hidden-xs hidden-sm\">" + getLength(data.comment) + "</td>";
