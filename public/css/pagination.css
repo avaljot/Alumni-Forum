@@ -5,11 +5,11 @@ div.pager span {
     line-height: 1.8;
     text-align: center;
     cursor: pointer;
-    background: #000;
+    background: gray;
     color: #fff;
     margin-right: 0.5em;
 }
 
 div.pager span.active {
-    background: #c00;
+    background: #357ae8;
 }
