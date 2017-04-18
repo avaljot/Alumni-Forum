@@ -1,21 +1,3 @@
-<script>
-    $(function () {
-        $('a.read_more').click(function (event) {
-            event.preventDefault();
-            var $elem = $(this).parents('.tag').find('.more_text');
-            if ($elem.css('display') === 'none') {
-                $elem.slideDown("slow");
-                $(this).find('img').attr('src', '/images/up-arrow.png')
-            }
-            else {
-                $elem.slideUp("slow");
-                $(this).find('img').attr('src', '/images/down.png');
-            }
-        });
-    });
-
-</script>
-
 <span class="expandonClick">
     <input type="text" name="search" placeholder="Search.." id="searchBox">
     {{#if reg_user}}
