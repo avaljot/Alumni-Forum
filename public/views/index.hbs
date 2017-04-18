@@ -8,7 +8,7 @@
 </span>
 <p class="lead" style="margin-top: 2%">Alumni Discussion Forum</p>
 
-<table class="table forum table-striped" id="middleTable">
+<table class="paginated table forum table-striped" id="middleTable">
     <thead>
     <tr>
         <th class="cell-stat"></th>
@@ -20,13 +20,27 @@
         <th class="cell-stat-2x hidden-xs hidden-sm">Last Post</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody id="projectLocation" class="list">
     {{#each posts}}
         <tr>
             <td class="text-center"><i class="fa fa-question fa-2x text-primary"></i></td>
             <td>
                 <h4><a href="/posts/getPost/{{_id}}">{{title}}</a><br>
-                    <small>Upvotes : {{upvotes}},Downvotes : {{downvotes}},Views : {{preview}}</small>
+                    <small>
+                    Upvotes :
+                    {{#if upvotes}}
+                        {{upvotes.length}}
+                    {{else}}
+                        0
+                    {{/if}}
+                    Downvotes :
+                    {{#if downvotes}}
+                        {{downvotes.length}}
+                    {{else}}
+                        0
+                    {{/if}}
+                    ,Views : {{preview}}
+                    </small>
                 </h4>
             </td>
             <td class="text-center hidden-xs hidden-sm">
