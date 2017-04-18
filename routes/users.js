@@ -109,7 +109,7 @@ router.post('/addUser', function (req, res) { // adding user to db
                 console.log(user);
             });
             req.flash('success_msg', 'You are registered and can now login');
-            res.redirect('/users/login');
+            res.redirect('/');
         }
     });//render view register and send errors to display
 });

@@ -13,7 +13,7 @@
     font-family: roboto;
 }
 
-.width-container{
+.width-container {
     max-width: 800px;
 }
 
@@ -48,12 +48,12 @@
 .loginmodal-container input[type=text]:hover, input[type=password]:hover {
     border: 1px solid #b9b9b9;
     border-top: 1px solid #a0a0a0;
-    -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.textarea{
+.textarea {
     height: 44px;
     font-size: 16px;
     width: 100%;
@@ -68,6 +68,7 @@
     -moz-box-sizing: border-box;
 
 }
+
 .loginmodal {
     text-align: center;
     font-size: 14px;
@@ -84,7 +85,7 @@
     /* border: 1px solid #3079ed; */
     border: 0px;
     color: #fff;
-    text-shadow: 0 1px rgba(0,0,0,0.1);
+    text-shadow: 0 1px rgba(0, 0, 0, 0.1);
     background-color: #4d90fe;
     padding: 17px 0px;
     font-family: roboto;
@@ -95,7 +96,7 @@
 .loginmodal-submit:hover {
     /* border: 1px solid #2f5bb7; */
     border: 0px;
-    text-shadow: 0 1px rgba(0,0,0,0.3);
+    text-shadow: 0 1px rgba(0, 0, 0, 0.3);
     background-color: #357ae8;
     /* background-image: -webkit-gradient(linear, 0 0, 0 100%,   from(#4d90fe), to(#357ae8)); */
 }
@@ -110,6 +111,52 @@
     transition: opacity ease 0.5s;
 }
 
-.login-help{
+.login-help {
     font-size: 12px;
+}
+
+#pswd_info {
+    position: absolute;
+    bottom: 67%;
+    left: 60%;
+    width: 250px;
+    padding: 15px;
+    background: #fefefe;
+    font-size: .875em;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px #ccc;
+    border: 1px solid #ddd;
+    display: none;
+}
+
+#pswd_info h4 {
+    margin: 0 0 10px 0;
+    padding: 0;
+    font-weight: normal;
+}
+
+#pswd_info::before {
+    content: "\25c0";
+    position: absolute;
+    top: 45%;
+    right: 100%;
+    font-size: 18px;
+    line-height: 14px;
+    color: #ddd;
+    text-shadow: none;
+    display: block;
+}
+
+.invalid {
+    /*background: url(../images/invalid.png) no-repeat 0 50%;*/
+    padding-left: 22px;
+    line-height: 24px;
+    color: #ec3f41;
+}
+
+.valid {
+    /*background: url(../images/valid.png) no-repeat 0 50%;*/
+    padding-left: 22px;
+    line-height: 24px;
+    color: #3a7d34;
 }
