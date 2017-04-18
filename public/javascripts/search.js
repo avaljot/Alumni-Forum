@@ -46,11 +46,20 @@ function getPostsWithoutComments() {
         type: 'POST',
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
-            $("#middleTable").empty();
-            $("#middleTable").append(getHeaderRow());
-            for (var i = 0; i < data.length; i++) {
-                $("#middleTable").append(getpostsForCurrentRow(data[i]));
+            if (($.trim(data))) {
+                $("#middleTable").empty();
+                $("#middleTable").append(getHeaderRow());
+                for (var i = 0; i < data.length; i++) {
+                    $("#middleTable").append(getpostsForCurrentRow(data[i]));
+                }
             }
+            else {
+                $("#middleTable").empty();
+                $("#middleTable").append(getHeaderRow());
+                $("#middleTable").append("<td><div class='alert-info' style='margin:0 auto;'><h4>No Threads</h4></div></td>");
+            }
+            $(".pager").remove();
+            paginate();
         }
     });
 }
@@ -60,11 +69,20 @@ function getPostsWithMostComments() {
         type: 'POST',
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
-            $("#middleTable").empty();
-            $("#middleTable").append(getHeaderRow());
-            for (var i = 0; i < data.length; i++) {
-                $("#middleTable").append(getpostsForCurrentRow(data[i]));
+            if (($.trim(data))) {
+                $("#middleTable").empty();
+                $("#middleTable").append(getHeaderRow());
+                for (var i = 0; i < data.length; i++) {
+                    $("#middleTable").append(getpostsForCurrentRow(data[i]));
+                }
             }
+            else {
+                $("#middleTable").empty();
+                $("#middleTable").append(getHeaderRow());
+                $("#middleTable").append("<td><div class='alert-info' style='margin:0 auto;'><h4>No Threads</h4></div></td>");
+            }
+            $(".pager").remove();
+            paginate();
         }
     });
 }
@@ -79,7 +97,7 @@ function getHeaderRow() {
     return one;
 }
 function getpostsForCurrentRow(data) {
-    var one = "<tr>";
+    /*var one = "<tr>";
     one += " <td class=\"text-center\"><i class=\"fa fa-question fa-2x text-primary\"></i></td>";
     one += "<td><h4><a href=\"/posts/getPost/" + data._id + "\">" + data.title + "</a><br>";
     one += "<small>Upvotes :" + getLength(data.upvotes) + ",Downvotes : " + getLength(data.downvotes)
@@ -87,9 +105,29 @@ function getpostsForCurrentRow(data) {
     one += "<td class=\"text-center hidden-xs hidden-sm\" >";
     one += getTagsofPost(data.tags);
     one += "</td>";
-    one += "<td class=\"text-center hidden-xs hidden-sm\">" + getLength(data.comment) + "</td>";
+    one += "<td class=\"text-center hidden-xs hidden-sm\">" + getLength(data.comments) + "</td>";
     one += "<td class=\"hidden-xs hidden-sm\">" + data.lastModified + "</td>";
-    one += "</tr>";
+    one += "</tr>"; */
+
+    var one="<tr> <td class='text-center'><i class='fa fa-question fa-2x text-primary'></i></td>";
+    one+="<td><h4><a href=\"/posts/getPost/" + data._id + "\">" + data.title + "</a><br>";
+    one+="<small> Upvotes : " + getLength(data.upvotes) ;
+    one+="Downvotes : "+getLength(data.downvotes);
+    one+=",Views :"+ data.preview;
+    one+="</small> </h4> </td>";
+    one+="<td class='text-center hidden-xs hidden-sm'><div class='tag'>";
+    one+="<span class='more_text' style='display: none;'>";
+    one+= getTagsofPost(data.tags);
+    one+="</span><br> <a class='read_more'><img class='more-icon' src='/images/down.png' height='25px' width='30px'>";
+    one+="</a> </div> </td>";
+    one+="<td class='text-center hidden-xs hidden-sm'>";
+    if(getLength(data.comments) == 0)
+        one+= "Be the first one to comment!";
+    else
+        one+=getLength(data.comments);
+    one+="</td> <td class='hidden-xs hidden-sm'>"+data.lastModified + "</a><br>";
+    one+="<small><i class='fa fa-clock-o'></i></small></td> </tr>";
+
     return one;
 }
 
@@ -105,7 +143,7 @@ function getLength(data) {
 function getTagsofPost(tags) {
     var one = "";
     for (var i = 0; i < tags.length; i++) {
-        one += "<span style='background-color:#cdf2f1;color: black;display: inline;font-weight: bold;'>" + tags[i].text + "</span>";
+        one += "<span style='background-color: #cce4ff'>#" + tags[i].text + "</span>";
         one += "<span>&nbsp;</span>";
     }
     return one;
