@@ -217,41 +217,47 @@ router.post('/addPost', function (req, res) {
     var title = req.body.title;
     var description = req.body.description;
     var tags = req.body.tags.split(" ");
-    var tagsArray = new Array();
-    if (tags.length == 0) {
-        createPost(title, description, tagsArray, req, res);
-    }
-    var count = 0;
-    console.log(tags);
-    console.log(tags.length);
-    tags.forEach(function (element, index, array) {
-        Tags.getTagByText(element, function (errNow, tagNow) {
-            console.log("tag now " + element);
-            console.log(array.length + " " + index);
-            if (errNow) throw errNow;
-            if (tagNow == null || tagNow == '') {
-                console.log('inside');
-                var newTag = new Tags({
-                    text: element, posts: [], comments: [], preview: 0
-                });
-                Tags.createTags(newTag, function (newErr, newTag) {
-                    if (newErr) throw newErr;
-                    tagsArray.push(newTag);
-                    //console.log(newTag);
+    var postid = req.body.isEdit; //post id to edit
+    if (postid === '') {
+        var tagsArray = new Array();
+        if (tags.length == 0) {
+            createPost(title, description, tagsArray, req, res);
+        }
+        var count = 0;
+        console.log(tags);
+        console.log(tags.length);
+        tags.forEach(function (element, index, array) {
+            Tags.getTagByText(element, function (errNow, tagNow) {
+                console.log("tag now " + element);
+                console.log(array.length + " " + index);
+                if (errNow) throw errNow;
+                if (tagNow == null || tagNow == '') {
+                    console.log('inside');
+                    var newTag = new Tags({
+                        text: element, posts: [], comments: [], preview: 0
+                    });
+                    Tags.createTags(newTag, function (newErr, newTag) {
+                        if (newErr) throw newErr;
+                        tagsArray.push(newTag);
+                        //console.log(newTag);
+                        count++;
+                        console.log("count " + count + " tagsArrayLength " + tagsArray.length);
+                        if (count == tags.length)
+                            createPost(title, description, tagsArray, req, res);
+                    });
+                } else {
+                    tagsArray.push(tagNow[0]);
                     count++;
-                    console.log("count " + count + " tagsArrayLength " + tagsArray.length);
+                    console.log("count old " + count + " tagsArrayLength " + tagsArray.length);
                     if (count == tags.length)
                         createPost(title, description, tagsArray, req, res);
-                });
-            } else {
-                tagsArray.push(tagNow[0]);
-                count++;
-                console.log("count old " + count + " tagsArrayLength " + tagsArray.length);
-                if (count == tags.length)
-                    createPost(title, description, tagsArray, req, res);
-            }
+                }
+            });
         });
-    });
+    }
+    else {
+        editPost(postid, description, req, res);
+    }
 });
 
 // create post functions.
@@ -304,6 +310,33 @@ function createPostOther(req, res, newPost, user) {
     res.redirect('/');
 }
 
+function editPost(postid, description, req, res) {
+    console.log("edit part" + postid + description);
+    Post.getPostbyId(postid, function (err, post) {
+        if (err) throw err;
+        if (post.versions == null)
+            post.versions = [];
+        post.versions.push(post.description); //old description
+        console.log('added version');
+        var lastModified = Date.now;
+        var updatePost = new Post({
+            description: description,//new desc
+            versions: post.versions,
+            lastModified: lastModified()
+        });
+        console.log("created post json");
+        Post.editPosts(postid, updatePost, function (err, editedPost) {
+            if (err) {
+                req.flash('error_msg', 'Try Again :(');
+                throw err;
+            }
+            console.log("edited" + editedPost);
+            req.flash('success_msg', 'Thread Edited Successfully');
+            res.redirect('/profile');
+        });
+    });
+
+}
 router.get('/viewPosts', function (req, res) {
     var query = {status: true};
     Post.getPostWithTags(query, function (err, posts) {

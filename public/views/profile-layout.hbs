@@ -7,7 +7,19 @@
     {{>header}}
 </head>
 <body onload="openTab(event, 'threads')">
+
 <div class="container">
+    <div>
+        {{#if success_msg}}
+            <div class="alert alert-success">{{success_msg}}</div>
+        {{/if}}
+        {{#if error_msg}}
+            <div class="alert alert-danger">{{error_msg}}</div>
+        {{/if}}
+        {{#if error}}
+            <div class="alert alert-danger">{{error}}</div>
+        {{/if}}
+    </div>
     <div class="row profile">
         <div class="col-md-3">
             <div class="profile-sidebar">

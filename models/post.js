@@ -69,12 +69,12 @@ module.exports.deletePost = function (id, callback) {
     }, callback);
 };
 
-module.exports.editPosts = function (editPost, callback) {
-    Post.findOneAndUpdate({'_id': editPost._id}, {
+module.exports.editPosts = function (postid, editPost, callback) {
+    Post.findOneAndUpdate({'_id': postid}, {
         $set: {
-            'title': editPost.title,
             'description': editPost.description,
-            'tags': editPost.tags
+            'versions': editPost.versions,
+            'lastModified': editPost.lastModified
         }
-    })
-}
+    }, callback)
+};

@@ -36,7 +36,7 @@ router.get('/allusers', function (req, res) {
         });
     }
     else {
-        res.redirect('/users/login');
+        res.redirect('/');
     }
 });
 
@@ -58,7 +58,6 @@ router.get('/post/:postid', function (req, res) {
         'status': true
     }).populate({path: 'tags', select: 'text'}).exec(function (err, post) {
         if (err) throw err;
-        console.log(post);
         res.send(post);
     });
 });
@@ -77,7 +76,7 @@ router.get('/:username', function (req, res) {
         });
     }
     else {
-        res.redirect('/users/login');
+        res.redirect('/');
     }
 });
 
@@ -131,7 +130,7 @@ router.get('/', function (req, res) {
         });
     }
     else {
-        res.redirect('/users/login');
+        res.redirect('/');
     }
 });
 
