@@ -41,6 +41,7 @@ module.exports.getPostbyId = function (id, callback) {
         'tags user'
     ).populate({
         path : 'comments',
+        match : {status : true},
         populate : {path : 'user'}
     }).exec(callback);
 };
