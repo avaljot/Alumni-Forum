@@ -166,7 +166,7 @@ router.post('/postsComment', function (req, res) {
 
     var newComment = new Comment({
         text: text, dateCreated: dateCreated(), lastModified: lastModified(),
-        upvotes: upvotes, downvotes: downvotes, user: user
+        upvotes: upvotes, downvotes: downvotes, user: user, status : true
     });
 
     if (user.comments == null)

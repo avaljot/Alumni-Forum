@@ -73,18 +73,17 @@
         <ul>
             <li><a>Click on comment to view comments of comment</a></li>
             <li>
-            {{#if reg_user}}
-                <a>Click on comment to comment on comment</a>
-            {{else}}
-                <a>Login to comment.</a>
-            {{/if}}
+                {{#if reg_user}}
+                    <a>Click on comment to comment on comment</a>
+                {{else}}
+                    <a>Login to comment.</a>
+                {{/if}}
             </li>
         </ul>
     </div>
     <div id="commentsList">
         {{#each comments}}
-        <div id="{{_id}}">
-            <div class="media" onclick="getCommentOfComment('{{_id}}',this);">
+            <div class="media commentNow" onclick="getCommentOfComment('{{_id}}',this);">
                 <a class="pull-left" href="#">
                     <img class="media-object" style="width: 7em;height: 5em;"
                          src="/uploads/{{#if user.filename}}{{user.filename}}{{else}}unknown.png{{/if}}"
@@ -99,7 +98,6 @@
             </div>
             <div class="clickedDiv" id='selected{{_id}}'></div>
         {{/each}}
-    </div>
 
     </div>
     {{#if reg_user}}
@@ -115,6 +113,7 @@
         </div>
     {{/if}}
 </div>
+<div class="row">
 <div class="col-md-4">
     <div class="well">
         <h4>Topic Search:</h4>
@@ -145,6 +144,7 @@
             {{post.preview}}</span>
 
     </div>
+</div>
 </div>
 </div>
 
