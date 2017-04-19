@@ -53,64 +53,46 @@ router.get('/getPost/:post_id', function (req, res) {
     var postID = req.params.post_id;
     var isfav = null;
     console.log("getting post " + postID);
-    Post.getPostbyId(postID, function (err, post) {
-        if (err) throw err;
-        User.getUserById(post.user, function (err, user) {
-            if (err) throw err;
-            if (user.favs!=null && user.favs.indexOf(postID.toString()) > 0) {
+    var comments=new Array();
+    Post.getPostbyId(postID,function (err,post) {
+         if(err) throw err;
+         console.log(post);
+         comments=post.comments;
+         user=post.user;
+        if (user.favs!=null && user.favs.indexOf(postID.toString()) > 0) {
+            isfav = true;
+        }
+        else
+            isfav = false;
+        post.preview = post.preview + 1;
+        Post.updatePost(post,function (newErr,newPost) {
+            if(newErr) throw newErr;
+            newPost.tags.forEach(function(ele1,ind1,arr1) {
+                Tags.getTagbyId(ele1,function (err2,tag2) {
+                    tag2.preview+=1;
+                    Tags.updateTags(tag2,function (err3,tag3) {
+                        if(err3) throw err3;
+                    });
+                });
+            });
+        });
+        if (req.session && req.session.user) {
+            console.log(req.session.user);
+            if (req.session.user.favs == null) req.session.user.favs = [];
+            console.log(req.session.user.favs.indexOf(postID));
+            if (req.session.user.favs.indexOf(postID) >= 0) {
                 isfav = true;
             }
             else
                 isfav = false;
-            var comments = new Array();
-            if (post.comments != null) {
-                console.log(post.comments.length);
-                for (var i = 0; i < post.comments.length; i++) {
-                    //console.log(post.comments[i]);
-                    Comment.getCommentByID(post.comments[i], function (commentErr, commentNow) {
-                        if (commentErr) throw  commentErr;
-                        // console.log(commentNow);
-                        User.getUserById(commentNow.user, function (userErr, userNow) {
-                            if (userErr) throw userErr;
-                            commentNow.user = userNow;
-                            comments.push(commentNow);
-                            //console.log(comments);
-                        });
-                    });
-                }
-            }
-            console.log(req.session.user);
-            post.preview = post.preview + 1;
-            Post.updatePost(post,function (newErr,newPost) {
-                if(newErr) throw newErr;
-                newPost.tags.forEach(function(ele1,ind1,arr1) {
-                    Tags.getTagbyId(ele1,function (err2,tag2) {
-                        tag2.preview+=1;
-                        Tags.updateTags(tag2,function (err3,tag3) {
-                            if(err3) throw err3;
-                            //console.log(tag3);
-                        });
-                    });
-                });
-            });
-            if (req.session && req.session.user) {
-                console.log(req.session.user);
-                if (req.session.user.favs == null) req.session.user.favs = [];
-                console.log(req.session.user.favs.indexOf(postID));
-                if (req.session.user.favs.indexOf(postID) >= 0) {
-                    isfav = true;
-                }
-                else
-                    isfav = false;
-            }
-            res.render('homePost', {
-                post: post,
-                layout: 'postLayout.hbs',
-                user: user,
-                comments: comments,
-                reg_user: req.session.user,
-                isfav: isfav
-            });
+        }
+        res.render('homePost', {
+            post: post,
+            layout: 'postLayout.hbs',
+            user: user,
+            comments: comments,
+            reg_user: req.session.user,
+            isfav: isfav
         });
     });
 });
