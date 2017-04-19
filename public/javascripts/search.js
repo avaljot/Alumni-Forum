@@ -1,13 +1,13 @@
 $(function () {
     $("#searchBox").keyup(function () {
         console.log("data now " + $("#searchBox").val());
-        getPostsByTags($("#searchBox").val());
+        getPostsByTags($("#searchBox").val(),$(this));
     });
 });
-function getPostsByTags(tags) {
-
-    var toRemove=$(".Special").parent();
-    $(toRemove).removeClass("selectedFeed Special");
+function getPostsByTags(tags,curobject) {
+    var toRemove = $(".selectedFeed");
+    toRemove.removeClass("selectedFeed");
+    $(curobject).parent().find("span").addClass("selectedFeed");
     var urlStr = window.location.origin + '/posts/getPostByTag';
     console.log(urlStr);
     $.ajax({
@@ -42,7 +42,10 @@ function getPostsByTags(tags) {
     });
 }
 
-function getPostsWithoutComments() {
+function getPostsWithoutComments(curobject) {
+    var toRemove = $(".selectedFeed");
+    toRemove.removeClass("selectedFeed");
+    $(curobject).parent().find("span").addClass("selectedFeed");
     $.ajax({
         url: '../posts/getPostByNoComment',
         type: 'POST',
@@ -65,7 +68,10 @@ function getPostsWithoutComments() {
         }
     });
 }
-function getPostsWithMostComments() {
+function getPostsWithMostComments(curobject) {
+    var toRemove = $(".selectedFeed");
+    toRemove.removeClass("selectedFeed");
+    $(curobject).parent().find("span").addClass("selectedFeed");
     $.ajax({
         url: '../posts/getPostByMostComment',
         type: 'POST',
@@ -99,36 +105,24 @@ function getHeaderRow() {
     return one;
 }
 function getpostsForCurrentRow(data) {
-    /*var one = "<tr>";
-    one += " <td class=\"text-center\"><i class=\"fa fa-question fa-2x text-primary\"></i></td>";
+    var one = "<tr> <td class='text-center'><i class='fa fa-question fa-2x text-primary'></i></td>";
     one += "<td><h4><a href=\"/posts/getPost/" + data._id + "\">" + data.title + "</a><br>";
-    one += "<small>Upvotes :" + getLength(data.upvotes) + ",Downvotes : " + getLength(data.downvotes)
-        + ",Views :" + data.preview + "</small></h4></td>";
-    one += "<td class=\"text-center hidden-xs hidden-sm\" >";
+    one += "<small> Upvotes : " + getLength(data.upvotes);
+    one += ",Downvotes : " + getLength(data.downvotes);
+    one += ",Views :" + data.preview;
+    one += "</small> </h4> </td>";
+    one += "<td class='text-center hidden-xs hidden-sm'><div class='tag'>";
+    one += "<span class='more_text' style='display: none;'>";
     one += getTagsofPost(data.tags);
-    one += "</td>";
-    one += "<td class=\"text-center hidden-xs hidden-sm\">" + getLength(data.comments) + "</td>";
-    one += "<td class=\"hidden-xs hidden-sm\">" + data.lastModified + "</td>";
-    one += "</tr>"; */
-
-    var one="<tr> <td class='text-center'><i class='fa fa-question fa-2x text-primary'></i></td>";
-    one+="<td><h4><a href=\"/posts/getPost/" + data._id + "\">" + data.title + "</a><br>";
-    one+="<small> Upvotes : " + getLength(data.upvotes) ;
-    one+=",Downvotes : "+getLength(data.downvotes);
-    one+=",Views :"+ data.preview;
-    one+="</small> </h4> </td>";
-    one+="<td class='text-center hidden-xs hidden-sm'><div class='tag'>";
-    one+="<span class='more_text' style='display: none;'>";
-    one+= getTagsofPost(data.tags);
-    one+="</span><br> <a class='read_more'><img class='more-icon' src='/images/down.png' height='25px' width='30px'>";
-    one+="</a> </div> </td>";
-    one+="<td class='text-center hidden-xs hidden-sm'>";
-    if(getLength(data.comments) == 0)
-        one+= "Be the first one to comment!";
+    one += "</span><br> <a class='read_more'><img class='more-icon' src='/images/down.png' height='25px' width='30px'>";
+    one += "</a> </div> </td>";
+    one += "<td class='text-center hidden-xs hidden-sm'>";
+    if (getLength(data.comments) == 0)
+        one += "Be the first one to comment!";
     else
-        one+=getLength(data.comments);
-    one+="</td> <td class='hidden-xs hidden-sm'>"+data.lastModified + "</a><br>";
-    one+="<small><i class='fa fa-clock-o'></i></small></td> </tr>";
+        one += getLength(data.comments);
+    one += "</td> <td class='hidden-xs hidden-sm'>" + data.lastModified + "</a><br>";
+    one += "<small><i class='fa fa-clock-o'></i></small></td> </tr>";
 
     return one;
 }
