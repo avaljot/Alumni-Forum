@@ -39,17 +39,19 @@ router.post('/getComments', function (req, res) {
             for (var i = 0; i < comment.comments.length; i++) {
                 Comment.getCommentByID(comment.comments[i], function (newErr, commentNow) {
                     if (newErr) throw newErr;
-                    if (commentNow != null) {
-                        User.getUserById(commentNow.user,function(userErr,userNow){
-                            if(userErr) throw userErr;
-                            count++;
-                            commentNow.user=userNow;
-                            comments.comments.push(commentNow);
-                            if(count==comment.comments.length){
-                                console.log("sending ");
-                                res.send(comments);
-                            }
-                        });
+                    if(commentNow.status) {
+                        if (commentNow != null) {
+                            User.getUserById(commentNow.user, function (userErr, userNow) {
+                                if (userErr) throw userErr;
+                                count++;
+                                commentNow.user = userNow;
+                                comments.comments.push(commentNow);
+                                if (count == comment.comments.length) {
+                                    console.log("sending ");
+                                    res.send(comments);
+                                }
+                            });
+                        }
                     }
                 });
             }
@@ -70,11 +72,6 @@ router.get('/getPost/:post_id', function (req, res) {
          console.log(post);
          comments=post.comments;
          user=post.user;
-        if (user.favs!=null && user.favs.indexOf(postID.toString()) > 0) {
-            isfav = true;
-        }
-        else
-            isfav = false;
         post.preview = post.preview + 1;
         Post.updatePost(post,function (newErr,newPost) {
             if(newErr) throw newErr;
@@ -122,7 +119,7 @@ router.post('/addCommentOfComment', function (req, res) {
 
     var newComment = new Comment({
         text: text, dateCreated: dateCreated(), lastModified: lastModified(),
-        upvotes: upvotes, downvotes: downvotes, user: user
+        upvotes: upvotes, downvotes: downvotes, user: user, status : true
     });
 
     if (user.comments == null)

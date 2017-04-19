@@ -12,6 +12,7 @@ function getCommentOfComment(commentId) {
             //$(divToAppend).append(one);
             var one = "<div class='commentOfComment'>";
             if (data.comments != "done") {
+                console.log(data);
                 for (i = 0; i < data.comments.length; i++) {
                     one += getCommentDiv(data.comments[i]);
                 }
