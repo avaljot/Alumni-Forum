@@ -362,9 +362,7 @@ router.post('/increaseUpvotes', function (req, res) {
         post.upvotes.push(req.session.user);
         Post.updatePost(post, function (newErr, newPost) {
             if (newErr) throw err;
-            console.log(newPost);
-            console.log('upvotes ' + newPost.upvotes.length);
-            res.send(newPost.upvotes.length.toString());
+            res.send(post.upvotes.length.toString());
         });
         //res.send(post.upvotes.length);
     });
@@ -379,9 +377,7 @@ router.post('/increaseDownvotes', function (req, res) {
         post.downvotes.push(req.session.user);
         Post.updatePost(post, function (newErr, newPost) {
             if (newErr) throw err;
-            console.log(newPost);
-            console.log('downvotes ' + newPost.downvotes.length);
-            res.send(newPost.downvotes.length.toString());
+            res.send(post.downvotes.length.toString());
         });
         //res.send(post.upvotes.length.toString());
     });
