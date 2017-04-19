@@ -80,7 +80,8 @@ function addCommentofComment(commentID, currentObject) {
         }
     });
 }
-function addComment(postId) {
+function addComment(postId,curObj) {
+
     $.ajax({
         url: '../postsComment',
         type: 'POST',
@@ -93,6 +94,7 @@ function addComment(postId) {
             console.log(data);
             var one = getCommentDiv(data);
             $("#commentsList").append(one);
+            $(curObj).parent().find("textarea").val("");
         }
     });
 }
