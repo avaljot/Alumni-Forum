@@ -4,7 +4,6 @@ $(function () {
         getPostsByTags($("#searchBox").val());
     });
 });
-
 function getPostsByTags(tags) {
     var urlStr = window.location.origin + '/posts/getPostByTag';
     console.log(urlStr);
