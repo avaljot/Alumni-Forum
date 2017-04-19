@@ -56,7 +56,17 @@
                 <small class="text-muted">
                     <i class="fa fa-clock-o"></i> Created on: {{dateFormat post.dateCreated
                                                                            "MMMM Do YYYY, h:mm a"}}</small>
+                {{#compare reg_user.username user.username operator="=="}}
+                    <button type="button" class="login loginmodal-submit" data-toggle="modal"
+                            data-target="#upload-image" style="width: 20%;margin-left: 40%;margin-top:-10%;">
+                        Upload Image
+                    </button>
+                {{/compare}}
                 <div style="margin-top:15px;font-size: 20px">{{post.description}}</div>
+                {{# if post.filename}}
+                    <img src="/uploads/{{post.filename}}" height="100px" width="100px" style="margin: 2%">
+                {{/if}}
+
             </div>
             <div class="clearfix"></div>
         </div>
