@@ -200,7 +200,7 @@ function deleteComment(cid) {
             if (data) {
                 alert("ok");
                 $('#' + cid).css("display", "none");
-                // window.location.reload();
+                window.location.reload();
             } else
                 $('#message').addClass("alert-danger").html("Try again");
 
