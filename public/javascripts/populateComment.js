@@ -1,4 +1,4 @@
-function getCommentOfComment(commentId) {
+function getCommentOfComment(commentId,currObj,userObj) {
     console.log("comment clicked " + commentId);
     var divToAppend = "#selected" + commentId;
     $.ajax({
@@ -14,11 +14,11 @@ function getCommentOfComment(commentId) {
             if (data.comments != "done") {
                 console.log(data);
                 for (i = 0; i < data.comments.length; i++) {
-                    one += getCommentDiv(data.comments[i]);
+                    one += getCommentDiv(data.comments[i],userObj);
                 }
             }
             if (data.user != false) {
-                one += getCommentButtonOfComment(data, commentId);
+                one += getCommentButtonOfComment(data, commentId,userObj);
                 one += getShowOrHideLink("selected" + commentId);
             }
             one += "</div>";
@@ -45,23 +45,16 @@ function showOrHideComment(selectedDiv) {
     }
 }
 
-function getCommentButtonOfComment(data, commentId) {
+function getCommentButtonOfComment(data, commentId,userObj) {
     var one = "<div style='margin-top: 10%;' class='postComments'><h4>Leave a Comment:</h4>";
     one += "<div class='form-group'>";
     one += "<input type='text' class='form-control' name='comment' id='comment'/>";
-    one += "</div><button onclick=\"addCommentofComment('" + commentId + "',this)\" class='login loginmodal-submit' style='width: 20%'>Post Comment</button>";
+    one += "</div><button onclick=\"addCommentofComment('" + commentId + "',this ,'"+userObj+"')\" class='login loginmodal-submit' style='width: 20%'>Post Comment</button>";
     one += "</div>";
-    /*  </div>
-     var one = "<div class='expandonClick'> <h4>Leave a Comment:</h4> <div>";
-     one += "<div class='form-group'>";
-     one += "<input type='text' class='form-control' name='comment' id='comment'/>";
-     one += "</div><button onclick=\"addCommentofComment('" + commentId + "',this)\" class='login loginmodal-submit' style='width: 20%'>Post Comment</button>";
-     one += "</div> </div>";
-     */
     return one;
 }
 
-function addCommentofComment(commentID, currentObject) {
+function addCommentofComment(commentID, currentObject,userObject) {
     var divToAppend = "#selected" + commentID;
     $.ajax({
         url: '../addCommentOfComment',
@@ -74,13 +67,13 @@ function addCommentofComment(commentID, currentObject) {
         success: function (data) {
             console.log(data);
             //$(currentObject).parent().parent().parent().empty();
-            var one = getCommentDiv(data);
+            var one = getCommentDiv(data,userObject);
             $(currentObject).parent().before(one);
             $(currentObject).parent().find("input").val("");
         }
     });
 }
-function addComment(postId,curObj) {
+function addComment(postId,curObj,userObj) {
 
     $.ajax({
         url: '../postsComment',
@@ -92,19 +85,23 @@ function addComment(postId,curObj) {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             console.log(data);
-            var one = getCommentDiv(data);
+            var one = getCommentDiv(data,userObj);
             $("#commentsList").append(one);
             $(curObj).parent().find("textarea").val("");
         }
     });
 }
 
-function getCommentDiv(data) {
-    var one = "<div class='media' onclick=\"getCommentOfComment('" + data._id + "',this)\">";
+function getCommentDiv(data,userObj) {
+    var one="<div id='" + data._id +">";
+    one += "<div class='media' onclick=\"getCommentOfComment('" + data._id + "',this)\">";
     one += "<a class='pull-left'>";
     one += "<img class='media-object' style='width: 7em;height: 5em;' src='http://localhost:8000/uploads/" + data.user.filename + "' alt='profile pic of user'>";
     one += "</a><div class='media-body'> <h4 class='media-heading'>" + data.user.username + "<small>" + data.lastModified + "</small>";
-    one += "</h4>" + data.text + "</div></div><div class=\"clickedDiv\" id='selected" + data._id + "'></div>";
+    one += "</h4>" + data.text + "</div>";
+    if(userObj == data.user.username)
+        one+="<a class='btn btn-default' onclick=\"deleteComment('" + data._id + "')\">Delete</a>";
+    one += "</div><div class=\"clickedDiv\" id='selected" + data._id + "'></div></div>";
     return one;
 }
 
@@ -201,9 +198,7 @@ function deleteComment(cid) {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             if (data) {
-                alert("ok");
                 $('#' + cid).css("display", "none");
-                window.location.reload();
             } else
                 $('#message').addClass("alert-danger").html("Try again");
 
