@@ -29,8 +29,8 @@ function getCommentOfComment(commentId) {
 }
 
 function getShowOrHideLink(selectedDiv){
-     var one="<br/><a onclick=\"showOrHideComment('"+selectedDiv+"');\"><span class='showOrHide'>Show Comment Box</span></a>";
-     return one;
+    var one="<br/><a onclick=\"showOrHideComment('"+selectedDiv+"');\"><span class='showOrHide'>Show Comment Box</span></a>";
+    return one;
 }
 
 function showOrHideComment(selectedDiv) {
@@ -50,13 +50,13 @@ function getCommentButtonOfComment(data, commentId) {
     one+="<input type='text' class='form-control' name='comment' id='comment'/>";
     one+="</div><button onclick=\"addCommentofComment('" + commentId + "',this)\" class='login loginmodal-submit' style='width: 20%'>Post Comment</button>";
     one +="</div>";
-/*  </div>
-    var one = "<div class='expandonClick'> <h4>Leave a Comment:</h4> <div>";
-    one += "<div class='form-group'>";
-    one += "<input type='text' class='form-control' name='comment' id='comment'/>";
-    one += "</div><button onclick=\"addCommentofComment('" + commentId + "',this)\" class='login loginmodal-submit' style='width: 20%'>Post Comment</button>";
-    one += "</div> </div>";
-    */
+    /*  </div>
+     var one = "<div class='expandonClick'> <h4>Leave a Comment:</h4> <div>";
+     one += "<div class='form-group'>";
+     one += "<input type='text' class='form-control' name='comment' id='comment'/>";
+     one += "</div><button onclick=\"addCommentofComment('" + commentId + "',this)\" class='login loginmodal-submit' style='width: 20%'>Post Comment</button>";
+     one += "</div> </div>";
+     */
     return one;
 }
 
