@@ -83,7 +83,8 @@
     </div>
     <div id="commentsList">
         {{#each comments}}
-            <div class="media commentNow" onclick="getCommentOfComment('{{_id}}',this);">
+        <div id="{{_id}}">
+            <div class="media" onclick="getCommentOfComment('{{_id}}',this);">
                 <a class="pull-left" href="#">
                     <img class="media-object" style="width: 7em;height: 5em;"
                          src="/uploads/{{#if user.filename}}{{user.filename}}{{else}}unknown.png{{/if}}"
@@ -96,8 +97,12 @@
                     {{text}}
                 </div>
             </div>
+            {{#compare ../reg_user.username user.username operator="=="}}
+                <a class="btn btn-default" onclick="deleteComment('{{_id}}')">Delete</a>
+            {{/compare}}
             <div class="clickedDiv" id='selected{{_id}}'></div>
         {{/each}}
+    </div>
 
     </div>
     {{#if reg_user}}
@@ -113,7 +118,6 @@
         </div>
     {{/if}}
 </div>
-<div class="row">
 <div class="col-md-4">
     <div class="well">
         <h4>Topic Search:</h4>
@@ -144,7 +148,6 @@
             {{post.preview}}</span>
 
     </div>
-</div>
 </div>
 </div>
 
