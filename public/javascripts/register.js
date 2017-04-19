@@ -46,3 +46,65 @@ function univName() {
 }
 
 
+$(document).ready(function () {
+
+    var f1 = false;
+    var f2 = false;
+    var f3 = false;
+    var f4 = false;
+    $('#pass').keyup(function () {
+        var pswd = $(this).val();
+
+
+        //validate the length
+        if (pswd.length < 8) {
+            $('#length').removeClass('valid').addClass('invalid');
+            f1 = true;
+
+        } else {
+            $('#length').removeClass('invalid').addClass('valid');
+        }
+        //validate letter
+        if (pswd.match(/[A-z]/)) {
+            $('#letter').removeClass('invalid').addClass('valid');
+            f2 = true;
+
+        } else {
+            $('#letter').removeClass('valid').addClass('invalid');
+        }
+
+        //validate capital letter
+        if (pswd.match(/[A-Z]/)) {
+            $('#capital').removeClass('invalid').addClass('valid');
+            f3 = true;
+
+        } else {
+            $('#capital').removeClass('valid').addClass('invalid');
+
+        }
+
+        //validate number
+        if (pswd.match(/\d/)) {
+            $('#number').removeClass('invalid').addClass('valid');
+            f4 = true;
+
+        } else {
+            $('#number').removeClass('valid').addClass('invalid');
+        }
+
+
+    }).focus(function () {
+        $('#pswd_info').show();
+    }).blur(function () {
+        $('#pswd_info').hide();
+    });
+    $('#rbtn').on("click", function () {
+        if (f1 && f2 && f3 && f4) {
+            $('#register_form').submit();
+        }
+    });
+
+});
+
+
+

@@ -80,23 +80,28 @@ function addCommentofComment(commentID, currentObject) {
         }
     });
 }
-function addComment(postId,curObj) {
+function addComment(postId, curObj) {
+    if ($("#comment").val().length > 0) {
 
-    $.ajax({
-        url: '../postsComment',
-        type: 'POST',
-        data: {
-            getPost: $("#getPost").val(),
-            comment: $("#comment").val(),
-        },
-        contentType: 'application/x-www-form-urlencoded',
-        success: function (data) {
-            console.log(data);
-            var one = getCommentDiv(data);
-            $("#commentsList").append(one);
-            $(curObj).parent().find("textarea").val("");
-        }
-    });
+
+        $.ajax({
+            url: '../postsComment',
+            type: 'POST',
+            data: {
+                getPost: $("#getPost").val(),
+                comment: $("#comment").val()
+            },
+            contentType: 'application/x-www-form-urlencoded',
+            success: function (data) {
+                console.log(data);
+                var one = getCommentDiv(data);
+                $("#commentsList").append(one);
+                $(curObj).parent().find("textarea").val("");
+            }
+        });
+    } else {
+
+    }
 }
 
 function getCommentDiv(data) {
@@ -203,7 +208,6 @@ function deleteComment(cid) {
             if (data) {
                 alert("ok");
                 $('#' + cid).css("display", "none");
-                window.location.reload();
             } else
                 $('#message').addClass("alert-danger").html("Try again");
 
