@@ -83,7 +83,8 @@
     </div>
     <div id="commentsList">
         {{#each comments}}
-            <div class="media commentNow" onclick="getCommentOfComment('{{_id}}',this);">
+        <div id="{{_id}}">
+            <div class="media" onclick="getCommentOfComment('{{_id}}',this);">
                 <a class="pull-left" href="#">
                     <img class="media-object" style="width: 7em;height: 5em;"
                          src="/uploads/{{#if user.filename}}{{user.filename}}{{else}}unknown.png{{/if}}"
@@ -98,6 +99,7 @@
             </div>
             <div class="clickedDiv" id='selected{{_id}}'></div>
         {{/each}}
+    </div>
 
     </div>
     {{#if reg_user}}
