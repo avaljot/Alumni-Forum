@@ -5,6 +5,7 @@ var Schema = mongoose.Schema;
 var PostSchema = mongoose.Schema({
     title: String,
     description: String,
+    filename: String,
     tags: [{type: Schema.ObjectId, ref: 'Tags'}],
     dateCreated: Date,
     lastModified: Date,
@@ -77,4 +78,10 @@ module.exports.editPosts = function (postid, editPost, callback) {
             'lastModified': editPost.lastModified
         }
     }, callback)
+};
+
+module.exports.updateImage = function (filename, postid, callback) {
+    var query = {'_id': postid};
+    Post.findOneAndUpdate(query, {$set: {filename: filename}}, callback)
+
 };
