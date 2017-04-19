@@ -7,6 +7,16 @@ var Comment = require('../models/comment');
 var Tags = require('../models/tags');
 var async = require("async");
 var waterfall = require('async-waterfall');
+var multer = require('multer');
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname)
+    }
+});
+var upload = multer({storage: storage});
 
 
 router.post('/getComments', function (req, res) {
@@ -51,6 +61,7 @@ router.post('/getComments', function (req, res) {
 
 router.get('/getPost/:post_id', function (req, res) {
     var postID = req.params.post_id;
+    req.session.postid = postID;  //storing post id in the session for image upload
     var isfav = null;
     console.log("getting post " + postID);
     var comments=new Array();
@@ -344,7 +355,9 @@ router.post('/increaseUpvotes', function (req, res) {
         post.upvotes.push(req.session.user);
         Post.updatePost(post, function (newErr, newPost) {
             if (newErr) throw err;
-            res.send(post.upvotes.length.toString());
+            console.log(newPost);
+            console.log('upvotes ' + newPost.upvotes.length);
+            res.send(newPost.upvotes.length.toString());
         });
         //res.send(post.upvotes.length);
     });
@@ -359,7 +372,9 @@ router.post('/increaseDownvotes', function (req, res) {
         post.downvotes.push(req.session.user);
         Post.updatePost(post, function (newErr, newPost) {
             if (newErr) throw err;
-            res.send(post.downvotes.length.toString());
+            console.log(newPost);
+            console.log('downvotes ' + newPost.downvotes.length);
+            res.send(newPost.downvotes.length.toString());
         });
         //res.send(post.upvotes.length.toString());
     });
@@ -477,6 +492,23 @@ router.post('/getPostByTag',function (req,res) {
     }
 });
 
+router.post('/upload', upload.single('post_img'), function (req, res, next) {
+    var myfile = req.file;
+    Post.updateImage(myfile.originalname, req.session.postid, function (err, post) {
+        if (err) throw  err;
+        else res.redirect('/posts/getPost/' + req.session.postid);
+    });
+});
+
+router.post('/delete-comment', function (req, res) {
+    var cid = req.body.cid;
+    Comment.deleteComment(cid, function (err, comment) {
+        if (err) throw err;
+        res.send(comment);
+        console.log(comment);
+    })
+
+});
 module.exports = router;
 
 /*

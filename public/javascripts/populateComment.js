@@ -29,8 +29,8 @@ function getCommentOfComment(commentId) {
 }
 
 function getShowOrHideLink(selectedDiv){
-    var one="<br/><a onclick=\"showOrHideComment('"+selectedDiv+"');\"><span class='showOrHide'>Show Comment Box</span></a>";
-    return one;
+     var one="<br/><a onclick=\"showOrHideComment('"+selectedDiv+"');\"><span class='showOrHide'>Show Comment Box</span></a>";
+     return one;
 }
 
 function showOrHideComment(selectedDiv) {
@@ -50,13 +50,13 @@ function getCommentButtonOfComment(data, commentId) {
     one+="<input type='text' class='form-control' name='comment' id='comment'/>";
     one+="</div><button onclick=\"addCommentofComment('" + commentId + "',this)\" class='login loginmodal-submit' style='width: 20%'>Post Comment</button>";
     one +="</div>";
-    /*  </div>
-     var one = "<div class='expandonClick'> <h4>Leave a Comment:</h4> <div>";
-     one += "<div class='form-group'>";
-     one += "<input type='text' class='form-control' name='comment' id='comment'/>";
-     one += "</div><button onclick=\"addCommentofComment('" + commentId + "',this)\" class='login loginmodal-submit' style='width: 20%'>Post Comment</button>";
-     one += "</div> </div>";
-     */
+/*  </div>
+    var one = "<div class='expandonClick'> <h4>Leave a Comment:</h4> <div>";
+    one += "<div class='form-group'>";
+    one += "<input type='text' class='form-control' name='comment' id='comment'/>";
+    one += "</div><button onclick=\"addCommentofComment('" + commentId + "',this)\" class='login loginmodal-submit' style='width: 20%'>Post Comment</button>";
+    one += "</div> </div>";
+    */
     return one;
 }
 
@@ -184,6 +184,32 @@ function increaseDownvotes(postId) {
             console.log('error: ', err);
             console.log('text: ', text);
             console.log('xhr: ', xhr);
+        }
+    });
+}
+
+function deleteComment(cid) {
+    $.ajax({
+        url: window.location.origin + "/posts/delete-comment",
+        type: 'POST',
+        data: {
+            cid: cid
+        },
+        contentType: 'application/x-www-form-urlencoded',
+        success: function (data) {
+            if (data) {
+                alert("ok");
+                $('#' + cid).css("display", "none");
+                // window.location.reload();
+            } else
+                $('#message').addClass("alert-danger").html("Try again");
+
+        },
+        error: function (xhr, text, err) {
+            console.log('error: ', err);
+            console.log('text: ', text);
+            console.log('xhr: ', xhr);
+            console.log("there is a problem with your request, please check ajax request");
         }
     });
 }
