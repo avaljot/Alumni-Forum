@@ -119,7 +119,7 @@ router.post('/addCommentOfComment', function (req, res) {
 
     var newComment = new Comment({
         text: text, dateCreated: dateCreated(), lastModified: lastModified(),
-        upvotes: upvotes, downvotes: downvotes, user: user, status : true
+        upvotes: upvotes, downvotes: downvotes, user: user
     });
 
     if (user.comments == null)
@@ -166,7 +166,7 @@ router.post('/postsComment', function (req, res) {
 
     var newComment = new Comment({
         text: text, dateCreated: dateCreated(), lastModified: lastModified(),
-        upvotes: upvotes, downvotes: downvotes, user: user, status : true
+        upvotes: upvotes, downvotes: downvotes, user: user
     });
 
     if (user.comments == null)
