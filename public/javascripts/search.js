@@ -5,6 +5,9 @@ $(function () {
     });
 });
 function getPostsByTags(tags) {
+
+    var toRemove=$(".Special").parent();
+    $(toRemove).removeClass("selectedFeed Special");
     var urlStr = window.location.origin + '/posts/getPostByTag';
     console.log(urlStr);
     $.ajax({
