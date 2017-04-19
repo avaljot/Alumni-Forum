@@ -108,7 +108,7 @@ function getCommentDiv(data) {
     var one = "<div class='media' onclick=\"getCommentOfComment('" + data._id + "',this)\">";
     one += "<a class='pull-left'>";
     one += "<img class='media-object' style='width: 7em;height: 5em;' src='http://localhost:8000/uploads/" + data.user.filename + "' alt='profile pic of user'>";
-    one += "</a><div class='media-body'> <h4 class='media-heading'>" + data.user.username + "<small>" + data.lastModified + "</small>";
+    one += "</a><div class='media-body'> <h4 class='media-heading'>" + data.user.username + "<small>" + new Date(data.lastModified) + "</small>";
     one += "</h4>" + data.text + "</div></div><div class=\"clickedDiv\" id='selected" + data._id + "'></div>";
     return one;
 }

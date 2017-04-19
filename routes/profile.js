@@ -125,7 +125,7 @@ router.get('/', function (req, res) {
             res.render('profile-posts', {
                 layout: 'profile-layout',
                 user: user,
-                reg_user: user
+                reg_user: req.session.user
             });
         });
     }

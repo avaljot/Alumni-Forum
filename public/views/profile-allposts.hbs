@@ -8,6 +8,10 @@
                         <p>Views={{preview}}</p>
                         <p>{{description}}</p>
                         <a class="btn btn-default" onclick="deletePost('{{_id}}')">Delete</a>
+                        <a data-toggle="modal" data-target="#thread-modal" class="btn btn-default"
+                           onclick="editThread('{{_id}}')">
+                            Edit
+                        </a>
                     </li>
                 {{/each}}
             {{else}}

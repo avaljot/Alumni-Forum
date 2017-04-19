@@ -64,7 +64,7 @@
                 {{/compare}}
                 <div style="margin-top:15px;font-size: 20px">{{post.description}}</div>
                 {{# if post.filename}}
-                    <a href="/uploads/{{post.filename}}" target="_blank"><img src="/uploads/{{post.filename}}" height="100px" width="100px" style="margin: 2%"></a>
+                    <img src="/uploads/{{post.filename}}" height="100px" width="100px" style="margin: 2%">
                 {{/if}}
 
             </div>
@@ -93,26 +93,27 @@
     </div>
     <div id="commentsList">
         {{#each comments}}
-        <div id="{{_id}}">
-            <div class="media" onclick="getCommentOfComment('{{_id}}',this);">
-                <a class="pull-left" href="#">
-                    <img class="media-object" style="width: 7em;height: 5em;"
-                         src="/uploads/{{#if user.filename}}{{user.filename}}{{else}}unknown.png{{/if}}"
-                         alt="profile pic of user">
-                </a>
-                <div class="media-body">
-                    <h4 class="media-heading">{{user.username}}
-                        <small>{{dateFormat lastModified "MMMM Do YYYY, h:mm a"}}</small>
-                    </h4>
-                    {{text}}
+            <div id="{{_id}}">
+                <div class="media" onclick="getCommentOfComment('{{_id}}',this,'{{../reg_user.username}}');">
+                    <a class="pull-left" href="#">
+                        <img class="media-object" style="width: 7em;height: 5em;"
+                             src="/uploads/{{#if user.filename}}{{user.filename}}{{else}}unknown.png{{/if}}"
+                             alt="profile pic of user">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{user.username}}
+                            <small>{{dateFormat lastModified "MMMM Do YYYY, h:mm a"}}</small>
+                        </h4>
+                        {{text}}
+                    </div>
+                    {{#compare ../reg_user.username user.username operator="=="}}
+                        <a class="btn btn-default" onclick="deleteComment('{{_id}}')">Delete</a>
+                    {{/compare}}
                 </div>
+                <div class="clickedDiv" id='selected{{_id}}'></div>
             </div>
-            {{#compare ../reg_user.username user.username operator="=="}}
-                <a class="btn btn-default" onclick="deleteComment('{{_id}}')">Delete</a>
-            {{/compare}}
-            <div class="clickedDiv" id='selected{{_id}}'></div>
         {{/each}}
-    </div>
+
 
     </div>
     {{#if reg_user}}
@@ -124,7 +125,7 @@
                                   style="margin: 0px 0px 10px; height: 95px; width: 763px;"></textarea>
             </div>
             <input type="button" class="login loginmodal-submit" value="Comment" style="width: 20%;"
-                   onclick="addComment('{{_id}}',this)"/>
+                   onclick="addComment('{{_id}}',this,'{{../reg_user.username}}')"/>
         </div>
     {{/if}}
 </div>
@@ -149,7 +150,7 @@
             <span style="color:blue;" id="upvotes">
                        Upvotes: {{post.upvotes.length}}</span>
 
-            <img src="/images/unlike.png" style="width: 2em;"
+            <img src="/images/dislike.png" style="width: 2em;"
                  onclick="increaseDownvotes('{{post._id}}');"/>
             <span style="color:blue;" id="downvotes">Downvotes: {{post.downvotes.length}}</span>
         {{/if}}
@@ -158,7 +159,4 @@
             {{post.preview}}</span>
 
     </div>
-</div>
-</div>
-
 </div>
