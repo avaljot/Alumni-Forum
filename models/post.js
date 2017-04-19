@@ -10,9 +10,9 @@ var PostSchema = mongoose.Schema({
     dateCreated: Date,
     lastModified: Date,
     versions: [String],
-    upvotes: {type: [Schema.ObjectId], ref: 'User'},
-    downvotes: {type: [Schema.ObjectId], ref: 'User'},
-    comments: {type: [Schema.ObjectId], ref: 'Comment'},
+    upvotes: [{type: Schema.ObjectId, ref: 'User'}],
+    downvotes: [{type: Schema.ObjectId, ref: 'User'}],
+    comments: [{type: Schema.ObjectId, ref: 'Comment'}],
     user: {type: Schema.ObjectId, ref: 'User'},
     status: Boolean,
     preview: Number
@@ -37,7 +37,12 @@ module.exports.updatePost = function (newPost, callback) {
 };
 
 module.exports.getPostbyId = function (id, callback) {
-    Post.findById(id).populate('tags').exec(callback);
+    Post.findById(id).populate(
+        'tags user'
+    ).populate({
+        path : 'comments',
+        populate : {path : 'user'}
+    }).exec(callback);
 };
 
 module.exports.getPostByNewest = function (callback) {

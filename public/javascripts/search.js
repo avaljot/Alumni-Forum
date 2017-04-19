@@ -111,7 +111,7 @@ function getpostsForCurrentRow(data) {
     var one="<tr> <td class='text-center'><i class='fa fa-question fa-2x text-primary'></i></td>";
     one+="<td><h4><a href=\"/posts/getPost/" + data._id + "\">" + data.title + "</a><br>";
     one+="<small> Upvotes : " + getLength(data.upvotes) ;
-    one+="Downvotes : "+getLength(data.downvotes);
+    one+=",Downvotes : "+getLength(data.downvotes);
     one+=",Views :"+ data.preview;
     one+="</small> </h4> </td>";
     one+="<td class='text-center hidden-xs hidden-sm'><div class='tag'>";
