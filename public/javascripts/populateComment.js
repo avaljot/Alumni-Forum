@@ -206,7 +206,6 @@ function deleteComment(cid) {
         contentType: 'application/x-www-form-urlencoded',
         success: function (data) {
             if (data) {
-                alert("ok");
                 $('#' + cid).css("display", "none");
             } else
                 $('#message').addClass("alert-danger").html("Try again");
