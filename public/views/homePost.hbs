@@ -64,9 +64,10 @@
                 {{/compare}}
                 <div style="margin-top:15px;font-size: 20px">{{post.description}}</div>
                 {{# if post.filename}}
-                    <img src="/uploads/{{post.filename}}" height="100px" width="100px" style="margin: 2%">
+                    <a href="/uploads/{{post.filename}}" target="_blank"><img src="/uploads/{{post.filename}}"
+                                                                              height="100px" width="100px"
+                                                                              style="margin: 2%"></a>
                 {{/if}}
-
             </div>
             <div class="clearfix"></div>
         </div>
