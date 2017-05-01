@@ -154,7 +154,7 @@ mongoose.model('Tags', TagsSchema);
 ```js
 Company:
 var CompanySchema = mongoose.Schema({
-    name: String,
+     name: String,
     location: {
         address: String,
         state: String,
@@ -223,6 +223,6 @@ inspired by the Ruby framework, Sinatra.
 is a schema less NoSQL database system. 
 
 ·       
-User Authentication is done using **passport.js.**It isauthentication middleware for Node.js. Extremely flexible and
+User Authentication is done using **passport.js.** It isauthentication middleware for Node.js. Extremely flexible and
 modular, passport.js can be unobtrusively dropped in to any Express-based web
 application.
